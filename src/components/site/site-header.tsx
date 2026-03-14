@@ -112,10 +112,10 @@ export function SiteHeader({ locale, dictionary }: SiteHeaderProps) {
                   );
                 })}
               </nav>
-              <Link
-                href={getLocalizedPath(locale, "contact")}
-                className={`${headingFont} inline-flex min-h-[34px] items-center justify-center rounded-none border border-header-button-text bg-header-button px-8 py-2 text-[12px] font-bold uppercase tracking-[0.08em] text-header-button-text transition hover:bg-background`}
-              >
+<Link
+  href={getLocalizedPath(locale, "contact")}
+  className={`${headingFont} inline-flex min-h-[34px] items-center justify-center rounded-none border border-[color:#625b3a] bg-[color:#9b9267] px-8 py-3 text-[9px] font-bold uppercase tracking-[0.08em] text-[color:#625b3a] transition hover:bg-[color:#f9f7f1]`}
+>
                 {dictionary.header.consultation}
               </Link>
             </div>
