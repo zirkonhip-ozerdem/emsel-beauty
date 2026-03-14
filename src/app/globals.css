@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f9f8f4;
+  --foreground: #4f452b;
+  --surface: rgba(255, 253, 248, 0.82);
+  --surface-strong: #fffdf8;
+  --surface-muted: #f2ebde;
+  --accent: #c5a059;
+  --accent-strong: #8a6e36;
+  --accent-soft: #e6cc93;
+  --accent-bright: #f2d688;
+  --olive: #7f7658;
+  --border: rgba(138, 110, 54, 0.18);
+  --muted: #7b6b4a;
+  --header-line: rgba(138, 110, 54, 0.18);
+  --header-button: #9b9267;
+  --header-button-text: #625b3a;
+  --shadow: 0 20px 48px rgba(138, 110, 54, 0.14);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-strong: var(--surface-strong);
+  --color-surface-muted: var(--surface-muted);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-bright: var(--accent-bright);
+  --color-olive: var(--olive);
+  --color-border: var(--border);
+  --color-muted: var(--muted);
+  --color-header-line: var(--header-line);
+  --color-header-button: var(--header-button);
+  --color-header-button-text: var(--header-button-text);
+  --font-sans: var(--font-manrope);
+  --font-display: var(--font-cinzel);
+  --font-arabic: var(--font-noto-arabic);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(242, 214, 136, 0.28), transparent 33%),
+    radial-gradient(circle at top right, rgba(197, 160, 89, 0.14), transparent 28%),
+    linear-gradient(180deg, #fffdf9 0%, #f9f8f4 56%, #f4f0e6 100%);
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-manrope), sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+::selection {
+  background: rgba(197, 160, 89, 0.28);
+}
+
+.page-shell {
+  position: relative;
+}
+
+.page-shell::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 420px;
+  background: linear-gradient(180deg, rgba(255, 252, 246, 0.96), rgba(255, 252, 246, 0));
+  pointer-events: none;
+  z-index: -1;
+}
