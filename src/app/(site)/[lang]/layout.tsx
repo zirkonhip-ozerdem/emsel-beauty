@@ -45,7 +45,7 @@ export default async function SiteLayout({
   return (
     <div lang={locale} dir={direction} className={`page-shell min-h-screen ${fontClass}`}>
       <SiteHeader locale={locale} dictionary={dictionary} />
-      <main className="mx-auto w-full max-w-7xl px-4 pb-20 pt-10 sm:px-6 lg:px-8">
+     <main className="w-full">
         {children}
       </main>
       <SiteFooter locale={locale} dictionary={dictionary} />
