@@ -51,7 +51,7 @@ export function SiteHeader({ locale, dictionary }: SiteHeaderProps) {
     }`;
 
   return (
-    <header className="sticky top-0 z-30">
+    <header className="relative z-30">
       <div className="relative w-full overflow-hidden border-y border-header-line bg-[linear-gradient(180deg,rgba(255,255,255,0.94),rgba(249,248,244,0.98))]">
         <div className="pointer-events-none absolute inset-0 opacity-90 [background:radial-gradient(circle_at_12%_18%,rgba(242,214,136,0.12),transparent_18%),radial-gradient(circle_at_78%_28%,rgba(230,204,147,0.12),transparent_20%),linear-gradient(115deg,rgba(255,255,255,0.8),rgba(245,240,231,0.44),rgba(255,255,255,0.82))]" />
         <div className="relative hidden w-full grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-8 px-8 py-2 lg:grid xl:px-14 2xl:px-20">

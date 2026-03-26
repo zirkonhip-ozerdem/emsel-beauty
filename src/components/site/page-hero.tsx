@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-
 import type { Locale } from "@/i18n/config";
 
 type PageHeroProps = {
@@ -8,7 +7,6 @@ type PageHeroProps = {
   title: string;
   description: string;
   actions?: ReactNode;
-  aside?: ReactNode;
 };
 
 export function PageHero({
@@ -17,31 +15,43 @@ export function PageHero({
   title,
   description,
   actions,
-  aside,
 }: PageHeroProps) {
   const headingFont = locale === "ar" ? "font-arabic" : "font-display";
 
   return (
-    <section className="grid gap-6 rounded-[40px] border border-border bg-white/72 p-6 shadow-[var(--shadow)] backdrop-blur md:grid-cols-[minmax(0,1.25fr)_minmax(280px,0.85fr)] md:p-8 lg:p-10">
-      <div className="space-y-6">
-        <span className="inline-flex rounded-full bg-accent-soft px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-accent-strong">
+    <section className="relative h-[420px] md:h-[500px] w-full overflow-hidden">
+
+      {/* 🖼️ BACKGROUND IMAGE */}
+      <img
+        src="/hero.jpg"
+        alt="spa"
+        className="absolute inset-0 h-full w-full object-cover"
+      />
+
+      {/* 🌑 DARK OVERLAY */}
+      <div className="absolute inset-0 bg-black/40"></div>
+
+      {/* ✨ CONTENT */}
+      <div className="relative z-10 flex h-full flex-col items-center justify-center text-center text-white px-4">
+
+        <span className="uppercase tracking-[0.3em] text-sm mb-4">
           {eyebrow}
         </span>
-        <div className="space-y-4">
-          <h1 className={`${headingFont} max-w-4xl text-4xl leading-tight text-foreground sm:text-5xl lg:text-6xl`}>
-            {title}
-          </h1>
-          <p className="max-w-2xl text-base leading-8 text-muted sm:text-lg">
-            {description}
-          </p>
-        </div>
-        {actions ? <div className="flex flex-wrap gap-3">{actions}</div> : null}
+
+        <h1 className={`${headingFont} text-4xl md:text-6xl font-bold`}>
+          {title}
+        </h1>
+
+        <p className="mt-4 text-lg max-w-xl">
+          {description}
+        </p>
+
+        {actions && (
+          <div className="mt-6 flex gap-4">
+            {actions}
+          </div>
+        )}
       </div>
-      {aside ? (
-        <div className="rounded-[32px] border border-border bg-surface-strong p-6">
-          {aside}
-        </div>
-      ) : null}
     </section>
   );
 }

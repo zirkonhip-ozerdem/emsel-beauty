@@ -25,7 +25,9 @@ export default async function HomePage({ params }: HomePageProps) {
   const headingFont = locale === "ar" ? "font-arabic" : "font-display";
 
   return (
-    <div className="space-y-20">
+    <div>
+
+      {/* 🔥 HERO */}
       <PageHero
         locale={locale}
         eyebrow={dictionary.home.hero.eyebrow}
@@ -35,50 +37,65 @@ export default async function HomePage({ params }: HomePageProps) {
           <>
             <Link
               href={getLocalizedPath(locale, "services")}
-              className="rounded-full bg-accent-strong px-5 py-3 text-sm font-semibold text-white transition hover:opacity-90"
+              className="rounded-full bg-[#1f3d2b] px-5 py-3 text-sm font-semibold text-white transition hover:opacity-90"
             >
               {dictionary.home.hero.primary}
             </Link>
             <Link
               href={getLocalizedPath(locale, "corporate")}
-              className="rounded-full border border-border bg-white px-5 py-3 text-sm font-semibold text-foreground transition hover:bg-surface-muted"
+              className="rounded-full border border-white px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
             >
               {dictionary.home.hero.secondary}
             </Link>
           </>
         }
-        aside={
-          <div className="space-y-6">
-            <div className="flex flex-wrap gap-2">
-              {dictionary.home.hero.badges.map((badge) => (
-                <span
-                  key={badge}
-                  className="rounded-full bg-surface-muted px-3 py-2 text-xs font-semibold text-accent-strong"
-                >
-                  {badge}
-                </span>
-              ))}
-            </div>
-            <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-1">
-              {dictionary.home.stats.map((item) => (
-                <div
-                  key={item.label}
-                  className="rounded-[24px] border border-border bg-white p-4"
-                >
-                  <p className={`${headingFont} text-3xl text-foreground`}>
-                    {item.value}
-                  </p>
-                  <p className="mt-2 text-sm leading-6 text-muted">
-                    {item.label}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        }
       />
 
-      <section className="space-y-8">
+      {/* 🔥 HERO ile OUR STORY arasına boşluk */}
+      <div className="h-12"></div>
+
+      {/* 🔥 OUR STORY */}
+      <div className="w-full max-w-6xl mx-auto px-4">
+        <div className="bg-[#ebe6dd] rounded-xl p-10 shadow-2xl flex justify-between items-center">
+
+          {/* SOL */}
+          <div>
+            <h2 className="text-3xl font-semibold mb-4">OUR STORY</h2>
+            <p className="text-gray-600 max-w-md">
+              Optima heated Ayurvedic massage & wellness treatments designed to relax your body and mind.
+            </p>
+          </div>
+
+          {/* BUTON */}
+          <button className="bg-[#1f3d2b] text-white px-6 py-3 rounded-md">
+            ÜRÜNLERİ İNCELE
+          </button>
+
+        </div>
+      </div>
+
+      {/* 🔥 KARTLAR */}
+      <div className="mt-12 w-full max-w-5xl mx-auto grid grid-cols-3 gap-6 px-4">
+
+        <div className="bg-white rounded-xl overflow-hidden shadow-xl hover:scale-105 transition">
+          <img src="/treatment1.jpg" className="h-40 w-full object-cover" />
+          <p className="text-center py-3 font-semibold">Head Massage</p>
+        </div>
+
+        <div className="bg-white rounded-xl overflow-hidden shadow-xl hover:scale-105 transition">
+          <img src="/treatment2.jpg" className="h-40 w-full object-cover" />
+          <p className="text-center py-3 font-semibold">Nail Art</p>
+        </div>
+
+        <div className="bg-white rounded-xl overflow-hidden shadow-xl hover:scale-105 transition">
+          <img src="/treatment3.jpg" className="h-40 w-full object-cover" />
+          <p className="text-center py-3 font-semibold">Other Massage</p>
+        </div>
+
+      </div>
+
+      {/* 🔽 DEVAM */}
+      <section className="mt-32 space-y-8">
         <SectionHeading
           locale={locale}
           eyebrow={dictionary.home.products.eyebrow}
@@ -105,83 +122,6 @@ export default async function HomePage({ params }: HomePageProps) {
         </div>
       </section>
 
-      <section className="grid gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
-        <SectionHeading
-          locale={locale}
-          eyebrow={dictionary.home.services.eyebrow}
-          title={dictionary.home.services.title}
-          description={dictionary.home.services.description}
-        />
-        <div className="grid gap-4">
-          {dictionary.home.services.items.map((item) => (
-            <article
-              key={item.title}
-              className="rounded-[28px] border border-border bg-surface-strong p-5"
-            >
-              <h3 className="text-lg font-semibold text-foreground">
-                {item.title}
-              </h3>
-              <p className="mt-2 text-sm leading-7 text-muted">
-                {item.description}
-              </p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="space-y-8">
-        <SectionHeading
-          locale={locale}
-          eyebrow={dictionary.home.journal.eyebrow}
-          title={dictionary.home.journal.title}
-          description={dictionary.home.journal.description}
-        />
-        <div className="grid gap-5 lg:grid-cols-3">
-          {dictionary.home.journal.entries.map((entry) => (
-            <article
-              key={entry.title}
-              className="rounded-[30px] border border-border bg-white/75 p-6"
-            >
-              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-accent-strong">
-                {entry.meta}
-              </span>
-              <h3 className="mt-4 text-xl font-semibold text-foreground">
-                {entry.title}
-              </h3>
-              <p className="mt-3 text-sm leading-7 text-muted">
-                {entry.description}
-              </p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="rounded-[36px] bg-accent-strong px-6 py-8 text-white shadow-[var(--shadow)] sm:px-8 lg:px-10">
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
-          <div className="space-y-4">
-            <h2 className={`${headingFont} text-3xl sm:text-4xl`}>
-              {dictionary.home.cta.title}
-            </h2>
-            <p className="max-w-3xl text-sm leading-7 text-white/78 sm:text-base">
-              {dictionary.home.cta.description}
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-3">
-            <Link
-              href={getLocalizedPath(locale, "contact")}
-              className="rounded-full bg-white px-5 py-3 text-sm font-semibold text-accent-strong transition hover:opacity-90"
-            >
-              {dictionary.home.cta.primary}
-            </Link>
-            <Link
-              href="/admin"
-              className="rounded-full border border-white/30 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
-            >
-              {dictionary.home.cta.secondary}
-            </Link>
-          </div>
-        </div>
-      </section>
     </div>
   );
 }
