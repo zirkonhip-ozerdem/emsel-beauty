@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
-import { SiteFooter } from "@/components/site/site-footer";
+import SiteFooter from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 import { getDirection, siteLocales } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
