@@ -1,21 +1,22 @@
 import type { Metadata } from "next";
-import { Cinzel, Manrope, Noto_Naskh_Arabic } from "next/font/google";
+import { Cormorant_Garamond, Lora, Manrope } from "next/font/google";
 import "./globals.css";
+import "@/styles/site-components.css";
 
 const manrope = Manrope({
   variable: "--font-manrope",
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext"],
 });
 
-const cinzel = Cinzel({
-  variable: "--font-cinzel",
-  subsets: ["latin"],
+const cormorant = Cormorant_Garamond({
+  variable: "--font-cormorant",
+  subsets: ["latin", "latin-ext"],
   weight: ["400", "500", "600", "700"],
 });
 
-const notoArabic = Noto_Naskh_Arabic({
-  variable: "--font-noto-arabic",
-  subsets: ["arabic"],
+const lora = Lora({
+  variable: "--font-lora",
+  subsets: ["latin", "latin-ext"],
   weight: ["400", "500", "600", "700"],
 });
 
@@ -35,7 +36,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="tr">
-      <body className={`${manrope.variable} ${cinzel.variable} ${notoArabic.variable} antialiased`}>
+      <body className={`${manrope.variable} ${cormorant.variable} ${lora.variable} antialiased`}>
         {children}
       </body>
     </html>

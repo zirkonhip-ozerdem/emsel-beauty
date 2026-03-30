@@ -53,6 +53,8 @@ export interface SiteDictionary {
   footer: {
     note: string;
     rights: string;
+    linksTitle: string;
+    contactTitle: string;
     addressLabel: string;
     address: string;
     phoneLabel: string;
@@ -196,7 +198,7 @@ export interface SiteDictionary {
   };
 }
 
-const dictionaries: Record<Locale, SiteDictionary> = {
+const dictionaries = {
   tr: {
     brand: {
       name: "Emsel Beauty",
@@ -206,7 +208,7 @@ const dictionaries: Record<Locale, SiteDictionary> = {
     },
     navigation: {
       home: "Anasayfa",
-      products: "Urunlerimiz",
+      products: "Ürünlerimiz",
       services: "Hizmetlerimiz",
       blog: "Blog",
       contact: "Iletisim",
@@ -215,7 +217,7 @@ const dictionaries: Record<Locale, SiteDictionary> = {
     languageLabels: {
       tr: "Turkce",
       en: "English",
-      ar: "العربية",
+      de: "Deutsch",
     },
     header: {
       consultation: "Online Rezervasyon",
@@ -223,8 +225,10 @@ const dictionaries: Record<Locale, SiteDictionary> = {
     footer: {
       note: "Starter icerikler ornek olarak hazirlandi; marka detaylari kolayca guncellenebilir.",
       rights: "Tum haklari saklidir.",
+      linksTitle: "Hizli Linkler",
+      contactTitle: "Iletisim",
       addressLabel: "Merkez",
-      address: "Istanbul merkez ofis ve randevulu deneyim alani",
+      address: "Ornek Mahallesi, Guzellik Cad. No:12 Istanbul",
       phoneLabel: "Telefon",
       phone: "+90 (5xx) xxx xx xx",
       mailLabel: "E-posta",
@@ -242,7 +246,7 @@ const dictionaries: Record<Locale, SiteDictionary> = {
           "Emsel Beauty anasayfasi; marka hikayesi, urun seckisi, hizmetler ve editoral icerikler tek deneyimde.",
       },
       products: {
-        title: "Urunlerimiz",
+        title: "Ürünlerimiz",
         description:
           "Emsel Beauty urun gamini kategori, formulasyon yaklasimi ve deneyim basliklariyla kesfedin.",
       },
@@ -275,7 +279,7 @@ const dictionaries: Record<Locale, SiteDictionary> = {
           "Emsel Beauty icin kurdugumuz bu altyapi; cok dilli site deneyimini premium bir gorunumle, tek dilli yonetim panelini ise operasyon odakli bir yapiyla bir araya getiriyor.",
         primary: "Hizmetleri Incele",
         secondary: "Markayi Tani",
-        badges: ["TR / EN / AR hazir", "Admin yapisi ayrik", "Premium landing kurgusu"],
+        badges: ["TR / EN / DE hazir", "Admin yapisi ayrik", "Premium landing kurgusu"],
       },
       stats: [
         { value: "3", label: "Dil ile ayni icerik mimarisi" },
@@ -667,7 +671,7 @@ const dictionaries: Record<Locale, SiteDictionary> = {
     languageLabels: {
       tr: "Turkish",
       en: "English",
-      ar: "Arabic",
+      de: "German",
     },
     header: {
       consultation: "Online Reservation",
@@ -675,8 +679,10 @@ const dictionaries: Record<Locale, SiteDictionary> = {
     footer: {
       note: "Starter copy is included as a placeholder and can be replaced with final brand content.",
       rights: "All rights reserved.",
+      linksTitle: "Quick Links",
+      contactTitle: "Contact",
       addressLabel: "Base",
-      address: "Istanbul central office and appointment-only experience space",
+      address: "Ornek Mahallesi, Guzellik Cad. No:12 Istanbul",
       phoneLabel: "Phone",
       phone: "+90 (5xx) xxx xx xx",
       mailLabel: "Email",
@@ -727,7 +733,7 @@ const dictionaries: Record<Locale, SiteDictionary> = {
           "This structure for Emsel Beauty combines a multilingual site experience with a premium visual language, while keeping the admin side focused and Turkish-only.",
         primary: "Explore Services",
         secondary: "Meet the Brand",
-        badges: ["Ready for TR / EN / AR", "Separate admin structure", "Premium landing flow"],
+        badges: ["Ready for TR / EN / DE", "Separate admin structure", "Premium landing flow"],
       },
       stats: [
         { value: "3", label: "Languages sharing one content system" },
@@ -1130,8 +1136,10 @@ const dictionaries: Record<Locale, SiteDictionary> = {
     footer: {
       note: "تمت اضافة النصوص الحالية كنقطة بداية ويمكن استبدالها لاحقا بمحتوى العلامة النهائي.",
       rights: "جميع الحقوق محفوظة.",
+      linksTitle: "روابط سريعة",
+      contactTitle: "التواصل",
       addressLabel: "المقر",
-      address: "مكتب اسطنبول المركزي ومساحة تجربة بالمواعيد",
+      address: "Ornek Mahallesi, Guzellik Cad. No:12 Istanbul",
       phoneLabel: "الهاتف",
       phone: "+90 (5xx) xxx xx xx",
       mailLabel: "البريد",
@@ -1561,5 +1569,16 @@ const dictionaries: Record<Locale, SiteDictionary> = {
 };
 
 export function getDictionary(locale: Locale): SiteDictionary {
-  return dictionaries[locale];
+  if (locale === "de") {
+    return {
+      ...dictionaries.en,
+      languageLabels: {
+        tr: "Turkish",
+        en: "English",
+        de: "Deutsch",
+      },
+    } as SiteDictionary;
+  }
+
+  return dictionaries[locale] as SiteDictionary;
 }

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 
+import { PageHero } from "@/components/site/page-hero";
+import { SectionHeading } from "@/components/site/section-heading";
 import { getDictionary } from "@/i18n/dictionaries";
 import { getPageMetadata } from "@/i18n/metadata";
 import { resolveLocale, type LangRouteParams } from "@/i18n/server";
@@ -18,78 +20,76 @@ export async function generateMetadata({
 export default async function ProductsPage({ params }: ProductsPageProps) {
   const locale = await resolveLocale(params);
   const dictionary = getDictionary(locale);
-
-  // EKSTRA ÜRÜNLER
-  const extraProducts = [
-    {
-      title: "Spa Tuzu",
-      description: "Mineral açısından zengin rahatlatıcı banyo tuzu.",
-    },
-    {
-      title: "Aromaterapi Yağı",
-      description: "Zihni ve bedeni rahatlatan doğal yağ karışımı.",
-    },
-    {
-      title: "Masaj Kremi",
-      description: "Kas gevşetici etkili özel bakım kremi.",
-    },
-    {
-      title: "Yüz Serumu",
-      description: "Cilt yenileyici ve parlaklık veren serum.",
-    },
-    {
-      title: "Nemlendirici Krem",
-      description: "Yoğun nem sağlayan günlük bakım kremi.",
-    },
-  ];
-
-  const allProducts = [
-    ...dictionary.productsPage.categories,
-    ...extraProducts,
-  ];
+  const headingFont = "font-display";
 
   return (
-    <div className="py-10 bg-[#eae6df]">
-      
-      {/* MERMER PANEL */}
-      <div
-        className="max-w-6xl mx-auto rounded-2xl overflow-hidden shadow-2xl p-8"
-        style={{
-          backgroundImage: "url('/back-1.jpeg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
+    <div className="site-page">
+      <PageHero
+        locale={locale}
+        eyebrow={dictionary.productsPage.hero.eyebrow}
+        title={dictionary.productsPage.hero.title}
+        description={dictionary.productsPage.hero.description}
+        aside={
+          <div className="space-y-3">
+            {dictionary.productsPage.categories.map((category) => (
+              <div key={category.title} className="site-card-plain">
+                <p className="site-kicker">{category.title}</p>
+                <p className="site-body mt-2">{category.detail}</p>
+              </div>
+            ))}
+          </div>
+        }
+      />
 
-        {/* ÜRÜNLER */}
-        <div className="grid gap-8 md:grid-cols-3">
-          {allProducts.map((product) => (
+      <section className="site-section">
+        <SectionHeading
+          locale={locale}
+          eyebrow={dictionary.productsPage.hero.eyebrow}
+          title={dictionary.productsPage.hero.title}
+          description={dictionary.productsPage.hero.description}
+        />
+        <div className="site-grid-3">
+          {dictionary.productsPage.categories.map((category) => (
+            <article key={category.title} className="site-card">
+              <h2 className={`${headingFont} text-3xl text-foreground`}>
+                {category.title}
+              </h2>
+              <p className="site-body mt-4">{category.description}</p>
+              <p className="mt-5 border-t border-border pt-5 text-sm leading-7 text-foreground">
+                {category.detail}
+              </p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="site-grid-3">
+        {dictionary.productsPage.pillars.map((pillar) => (
+          <article key={pillar.title} className="site-card-soft">
+            <h3 className="site-title">{pillar.title}</h3>
+            <p className="site-body mt-2">{pillar.description}</p>
+          </article>
+        ))}
+      </section>
+
+      <section className="site-section">
+        <div className="grid gap-4">
+          {dictionary.productsPage.roadmap.map((step, index) => (
             <article
-              key={product.title}
-              className="group rounded-[20px] overflow-hidden bg-[#f5f1ea] border border-[#e5ded3] shadow-lg transition duration-300 hover:shadow-2xl hover:-translate-y-2"
+              key={step.title}
+              className="grid gap-4 rounded-[28px] border border-border bg-white/75 p-5 md:grid-cols-[72px_minmax(0,1fr)] md:items-start"
             >
-              {/* IMAGE */}
-              <div className="h-60 bg-[#e7e2d9]"></div>
-
-              {/* CONTENT */}
-              <div className="p-5 text-center bg-[#f5f1ea]">
-                <h2 className="text-lg font-semibold text-[#3a2f1d]">
-                  {product.title}
-                </h2>
-
-                <p className="mt-2 text-sm text-[#6b6257]">
-                  {product.description}
-                </p>
-
-                <button className="mt-4 px-4 py-2 bg-[#7a6a4f] text-white rounded transition hover:bg-[#6a5a3f]">
-                  Detaylı İncele 
-                </button>
+              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-accent-soft text-lg font-semibold text-accent-strong">
+                0{index + 1}
+              </div>
+              <div>
+                <h3 className="site-title">{step.title}</h3>
+                <p className="site-body mt-2">{step.description}</p>
               </div>
             </article>
           ))}
         </div>
-
-      </div>
+      </section>
     </div>
   );
 }

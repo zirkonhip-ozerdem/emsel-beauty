@@ -36,8 +36,8 @@
   --color-header-button: var(--header-button);
   --color-header-button-text: var(--header-button-text);
   --font-sans: var(--font-manrope);
-  --font-display: var(--font-cinzel);
-  --font-arabic: var(--font-noto-arabic);
+  --font-display: var(--font-cormorant);
+  --font-body: var(--font-lora);
 }
 
 * {
@@ -62,6 +62,13 @@ body {
   background-attachment: fixed;
 }
 
+.page-shell main :where(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-cormorant), serif;
+}
+
+.page-shell main :where(p, li, blockquote) {
+  font-family: var(--font-lora), serif;
+}
 
 a {
   color: inherit;
@@ -80,6 +87,7 @@ textarea {
 
 .page-shell {
   position: relative;
+  isolation: isolate;
 }
 
 .page-shell::before {

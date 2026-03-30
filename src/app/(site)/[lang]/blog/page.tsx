@@ -41,10 +41,10 @@ const LABELS: Record<string, { readMore: string; continueReading: string; subtit
     continueReading: "Load More",
     subtitle: "Curated stories on beauty, care and brand culture",
   },
-  ar: {
-    readMore: "اقرأ المزيد",
-    continueReading: "عرض المزيد",
-    subtitle: "مختارات من عالم الجمال والعناية والعلامة",
+  de: {
+    readMore: "Mehr Lesen",
+    continueReading: "Mehr Anzeigen",
+    subtitle: "Ausgewahlte Inhalte aus Beauty, Care und Markenwelt",
   },
 };
 
@@ -119,32 +119,32 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
 }
 
 export default async function BlogPage({ params }: BlogPageProps) {
-  const locale      = await resolveLocale(params);
-  const dictionary  = getDictionary(locale);
-  const headingFont = locale === "ar" ? "font-arabic" : "font-display";
-  const labels      = LABELS[locale] ?? LABELS.tr;
+  const locale = await resolveLocale(params);
+  const dictionary = getDictionary(locale);
+  const headingFont = "font-display";
+  const labels = LABELS[locale] ?? LABELS.tr;
 
-  const allPosts   = dictionary.blogPage.posts;
+  const allPosts = dictionary.blogPage.posts;
   const firstBatch = allPosts.slice(0, INITIAL_VISIBLE);
-  const hasMore    = allPosts.length > INITIAL_VISIBLE;
+  const hasMore = allPosts.length > INITIAL_VISIBLE;
 
   return (
     <div className="blog-page">
       <header className="page-header">
         <div className="blog-divider" />
 
-          <h1 className="page-title">  Blog, markanın sadece anlattığı değil <br />
-  yön verdiği bir alana dönüşüyor.</h1>
+        <h1 className="page-title">
+          Blog, markanın sadece anlattığı değil
+          <br />
+          yön verdiği bir alana dönüşüyor.
+        </h1>
 
-        <p className="page-sub">
-          {labels.subtitle}
-        </p>
+        <p className="page-sub">{labels.subtitle}</p>
 
         <div className="blog-divider" />
       </header>
 
       <div className="blog-container">
-
         <section className="blog-grid">
           {firstBatch.map((post, i) => (
             <BlogCard
@@ -165,7 +165,6 @@ export default async function BlogPage({ params }: BlogPageProps) {
             </a>
           </div>
         )}
-
       </div>
     </div>
   );

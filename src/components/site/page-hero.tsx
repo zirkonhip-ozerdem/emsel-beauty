@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+
 import type { Locale } from "@/i18n/config";
 
 type PageHeroProps = {
@@ -7,6 +8,7 @@ type PageHeroProps = {
   title: string;
   description: string;
   actions?: ReactNode;
+  aside?: ReactNode;
 };
 
 export function PageHero({
@@ -15,43 +17,23 @@ export function PageHero({
   title,
   description,
   actions,
+  aside,
 }: PageHeroProps) {
-  const headingFont = locale === "ar" ? "font-arabic" : "font-display";
+  const headingFont = "font-display";
 
   return (
-    <section className="relative h-[420px] md:h-[500px] w-full overflow-hidden">
-
-      {/* 🖼️ BACKGROUND IMAGE */}
-      <img
-        src="/hero.jpg"
-        alt="spa"
-        className="absolute inset-0 h-full w-full object-cover"
-      />
-
-      {/* 🌑 DARK OVERLAY */}
-      <div className="absolute inset-0 bg-black/40"></div>
-
-      {/* ✨ CONTENT */}
-      <div className="relative z-10 flex h-full flex-col items-center justify-center text-center text-white px-4">
-
-        <span className="uppercase tracking-[0.3em] text-sm mb-4">
-          {eyebrow}
-        </span>
-
-        <h1 className={`${headingFont} text-4xl md:text-6xl font-bold`}>
-          {title}
-        </h1>
-
-        <p className="mt-4 text-lg max-w-xl">
-          {description}
-        </p>
-
-        {actions && (
-          <div className="mt-6 flex gap-4">
-            {actions}
-          </div>
-        )}
+    <section className="site-hero">
+      <div className="space-y-6">
+        <span className="site-badge">{eyebrow}</span>
+        <div className="space-y-4">
+          <h1 className={`${headingFont} site-heading-lg max-w-4xl leading-tight`}>
+            {title}
+          </h1>
+          <p className="site-body-lg max-w-2xl">{description}</p>
+        </div>
+        {actions ? <div className="flex flex-wrap gap-3">{actions}</div> : null}
       </div>
+      {aside ? <div className="site-hero-panel">{aside}</div> : null}
     </section>
   );
 }

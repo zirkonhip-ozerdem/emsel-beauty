@@ -3,68 +3,160 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
+import { headerLeftRouteKeys, headerRightRouteKeys } from "@/components/site/navigation";
 import {
   getLocalizedPath,
   siteLocales,
-  siteRouteKeys,
   swapLocaleInPath,
   type Locale,
 } from "@/i18n/config";
 import type { SiteDictionary } from "@/i18n/dictionaries";
+
+type HeaderRouteKey =
+  | (typeof headerLeftRouteKeys)[number]
+  | (typeof headerRightRouteKeys)[number];
 
 type SiteHeaderProps = {
   locale: Locale;
   dictionary: SiteDictionary;
 };
 
+const localeMeta: Record<Locale, { shortLabel: string; flagClassName: string }> = {
+  tr: { shortLabel: "TR", flagClassName: "site-header-flag-tr" },
+  en: { shortLabel: "ENG", flagClassName: "site-header-flag-en" },
+  de: { shortLabel: "GER", flagClassName: "site-header-flag-de" },
+};
+
+function PhoneIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="site-header-top-icon">
+      <path
+        d="M7.3 4.8c.3-.7 1-.9 1.6-.7l2 .8c.7.3 1 .9.8 1.6l-.7 2.2c-.1.4 0 .8.3 1.1l2.4 2.4c.3.3.7.4 1.1.3l2.2-.7c.7-.2 1.4.1 1.6.8l.8 2c.2.6 0 1.3-.7 1.6l-1.8.9c-.6.3-1.2.3-1.8.2A15.9 15.9 0 0 1 5.6 8.2c-.1-.6-.1-1.2.2-1.8z"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function PinIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="site-header-top-icon">
+      <path
+        d="M12 20s6-4.6 6-10a6 6 0 1 0-12 0c0 5.4 6 10 6 10Z"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <circle cx="12" cy="10" r="2.2" fill="none" stroke="currentColor" strokeWidth="1.7" />
+    </svg>
+  );
+}
+
 export function SiteHeader({ locale, dictionary }: SiteHeaderProps) {
   const pathname = usePathname() ?? getLocalizedPath(locale, "home");
-  const headingFont = locale === "ar" ? "font-arabic" : "font-display";
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const buttonFont = "font-sans";
+  const phoneHref = dictionary.footer.phone.replace(/[^+\d]/g, "") || dictionary.footer.phone;
+  const allRouteKeys = [...headerLeftRouteKeys, ...headerRightRouteKeys] as HeaderRouteKey[];
+  const mobileSubmenus: Partial<Record<HeaderRouteKey, string[]>> = {
+    services: dictionary.servicesPage.packages.slice(0, 3).map((item) => item.title),
+    products: dictionary.productsPage.categories.slice(0, 3).map((item) => item.title),
+  };
 
-  const leftNavigation: Array<"home" | "services" | "blog"> = [
-    "home", "services", "blog",
-  ];
-  const rightNavigation: Array<"corporate" | "products"> = [
-    "corporate", "products",
-  ];
+  useEffect(() => {
+    const updateStickyState = () => {
+      setIsScrolled(window.scrollY > 18);
+    };
 
-  const navigation = siteRouteKeys.map((routeKey) => ({
+    updateStickyState();
+    window.addEventListener("scroll", updateStickyState, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", updateStickyState);
+    };
+  }, []);
+
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!isMobileMenuOpen) {
+      document.body.style.overflow = "";
+      return;
+    }
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", handleEscape);
+    };
+  }, [isMobileMenuOpen]);
+
+  const buildNavItem = (routeKey: HeaderRouteKey) => ({
     key: routeKey,
     href: getLocalizedPath(locale, routeKey),
     label: dictionary.navigation[routeKey],
-  }));
+  });
 
   const isActive = (href: string) =>
     href === getLocalizedPath(locale, "home")
       ? pathname === href
       : pathname === href || pathname.startsWith(`${href}/`);
 
-  const desktopLinkClass = (href: string) =>
-    `group relative inline-flex items-center justify-center pb-2 text-[13px] font-semibold uppercase tracking-[0.18em] transition xl:text-[14px] ${
-      isActive(href) ? "text-[#5f5421]" : "text-[#605B25] hover:text-[#8A6E36]"
-    }`;
-
   return (
-    <header className="sticky top-0 z-30 backdrop-blur-[6px]">
-      <div
-        className="relative w-full overflow-hidden border-y"
-        style={{
-          borderColor: "rgba(197, 160, 89, 0.45)",
-          background:
-            "linear-gradient(180deg, rgba(229,225,216,0.9) 0%, rgba(218,212,200,0.85) 100%)",
-        }}
-      >
-        {/* ── DESKTOP NAV ────────────────────────────────────────────── */}
-        <div className="relative z-10 hidden w-full grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-8 px-8 py-2 lg:grid xl:px-14 2xl:px-20">
+    <header className={`site-header ${isScrolled ? "site-header-scrolled" : ""}`}>
+      <div className="site-header-top hidden md:block">
+        <div className="site-header-top-inner">
+          <div className="site-header-top-item">
+            <span className="site-header-top-label" aria-hidden="true">
+              <PhoneIcon />
+            </span>
+            <Link href={`tel:${phoneHref}`} className="site-header-top-link">
+              {dictionary.footer.phone}
+            </Link>
+          </div>
 
-          {/* Sol nav */}
+          <div className="site-header-top-item site-header-top-item-address">
+            <span className="site-header-top-label" aria-hidden="true">
+              <PinIcon />
+            </span>
+            <span className="site-header-top-text">{dictionary.footer.address}</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="site-header-shell">
+        <div className="site-header-overlay pointer-events-none absolute inset-0 opacity-90" />
+
+        <div className="relative hidden w-full grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-8 px-8 !py-0.5 xl:grid xl:px-14 2xl:px-20">
           <nav className="flex flex-wrap justify-end gap-x-8 gap-y-2">
-            {leftNavigation.map((routeKey) => {
-              const item = navigation.find((e) => e.key === routeKey);
-              if (!item) return null;
+            {headerLeftRouteKeys.map((routeKey) => {
+              const item = buildNavItem(routeKey);
+
               return (
-                <Link key={item.key} href={item.href} className={desktopLinkClass(item.href)}>
+                <Link
+                  key={item.key}
+                  href={item.href}
+                  className={`site-header-link group ${isActive(item.href) ? "text-foreground" : "text-muted hover:text-foreground"}`}
+                >
                   {item.label}
                   <span
                     className={`absolute bottom-0 left-0 h-px bg-accent transition-all duration-300 ${
@@ -76,37 +168,35 @@ export function SiteHeader({ locale, dictionary }: SiteHeaderProps) {
             })}
           </nav>
 
-          {/* ── LOGO EFEKTİ ──────────────────────────────────────
-          ──────────────────────────────────────────────────────────────── */}
           <Link
             href={getLocalizedPath(locale, "home")}
-            className="justify-self-center px-2 py-1"
+            className="justify-self-center px-2 py-0"
             aria-label={dictionary.brand.name}
           >
-          <div className="relative flex items-center justify-center">
-
             <Image
-                src="/logo/emsel-logo.png"
-                alt={dictionary.brand.name}
-                width={620}
-                height={675}
-                priority
-                className="h-auto w-[170px] xl:w-[220px] object-contain logo-glow"
+              src="/logo/emsel-logo.png"
+              alt={dictionary.brand.name}
+              width={220}
+              height={275}
+              priority
+              className="h-auto w-[96px] object-contain xl:w-[112px]"
             />
-          </div>
           </Link>
 
-          {/* Sağ nav + buton */}
           <div className="flex items-center justify-start gap-5">
             <nav className="flex flex-wrap items-center gap-x-8 gap-y-2">
-              {rightNavigation.map((routeKey) => {
-                const item = navigation.find((e) => e.key === routeKey);
-                if (!item) return null;
+              {headerRightRouteKeys.map((routeKey) => {
+                const item = buildNavItem(routeKey);
+
                 return (
-                  <Link key={item.key} href={item.href} className={desktopLinkClass(item.href)}>
+                  <Link
+                    key={item.key}
+                    href={item.href}
+                    className={`site-header-link group ${isActive(item.href) ? "text-foreground" : "text-muted hover:text-foreground"}`}
+                  >
                     {item.label}
                     <span
-                      className={`absolute bottom-0 left-0 h-px bg-[#C5A059] transition-all duration-300 ${
+                      className={`absolute bottom-0 left-0 h-px bg-accent transition-all duration-300 ${
                         isActive(item.href) ? "w-full" : "w-0 group-hover:w-full"
                       }`}
                     />
@@ -117,23 +207,39 @@ export function SiteHeader({ locale, dictionary }: SiteHeaderProps) {
 
             <Link
               href={getLocalizedPath(locale, "contact")}
-              className={`${headingFont} inline-flex min-h-[36px] items-center justify-center rounded-none border px-8 py-2.5 text-[10px] font-bold uppercase tracking-[0.12em] text-[#E6CC93] transition hover:bg-[#8A6E36] hover:text-[#F9F8F4]`}
-              style={{
-                borderColor: "#C5A059",
-                backgroundColor: "rgba(62, 64, 24, 0.5)",
-              }}
+              className={`${buttonFont} site-header-cta`}
             >
               {dictionary.header.consultation}
             </Link>
           </div>
         </div>
 
-        {/* ── MOBİL NAV ──────────────────────────────────────────────── */}
-        <div className="relative space-y-4 px-4 py-3 sm:px-6 lg:hidden">
-          <div className="flex justify-center border-b border-header-line pb-3">
+        <div className="relative hidden space-y-2 px-5 !py-1.5 md:block xl:hidden">
+          <div className="site-header-tablet-row">
+            <nav className="site-header-tablet-nav justify-end">
+              {headerLeftRouteKeys.map((routeKey) => {
+                const item = buildNavItem(routeKey);
+
+                return (
+                  <Link
+                    key={item.key}
+                    href={item.href}
+                    className={`site-header-link group ${isActive(item.href) ? "text-foreground" : "text-muted hover:text-foreground"}`}
+                  >
+                    {item.label}
+                    <span
+                      className={`absolute bottom-0 left-0 h-px bg-accent transition-all duration-300 ${
+                        isActive(item.href) ? "w-full" : "w-0 group-hover:w-full"
+                      }`}
+                    />
+                  </Link>
+                );
+              })}
+            </nav>
+
             <Link
               href={getLocalizedPath(locale, "home")}
-              className="px-3 py-1"
+              className="justify-self-center px-2 py-0"
               aria-label={dictionary.brand.name}
             >
               <Image
@@ -142,59 +248,220 @@ export function SiteHeader({ locale, dictionary }: SiteHeaderProps) {
                 width={220}
                 height={275}
                 priority
-                className="h-auto w-[120px] object-contain drop-shadow-[0_4px_12px_rgba(197,160,89,0.35)]"
+                className="h-auto w-[92px] object-contain lg:w-[104px]"
               />
             </Link>
+
+            <nav className="site-header-tablet-nav justify-start">
+              {headerRightRouteKeys.map((routeKey) => {
+                const item = buildNavItem(routeKey);
+
+                return (
+                  <Link
+                    key={item.key}
+                    href={item.href}
+                    className={`site-header-link group ${isActive(item.href) ? "text-foreground" : "text-muted hover:text-foreground"}`}
+                  >
+                    {item.label}
+                    <span
+                      className={`absolute bottom-0 left-0 h-px bg-accent transition-all duration-300 ${
+                        isActive(item.href) ? "w-full" : "w-0 group-hover:w-full"
+                      }`}
+                    />
+                  </Link>
+                );
+              })}
+            </nav>
           </div>
 
-          <nav className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-            {[...leftNavigation, ...rightNavigation].map((routeKey) => {
-              const item = navigation.find((e) => e.key === routeKey);
-              if (!item) return null;
-              return (
-                <Link
-                  key={item.key}
-                  href={item.href}
-                  className={`border px-4 py-3 text-center text-xs font-semibold uppercase tracking-[0.16em] transition ${
-                    isActive(item.href)
-                      ? "border-accent bg-white text-accent-strong"
-                      : "border-border bg-white/70 text-muted hover:text-foreground"
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              );
-            })}
+          <div className="flex flex-wrap items-center justify-center gap-3 border-t border-header-line !pt-1.5">
             <Link
               href={getLocalizedPath(locale, "contact")}
-              className={`${headingFont} col-span-full inline-flex justify-center bg-accent-strong px-5 py-2.5 text-center text-sm uppercase tracking-[0.1em] text-background transition hover:bg-accent`}
+              className={`${buttonFont} site-header-cta px-6`}
             >
               {dictionary.header.consultation}
             </Link>
-          </nav>
 
-          <div className="flex flex-wrap items-center justify-center gap-2 border-t border-border pt-4">
-            {siteLocales.map((currentLocale) => {
-              const href = swapLocaleInPath(pathname, currentLocale);
-              const active = currentLocale === locale;
-              return (
-                <Link
-                  key={currentLocale}
-                  href={href}
-                  className={`rounded-full px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] transition ${
-                    active
-                      ? "bg-accent-soft text-accent-strong"
-                      : "bg-white/70 text-muted hover:text-foreground"
-                  }`}
-                >
-                  {dictionary.languageLabels[currentLocale]}
-                </Link>
-              );
-            })}
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              {siteLocales.map((currentLocale) => {
+                const href = swapLocaleInPath(pathname, currentLocale);
+                const active = currentLocale === locale;
+
+                return (
+                  <Link
+                    key={currentLocale}
+                    href={href}
+                    className={`site-header-locale-link ${
+                      active
+                        ? "bg-accent-soft text-accent-strong"
+                        : "bg-white/70 text-muted hover:text-foreground"
+                    }`}
+                  >
+                    {dictionary.languageLabels[currentLocale]}
+                  </Link>
+                );
+              })}
+            </div>
           </div>
         </div>
 
+        <div className="relative space-y-1.5 px-5 !py-1.5 md:hidden">
+          <div className="grid grid-cols-[48px_1fr_48px] items-center gap-3 border-b border-header-line !pb-1.5">
+            <button
+              type="button"
+              className="site-header-mobile-toggle ml-1"
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="site-mobile-menu"
+              aria-label={isMobileMenuOpen ? "Menüyü kapat" : "Menüyü aç"}
+              onClick={() => setIsMobileMenuOpen((current) => !current)}
+            >
+              <span
+                className={`site-header-mobile-line ${
+                  isMobileMenuOpen ? "translate-y-[6px] rotate-45" : ""
+                }`}
+              />
+              <span
+                className={`site-header-mobile-line ${isMobileMenuOpen ? "opacity-0" : ""}`}
+              />
+              <span
+                className={`site-header-mobile-line ${
+                  isMobileMenuOpen ? "-translate-y-1.5 -rotate-45" : ""
+                }`}
+              />
+            </button>
+
+            <Link
+              href={getLocalizedPath(locale, "home")}
+              className="flex justify-center px-3 py-1"
+              aria-label={dictionary.brand.name}
+            >
+              <Image
+                src="/logo/emsel-logo.png"
+                alt={dictionary.brand.name}
+                width={220}
+                height={275}
+                priority
+                className="h-auto w-[94.5px] object-contain"
+              />
+            </Link>
+
+            <div aria-hidden="true" />
+          </div>
+        </div>
       </div>
+
+      {isMobileMenuOpen ? (
+        <>
+          <button
+            type="button"
+            className="site-header-mobile-scrim md:hidden"
+            aria-label="Menüyü kapat"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+
+          <aside
+            id="site-mobile-menu"
+            className="site-header-mobile-drawer md:hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mobil navigasyon"
+          >
+            <div className="site-header-mobile-drawer-top">
+              <Link
+                href={getLocalizedPath(locale, "home")}
+                className="flex justify-center"
+                aria-label={dictionary.brand.name}
+              >
+                <Image
+                  src="/logo/emsel-logo.png"
+                  alt={dictionary.brand.name}
+                  width={220}
+                  height={275}
+                  priority
+                  className="h-auto w-23 object-contain"
+                />
+              </Link>
+
+              <button
+                type="button"
+                className="site-header-mobile-close"
+                aria-label="Menüyü kapat"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <span className="site-header-mobile-close-line rotate-45" />
+                <span className="site-header-mobile-close-line -rotate-45" />
+              </button>
+            </div>
+
+            <nav className="site-header-mobile-nav" aria-label="Mobil navigasyon linkleri">
+              {allRouteKeys.map((routeKey) => {
+                const item = buildNavItem(routeKey);
+                const submenuItems = mobileSubmenus[routeKey];
+
+                return (
+                  <div key={item.key} className="site-header-mobile-entry">
+                    <Link
+                      href={item.href}
+                      className={`site-header-mobile-link ${
+                        isActive(item.href)
+                          ? "site-header-mobile-link-active"
+                          : "site-header-mobile-link-default"
+                      }`}
+                    >
+                      <span>{item.label}</span>
+                    </Link>
+
+                    {submenuItems?.length ? (
+                      <div className="site-header-mobile-submenu">
+                        {submenuItems.map((submenuItem) => (
+                          <span key={submenuItem} className="site-header-mobile-submenu-item">
+                            {submenuItem}
+                          </span>
+                        ))}
+                      </div>
+                    ) : null}
+                  </div>
+                );
+              })}
+            </nav>
+
+            <div className="site-header-mobile-actions">
+              <Link
+                href={getLocalizedPath(locale, "contact")}
+                className={`${buttonFont} site-header-mobile-cta`}
+              >
+                {dictionary.header.consultation}
+              </Link>
+
+              <div className="site-header-mobile-locales">
+                {siteLocales.map((currentLocale) => {
+                  const href = swapLocaleInPath(pathname, currentLocale);
+                  const active = currentLocale === locale;
+                  const meta = localeMeta[currentLocale];
+
+                  return (
+                    <Link
+                      key={currentLocale}
+                      href={href}
+                      className={`site-header-mobile-locale ${
+                        active
+                          ? "site-header-mobile-locale-active"
+                          : "site-header-mobile-locale-default"
+                      }`}
+                    >
+                      <span
+                        className={`site-header-flag ${meta.flagClassName}`}
+                        aria-hidden="true"
+                      />
+                      <span>{meta.shortLabel}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          </aside>
+        </>
+      ) : null}
     </header>
   );
 }

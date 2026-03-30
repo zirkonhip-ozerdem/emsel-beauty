@@ -1,4 +1,4 @@
-export const siteLocales = ["tr", "en", "ar"] as const;
+export const siteLocales = ["tr", "en", "de"] as const;
 
 export type Locale = (typeof siteLocales)[number];
 
@@ -22,7 +22,7 @@ export function isLocale(value: string): value is Locale {
 }
 
 export function getDirection(locale: Locale): "ltr" | "rtl" {
-  return locale === "ar" ? "rtl" : "ltr";
+  return "ltr";
 }
 
 export function getLocalizedPath(locale: Locale, routeKey: SiteRouteKey): string {
