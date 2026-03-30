@@ -144,6 +144,9 @@ export interface SiteDictionary {
     };
     posts: BlogCard[];
     topics: string[];
+    readMoreLabel: string;
+    continueLabel: string;  
+    loadMoreCta: string;
   };
   contactPage: {
     hero: {
@@ -464,9 +467,10 @@ const dictionaries: Record<Locale, SiteDictionary> = {
       },
       posts: [
         {
-          title: "Hassas cilt icerikleri icin ikna edici ama sade anlatim nasil kurulur?",
-          description: "Faydalar, vaatler ve teknik detaylar arasindaki dengeyi anlatan yazi iskeleti.",
-          meta: "Editoryal dil",
+          title: "Kafa masaji ve head spa: gerginligi azaltan rituel rehberi",
+          description:
+            "Sac derisi, bas bolgesi ve omuz hatti icin sakin tempolu, premium bir deneyim vaadiyle nasil anlatilir?",
+          meta: "Kafa masaji",
         },
         {
           title: "Salon blog'unda once deneyim mi, once sonuc mu gosterilmeli?",
@@ -478,8 +482,71 @@ const dictionaries: Record<Locale, SiteDictionary> = {
           description: "Her dilde ayni mesaji korurken dogal okuma deneyimi saglama yontemi.",
           meta: "Multilingual SEO",
         },
+        {
+          title: "Kis aylarinda nem bariyerini korumak icin sade rutin onerileri",
+          description: "Kuru hava ve isitma ile bozulan bariyeri destekleyen, abartisiz bakim basliklari.",
+          meta: "Cilt bakimi",
+        },
+        {
+          title: "Manikur sonrasi ojenin dayanikliligini artiran kucuk aliskanliklar",
+          description: "Gunluk rutinde nelere dikkat edilir, blogda nasil kisa ve net anlatilir?",
+          meta: "El bakimi",
+        },
+        {
+          title: "Head spa sonrasi evde uygulanabilecek hafif bakim adimlari",
+          description: "Salon deneyimini uzatan, musteriye guven veren yonlendirici icerik fikirleri.",
+          meta: "Head spa",
+        },
+        {
+          title: "Cilt tonunu esitlemek isteyenler icin icerik plani onerisi",
+          description: "Vaatleri abartmadan, beklentiyi yoneten editorial takvim satirlari.",
+          meta: "Icerik plani",
+        },
+        {
+          title: "Sac derisi kasintisinda nelere dikkat edilmeli, ne yazilmali?",
+          description: "Tibbi iddia yerine bilgilendirici ve guvenli dil icin kontrol listesi.",
+          meta: "Sac derisi",
+        },
+        {
+          title: "Premium salon deneyimini metinde hissettiren fotograf secimi",
+          description: "Isik, kadraj ve detaylarla marka tonunu destekleyen gorsel anlatim.",
+          meta: "Gorsel dil",
+        },
+        {
+          title: "Sezonluk kampanya metinlerinde abartidan kacinma rehberi",
+          description: "Indirim ve kampanya cumlelerinde premium hissi koruyan cumle yapilari.",
+          meta: "Kampanya",
+        },
+        {
+          title: "Blog yazilarinda H1–H2 hiyerarsisini SEO ile uyumlu kullanma",
+          description: "Okunabilirligi bozmadan anahtar kelime ve baslik hizasi icin pratik sablon.",
+          meta: "SEO",
+        },
+        {
+          title: "Musteri yorumlarini editoral icerige donusturme fikirleri",
+          description: "Sosyal kanit ile hikaye anlatimini birlestiren guvenli ornekler.",
+          meta: "Guven",
+        },
+        {
+          title: "Nis parfum ve bakim urunleri icin urun hikayesi sablonu",
+          description: "Notalar, dokusu ve kullanim anini tek paragrafta toplayan yazi kalibi.",
+          meta: "Urun hikayesi",
+        },
+        {
+          title: "Randevu sonrasi e-posta icerikleri icin kisa mesaj kaliplari",
+          description: "Bakim onerisi, hatirlatma ve tesekkur tonunu ayni ritimde tutma.",
+          meta: "E-posta",
+        },
+        {
+          title: "Sosyal medya icin blog yazisindan carousel uretme checklist'i",
+          description: "Tek yazidan bes alt baslik cikaran, tasarimla uyumlu icerik bolme rehberi.",
+          meta: "Sosyal medya",
+        },
       ],
       topics: ["Bakim ritulleri", "Marka dili", "Servis deneyimi", "Urun rehberi", "Sezon trendleri"],
+      readMoreLabel: "Devamını Oku",
+      loadMoreCta: "Daha fazla yazi — asagida devamina bak",
+      continueLabel: "Devamı",
     },
     contactPage: {
       hero: {
@@ -852,9 +919,10 @@ const dictionaries: Record<Locale, SiteDictionary> = {
       },
       posts: [
         {
-          title: "How to write for sensitive skin without sounding either vague or clinical",
-          description: "A content structure that balances trust, benefits and technical clarity.",
-          meta: "Editorial voice",
+          title: "Head spa and scalp massage: an editorial ritual for tension release",
+          description:
+            "How to describe slow tempo, scalp-to-shoulder relief and a premium care promise in one story.",
+          meta: "Head spa",
         },
         {
           title: "Should a salon blog lead with the experience or the result?",
@@ -866,8 +934,71 @@ const dictionaries: Record<Locale, SiteDictionary> = {
           description: "How to preserve the same message across locales with a natural reading flow.",
           meta: "Multilingual SEO",
         },
+        {
+          title: "A simple winter routine idea to protect the skin barrier",
+          description: "Editorial angles that support the barrier without overpromising in dry air.",
+          meta: "Skin care",
+        },
+        {
+          title: "Small habits that help nail polish last after a manicure",
+          description: "What to mention in a blog post so guidance feels practical, not preachy.",
+          meta: "Hands",
+        },
+        {
+          title: "Gentle aftercare steps guests can do at home after a head spa",
+          description: "How to extend the salon story with calm, trustworthy instructions.",
+          meta: "Head spa",
+        },
+        {
+          title: "A content-plan sketch for readers focused on even skin tone",
+          description: "Calendar lines that manage expectations while staying premium.",
+          meta: "Editorial plan",
+        },
+        {
+          title: "What to say (and avoid) when writing about scalp itch",
+          description: "A checklist for informative language without medical claims.",
+          meta: "Scalp",
+        },
+        {
+          title: "Choosing photos that make a premium salon feel tangible in copy",
+          description: "Light, framing and detail choices that reinforce brand tone.",
+          meta: "Visual language",
+        },
+        {
+          title: "Keeping seasonal campaign copy confident without sounding loud",
+          description: "Sentence shapes that preserve luxury while mentioning offers.",
+          meta: "Campaigns",
+        },
+        {
+          title: "Using H1–H2 hierarchy in blog posts with SEO in mind",
+          description: "A practical template for headings that stay readable.",
+          meta: "SEO",
+        },
+        {
+          title: "Turning client feedback into editorial stories safely",
+          description: "Examples that blend social proof with narrative restraint.",
+          meta: "Trust",
+        },
+        {
+          title: "A short product-story template for niche fragrance and care",
+          description: "One-paragraph rhythm for notes, texture and the moment of use.",
+          meta: "Product story",
+        },
+        {
+          title: "Email snippets after appointments: care, reminder and thanks",
+          description: "Keeping tone consistent across follow-up messages.",
+          meta: "Email",
+        },
+        {
+          title: "A checklist to turn one blog post into a social carousel",
+          description: "Splitting a long article into five slides designers can reuse.",
+          meta: "Social",
+        },
       ],
       topics: ["Care rituals", "Brand voice", "Service design", "Product guides", "Seasonal trends"],
+      readMoreLabel: "Read more",
+      loadMoreCta: "More articles — continue below",
+      continueLabel: "Continue",
     },
     contactPage: {
       hero: {
@@ -1243,9 +1374,9 @@ const dictionaries: Record<Locale, SiteDictionary> = {
       },
       posts: [
         {
-          title: "كيف نكتب للبشرة الحساسة دون ان يبدو النص غامضا او تقنيا جدا؟",
-          description: "هيكل محتوى يوازن بين الثقة والفوائد والوضوح.",
-          meta: "صوت تحريري",
+          title: "هيد سبا وتدليك فروة الراس: طقوس تحريرية لتهدئة التوتر",
+          description: "كيف تصف ايقاعا بطيئا وارتياحا من فروة الراس الى الاكتاف مع وعد عناية فاخر في قصة واحدة؟",
+          meta: "هيد سبا",
         },
         {
           title: "هل يجب ان يبدأ مدون الصالون بالتجربة ام بالنتيجة؟",
@@ -1257,8 +1388,71 @@ const dictionaries: Record<Locale, SiteDictionary> = {
           description: "كيف نحافظ على الرسالة نفسها بين اللغات مع تجربة قراءة طبيعية.",
           meta: "سيو متعدد اللغات",
         },
+        {
+          title: "فكرة روتين شتوي بسيط لدعم حاجز البشرة",
+          description: "زوايا تحريرية تدعم الحاجز دون مبالغة في الجو الجاف.",
+          meta: "العناية بالبشرة",
+        },
+        {
+          title: "عادات صغيرة تطيل عمر طلاء الاظافر بعد المانيكير",
+          description: "كيف تبدو النصائح عملية لا خطابية في المدونة.",
+          meta: "العناية باليدين",
+        },
+        {
+          title: "خطوات لطيفة للعناية المنزلية بعد جلسة هيد سبا",
+          description: "تمديد قصة الصالون بتعليمات هادئة وموثوقة.",
+          meta: "هيد سبا",
+        },
+        {
+          title: "مسودة خطة محتوى لمن يهتمون بتجانس لون البشرة",
+          description: "اسطر تقويم تدير التوقعات مع الحفاظ على فخامة النبرة.",
+          meta: "التحرير",
+        },
+        {
+          title: "ماذا نقول وما نتجنب عند الكتابة عن حكة فروة الراس؟",
+          description: "قائمة تحقق للغة معلوماتية دون ادعاءات طبية.",
+          meta: "فروة الراس",
+        },
+        {
+          title: "اختيار صور تجعل تجربة الصالون الفاخرة محسوسة في النص",
+          description: "الضوء والتكوين والتفاصيل التي تعزز نبرة العلامة.",
+          meta: "الصورة",
+        },
+        {
+          title: "الحفاظ على ثقة النص في عروض الموسم دون صخب",
+          description: "اشكال جمل تحافظ على الفخامة مع ذكر العروض.",
+          meta: "الحملات",
+        },
+        {
+          title: "استخدام تسلسل العناوين H1–H2 في المدونة مع مراعاة السيو",
+          description: "قالب عملي لعناوين مقروءة ومنظمة.",
+          meta: "السيو",
+        },
+        {
+          title: "تحويل آراء العملاء الى قصص تحريرية بأمان",
+          description: "امثلة تمزج بين الاثبات الاجتماعي والحكاية باعتدال.",
+          meta: "الثقة",
+        },
+        {
+          title: "قالب قصة قصيرة لعطور ومنتجات عناية متخصصة",
+          description: "إيقاع فقرة واحدة للروائح والملمس ولحظة الاستخدام.",
+          meta: "المنتج",
+        },
+        {
+          title: "مقتطفات بريد بعد المواعيد: عناية وتذكير وشكر",
+          description: "توحيد النبرة في رسائل المتابعة.",
+          meta: "البريد",
+        },
+        {
+          title: "قائمة تحقق لتحويل مقال الى كاروسيل لوسائل التواصل",
+          description: "تقسيم المقال الطويل الى شرائح يعيدها المصمم.",
+          meta: "التواصل",
+        },
       ],
       topics: ["طقوس العناية", "لغة العلامة", "تصميم الخدمة", "ادلة المنتجات", "اتجاهات موسمية"],
+      readMoreLabel: "اقرأ المزيد",
+      loadMoreCta: "المزيد من المقالات — تابع الاسفل",
+      continueLabel: "متابعة",
     },
     contactPage: {
       hero: {
