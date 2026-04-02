@@ -1,0 +1,281 @@
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root {
+          --brown-dark: #3b2a1a;
+          --brown-mid:  #6b4c32;
+          --gold:       #c9a84c;
+          --gold-light: #e2c47a;
+          --cream:      #faf6f0;
+          --text-mid:   #6b4c32;
+          --border:     rgba(180,140,90,0.25);
+          --green-dark: #2a3320;
+          --green-mid:  #3d4a2e;
+        }
+
+        .kp {
+          background-image: url('/background/back-1.jpeg');
+          background-size: cover;
+          background-position: center;
+          background-attachment: fixed;
+          font-family: var(--font-body), serif;
+          color: var(--brown-dark);
+          width: 100%;
+        }
+
+        /* BAŞLIK */
+        .kp-header {
+          background: rgba(250,246,240,0.82);
+          backdrop-filter: blur(8px);
+          text-align: center;
+          padding: 56px 32px 48px;
+          border-bottom: 1px solid var(--border);
+        }
+        .kp-header h1 {
+          font-family: var(--font-display), serif;
+          font-size: 24px; font-weight: 600;
+          letter-spacing: 0.24em; text-transform: uppercase;
+          color: var(--brown-dark);
+        }
+        .kp-rule {
+          display: flex; align-items: center; justify-content: center;
+          gap: 14px; margin-top: 18px;
+        }
+        .kp-rule span { width: 72px; height: 0.5px; background: var(--gold); display: block; }
+        .kp-rule i { width: 6px; height: 6px; background: var(--gold); transform: rotate(45deg); display: block; flex-shrink: 0; }
+
+        /* HAKKIMIZDA — krem */
+        .kp-about {
+           background-image: url('/background/back-1.jpeg');
+          backdrop-filter: blur(6px);
+          padding: 64px 72px;
+          border-bottom: 1px solid var(--border);
+        }
+        .kp-about-grid {
+          display: grid; grid-template-columns: 1.1fr 0.9fr;
+          gap: 56px; align-items: start;
+          max-width: 1080px; margin: 0 auto;
+        }
+
+        /* MİSYON — koyu yeşil */
+        .kp-misyon {
+          background: var(--green-mid);
+          padding: 64px 72px;
+          border-bottom: 1px solid rgba(226,196,122,0.1);
+        }
+        .kp-misyon-grid {
+          display: grid; grid-template-columns: 0.9fr 1.1fr;
+          gap: 56px; align-items: center;
+          max-width: 1080px; margin: 0 auto;
+        }
+        .kp-misyon-img {
+          width: 100%; height: 420px; object-fit: cover; display: block;
+        }
+
+        /* VİZYON — krem */
+        .kp-vizyon {
+           background-image: url('/background/back-1.jpeg');
+          backdrop-filter: blur(6px);
+          padding: 64px 72px;
+          border-bottom: 1px solid var(--border);
+        }
+        .kp-vizyon-grid {
+          display: grid; grid-template-columns: 1.1fr 0.9fr;
+          gap: 56px; align-items: center;
+          max-width: 1080px; margin: 0 auto;
+        }
+        .kp-vizyon-img {
+          width: 100%; height: 380px; object-fit: cover; display: block;
+        }
+
+        /* SAYILAR — krem, kutular */
+        .kp-stats {
+          background: rgba(250,246,240,0.82);
+          backdrop-filter: blur(6px);
+          display: grid; grid-template-columns: repeat(4, 1fr);
+          gap: 20px;
+          padding: 56px 72px;
+          border-bottom: 1px solid var(--border);
+        }
+        .kp-stat {
+          padding: 36px 24px; text-align: center;
+          background: rgba(255,255,255,0.65);
+          border: 1px solid var(--border);
+          transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .kp-stat:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(59,42,26,0.1); }
+        .kp-stat-n {
+          font-family: var(--font-display), serif; font-size: 36px; font-weight: 700;
+          color: var(--gold); display: block; margin-bottom: 8px;
+        }
+        .kp-stat-l {
+          font-family: var(--font-body), serif; font-size: 13px;
+          font-style: italic; color: var(--text-mid);
+        }
+
+        /* PAYLAŞILAN STİLLER */
+        .kp-section-title {
+          font-family: var(--font-display), serif; font-size: 17px; font-weight: 600;
+          letter-spacing: 0.2em; text-transform: uppercase;
+          color: var(--brown-dark);
+          margin-bottom: 24px; padding-bottom: 14px;
+          border-bottom: 1px solid var(--border);
+          display: inline-block;
+        }
+        .kp-section-title-light {
+          font-family: var(--font-display), serif; font-size: 17px; font-weight: 600;
+          letter-spacing: 0.2em; text-transform: uppercase;
+          color: #f0e8d0;
+          margin-bottom: 24px; padding-bottom: 14px;
+          border-bottom: 1px solid rgba(226,196,122,0.25);
+          display: inline-block;
+        }
+        .kp-text p {
+          font-family: var(--font-body), serif; font-size: 16px;
+          color: var(--text-mid); line-height: 1.95; margin-bottom: 14px;
+        }
+        .kp-text p:last-child { margin-bottom: 0; }
+        .kp-text-light p {
+          font-family: var(--font-body), serif; font-size: 16px; font-style: italic;
+          color: rgba(220,200,160,0.82); line-height: 1.95; margin-bottom: 14px;
+        }
+        .kp-text-light p:last-child { margin-bottom: 0; }
+
+        /* GÖRSELLER */
+        .kp-imgs {
+          display: flex; flex-direction: column; gap: 10px;
+        }
+        .kp-imgs img:first-child {
+          width: 100%; height: 200px; object-fit: cover; display: block;
+        }
+        .kp-imgs-row {
+          display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+        }
+        .kp-imgs-row img {
+          width: 100%; height: 150px; object-fit: cover; display: block;
+        }
+
+        @media (max-width: 1100px) {
+          .kp-about,
+          .kp-misyon,
+          .kp-vizyon,
+          .kp-stats {
+            padding: 48px 32px;
+          }
+
+          .kp-about-grid,
+          .kp-misyon-grid,
+          .kp-vizyon-grid {
+            gap: 36px;
+          }
+
+          .kp-stats {
+            grid-template-columns: repeat(2, 1fr);
+          }
+        }
+
+        @media (max-width: 768px) {
+          .kp-header {
+            padding: 44px 20px 36px;
+          }
+
+          .kp-header h1 {
+            font-size: 20px;
+            line-height: 1.4;
+            letter-spacing: 0.14em;
+          }
+
+          .kp-rule span {
+            width: 48px;
+          }
+
+          .kp-about,
+          .kp-misyon,
+          .kp-vizyon,
+          .kp-stats {
+            padding: 36px 20px;
+          }
+
+          .kp-about-grid,
+          .kp-misyon-grid,
+          .kp-vizyon-grid {
+            grid-template-columns: 1fr;
+            gap: 24px;
+          }
+
+          .kp-about-grid > .kp-imgs,
+          .kp-misyon-grid > .kp-misyon-img,
+          .kp-vizyon-grid > .kp-vizyon-img {
+            order: 1;
+          }
+
+          .kp-about-grid > .kp-text,
+          .kp-misyon-grid > .kp-text-light,
+          .kp-vizyon-grid > .kp-text {
+            order: 2;
+          }
+
+          .kp-section-title,
+          .kp-section-title-light {
+            font-size: 15px;
+            margin-bottom: 18px;
+            padding-bottom: 10px;
+          }
+
+          .kp-text p,
+          .kp-text-light p {
+            font-size: 15px;
+            line-height: 1.8;
+          }
+
+          .kp-misyon-img,
+          .kp-vizyon-img {
+            height: 280px;
+          }
+
+          .kp-imgs img:first-child {
+            height: 190px;
+          }
+
+          .kp-imgs-row img {
+            height: 140px;
+          }
+
+          .kp-stats {
+            grid-template-columns: 1fr;
+            gap: 16px;
+          }
+
+          .kp-stat {
+            padding: 28px 20px;
+          }
+        }
+
+        @media (max-width: 520px) {
+          .kp-header h1 {
+            font-size: 18px;
+            letter-spacing: 0.1em;
+          }
+
+          .kp-about,
+          .kp-misyon,
+          .kp-vizyon,
+          .kp-stats {
+            padding: 32px 16px;
+          }
+
+          .kp-imgs-row {
+            grid-template-columns: 1fr;
+          }
+
+          .kp-imgs img:first-child,
+          .kp-imgs-row img,
+          .kp-misyon-img,
+          .kp-vizyon-img {
+            height: 220px;
+          }
+
+          .kp-stat-n {
+            font-size: 30px;
+          }
+        }
+      
