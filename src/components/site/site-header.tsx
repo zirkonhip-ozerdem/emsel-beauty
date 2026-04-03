@@ -41,7 +41,7 @@ export function SiteHeader({ locale, dictionary }: SiteHeaderProps) {
       : pathname === href || pathname.startsWith(`${href}/`);
 
   const desktopLinkClass = (href: string) =>
-    `group relative inline-flex items-center justify-center pb-2 text-[13px] font-semibold uppercase tracking-[0.18em] transition xl:text-[14px] ${
+    `group relative inline-flex items-center justify-center pb-0 text-[13px] font-semibold uppercase tracking-[0.18em] transition xl:text-[14px] ${
       isActive(href) ? "text-[#5f5421]" : "text-[#605B25] hover:text-[#8A6E36]"
     }`;
 
@@ -56,7 +56,7 @@ export function SiteHeader({ locale, dictionary }: SiteHeaderProps) {
         }}
       >
         {/* ── DESKTOP NAV ────────────────────────────────────────────── */}
-        <div className="relative z-10 hidden w-full grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-8 px-8 py-2 lg:grid xl:px-14 2xl:px-20">
+        <div className="relative z-10 hidden w-full grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-4 px-8 py-[2px] lg:grid xl:px-14 2xl:px-20">
 
           {/* Sol nav */}
           <nav className="flex flex-wrap justify-end gap-x-8 gap-y-2">
@@ -80,7 +80,7 @@ export function SiteHeader({ locale, dictionary }: SiteHeaderProps) {
           ──────────────────────────────────────────────────────────────── */}
           <Link
             href={getLocalizedPath(locale, "home")}
-            className="justify-self-center px-2 py-1"
+            className="justify-self-center px-1 py-0"
             aria-label={dictionary.brand.name}
           >
           <div className="relative flex items-center justify-center">
@@ -91,7 +91,7 @@ export function SiteHeader({ locale, dictionary }: SiteHeaderProps) {
                 width={620}
                 height={675}
                 priority
-                className="h-auto w-[170px] xl:w-[220px] object-contain logo-glow"
+                className="h-auto w-[100px] xl:w-[130px] object-contain logo-glow"
             />
           </div>
           </Link>
@@ -117,7 +117,7 @@ export function SiteHeader({ locale, dictionary }: SiteHeaderProps) {
 
             <Link
               href={getLocalizedPath(locale, "contact")}
-              className={`${headingFont} inline-flex min-h-[36px] items-center justify-center rounded-none border px-8 py-2.5 text-[10px] font-bold uppercase tracking-[0.12em] text-[#E6CC93] transition hover:bg-[#8A6E36] hover:text-[#F9F8F4]`}
+              className={`${headingFont} inline-flex min-h-[26px] items-center justify-center rounded-none border px-4 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-[#E6CC93] transition hover:bg-[#8A6E36] hover:text-[#F9F8F4]`}
               style={{
                 borderColor: "#C5A059",
                 backgroundColor: "rgba(62, 64, 24, 0.5)",
