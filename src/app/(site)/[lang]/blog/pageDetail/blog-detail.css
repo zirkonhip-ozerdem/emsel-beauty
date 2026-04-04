@@ -1,0 +1,580 @@
+/* ==========================================================================
+   blog-detail.css  — v2
+   Konum: src/app/(site)/[lang]/blog/[slug]/blog-detail.css
+   ========================================================================== */
+
+:root {
+  --bd-gold:        #c9a84c;
+  --bd-gold-faint:  rgba(201, 168, 76, 0.35);
+  --bd-dark:        #3b2a1a;
+  --bd-mid:         #6b4c32;
+  --bd-cream:       #faf6f0;
+  --bd-blur:        blur(10px);
+}
+
+/* ── Sayfa kapsayıcı ──────────────────────────────────────────────────────── */
+.bd-page {
+  font-family: "EB Garamond", Georgia, serif;
+  color: var(--bd-dark);
+  min-height: 100vh;
+  background-image: url("/background/back-1.jpeg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  position: relative;
+}
+
+.bd-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(250, 246, 240, 0.50);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Hero ─────────────────────────────────────────────────────────────────── */
+.bd-hero {
+  position: relative;
+  width: 100%;
+  height: clamp(260px, 44vw, 500px);
+  overflow: hidden;
+  z-index: 1;
+}
+
+.bd-hero-img {
+  object-fit: cover;
+  object-position: center 30%;
+}
+
+.bd-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(25, 14, 5, 0.20) 0%,
+    rgba(25, 14, 5, 0.52) 55%,
+    rgba(25, 14, 5, 0.80) 100%
+  );
+  z-index: 1;
+}
+
+.bd-hero-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  padding: 28px clamp(16px, 6vw, 80px) 36px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bd-hero-eyebrow {
+  font-family: "Cinzel", serif;
+  font-size: 0.60rem;
+  font-weight: 700;
+  letter-spacing: 0.30em;
+  text-transform: uppercase;
+  color: var(--bd-gold);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bd-hero-eyebrow::after {
+  content: "";
+  display: inline-block;
+  width: 36px;
+  height: 1px;
+  background: var(--bd-gold);
+  opacity: 0.65;
+}
+
+.bd-hero-title {
+  font-family: "Cinzel", serif;
+  font-size: clamp(1.35rem, 3.8vw, 2.5rem);
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--bd-cream);
+  line-height: 1.25;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.45);
+  max-width: 840px;
+}
+
+/* ── Okuma süresi etiketi (hero altında veya nav-bar içinde) ─────────────── */
+.bd-read-time {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "Cinzel", serif;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(250, 246, 240, 0.72);
+}
+
+.bd-read-time svg {
+  flex-shrink: 0;
+  opacity: 0.75;
+}
+
+/* Alternatif: nav bar içindeki dark versiyonu */
+.bd-read-time.dark {
+  color: var(--bd-mid);
+  opacity: 0.80;
+}
+
+.bd-hero-date {
+  font-family: "EB Garamond", Georgia, serif;
+  font-size: 0.88rem;
+  font-style: italic;
+  color: rgba(250, 246, 240, 0.68);
+  letter-spacing: 0.03em;
+}
+
+/* ── İki sütunlu layout: içerik + sidebar ────────────────────────────────── */
+.bd-layout {
+  position: relative;
+  z-index: 1;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 4vw, 40px) 80px;
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 32px;
+  align-items: start;
+}
+
+@media (max-width: 960px) {
+  .bd-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Navigasyon çubuğu ───────────────────────────────────────────────────── */
+.bd-nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--bd-gold-faint);
+  margin-bottom: 36px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.bd-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "Cinzel", serif;
+  font-size: 0.60rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--bd-mid);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.bd-back-btn:hover { color: var(--bd-gold); }
+
+.bd-back-btn svg {
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+
+.bd-back-btn:hover svg { transform: translateX(-3px); }
+
+.bd-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.bd-breadcrumb {
+  font-family: "Cinzel", serif;
+  font-size: 0.52rem;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: #a08060;
+  opacity: 0.65;
+  max-width: 260px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── İçerik kartı ─────────────────────────────────────────────────────────── */
+.bd-content-card {
+  background: rgba(250, 246, 240, 0.84);
+  backdrop-filter: var(--bd-blur);
+  -webkit-backdrop-filter: var(--bd-blur);
+  border: 1px solid var(--bd-gold-faint);
+  padding: clamp(24px, 5vw, 60px) clamp(20px, 6vw, 68px);
+  margin-bottom: 48px;
+}
+
+
+.bd-divider {
+  width: 68px;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent, var(--bd-gold), transparent);
+  margin: 0 auto 36px;
+}
+
+.bd-article-body {
+  font-size: clamp(1rem, 1.7vw, 1.12rem);
+  line-height: 1.95;
+  color: var(--bd-mid);
+}
+
+.bd-article-body p        { margin-bottom: 1.6em; }
+.bd-article-body p:last-child { margin-bottom: 0; }
+.bd-article-body strong   { color: var(--bd-dark); font-weight: 600; }
+
+/* ── SIDEBAR ─────────────────────────────────────────────────────────────── */
+.bd-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  position: sticky;
+  top: 0;
+  margin-top: 94px;
+}
+
+/* Sidebar section kartı */
+.bd-sidebar-card {
+  background: rgba(250, 246, 240, 0.84);
+  backdrop-filter: var(--bd-blur);
+  -webkit-backdrop-filter: var(--bd-blur);
+  border: 1px solid var(--bd-gold-faint);
+  padding: 22px 20px 24px;
+}
+
+/* Sidebar bölüm başlığı */
+.bd-sidebar-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.bd-sidebar-title {
+  font-family: "Cinzel", serif;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--bd-dark);
+  white-space: nowrap;
+}
+
+.bd-sidebar-line {
+  flex: 1;
+  height: 1px;
+  background: var(--bd-gold-faint);
+}
+
+/* ── Sidebar: Diğer Yazılar ──────────────────────────────────────────────── */
+.bd-sidebar-posts {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.bd-sidebar-post {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 12px;
+  align-items: center;
+  text-decoration: none;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--bd-gold-faint);
+  transition: opacity 0.2s;
+}
+
+.bd-sidebar-post:last-child {
+  border-bottom: none;
+}
+
+.bd-sidebar-post:hover { opacity: 0.72; }
+
+.bd-sidebar-post:hover .bd-sidebar-post-img {
+  transform: scale(1.06);
+}
+
+.bd-sidebar-post-img-wrap {
+  position: relative;
+  height: 52px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.bd-sidebar-post-img {
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.bd-sidebar-post-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bd-sidebar-post-meta {
+  font-family: "Cinzel", serif;
+  font-size: 0.50rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--bd-gold);
+  opacity: 0.85;
+}
+
+.bd-sidebar-post-title {
+  font-family: "Cinzel", serif;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--bd-dark);
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+
+/* ── Sidebar: Paylaş ─────────────────────────────────────────────────────── */
+.bd-share-btns {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.bd-share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: "Cinzel", serif;
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 8px 14px;
+  border: 1px solid var(--bd-gold-faint);
+  color: var(--bd-mid);
+  background: transparent;
+  transition: border-color 0.22s, color 0.22s, background 0.22s;
+  white-space: nowrap;
+}
+
+.bd-share-btn svg {
+  flex-shrink: 0;
+  transition: transform 0.22s;
+}
+
+.bd-share-btn:hover svg { transform: scale(1.12); }
+
+.bd-share-btn.instagram:hover {
+  border-color: #c13584;
+  color: #c13584;
+  background: rgba(193, 53, 132, 0.06);
+}
+
+.bd-share-btn.facebook:hover {
+  border-color: #1877f2;
+  color: #1877f2;
+  background: rgba(24, 119, 242, 0.06);
+}
+
+.bd-share-btn.twitter:hover {
+  border-color: #0f1419;
+  color: #0f1419;
+  background: rgba(15, 20, 25, 0.06);
+}
+
+/* ── Diğer yazılar bölümü (ana alan, sidebar değil) ─────────────────────── */
+.bd-related-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.bd-related-title {
+  font-family: "Cinzel", serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--bd-dark);
+  white-space: nowrap;
+}
+
+.bd-related-line {
+  flex: 1;
+  height: 1px;
+  background: var(--bd-gold-faint);
+}
+
+.bd-related-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 720px) {
+  .bd-related-grid { grid-template-columns: 1fr; }
+}
+
+@media (min-width: 721px) and (max-width: 960px) {
+  .bd-related-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.bd-related-card {
+  background: rgba(250, 246, 240, 0.84);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid var(--bd-gold-faint);
+  text-decoration: none;
+  display: block;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.bd-related-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(180, 140, 30, 0.15);
+}
+
+.bd-related-img-wrap {
+  position: relative;
+  height: 130px;
+  overflow: hidden;
+}
+
+.bd-related-img {
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.bd-related-card:hover .bd-related-img { transform: scale(1.06); }
+
+.bd-related-body {
+  padding: 12px 14px 16px;
+  border-top: 1px solid var(--bd-gold-faint);
+}
+
+.bd-related-meta {
+  font-family: "Cinzel", serif;
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.20em;
+  text-transform: uppercase;
+  color: var(--bd-gold);
+  margin-bottom: 6px;
+  opacity: 0.85;
+}
+
+.bd-related-name {
+  font-family: "Cinzel", serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--bd-dark);
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+
+.bd-related-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 10px;
+  font-family: "Cinzel", serif;
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--bd-mid);
+  opacity: 0.75;
+}
+
+/* ── Mobil ────────────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .bd-hero-content   { padding: 18px 16px 24px; }
+  .bd-content-card   { padding: 22px 16px; }
+  .bd-breadcrumb     { display: none; }
+}
+
+/* ── Scroll Progress Bar ───────────────────────────────────── */
+.bd-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0%;
+  background: var(--bd-gold);
+  z-index: 9999;
+  transition: width 0.1s linear;
+}
+
+.bd-gallery-section {
+  margin: 40px 0;
+}
+
+.bd-gallery-grid {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.bd-gallery-grid img {
+  width: calc(33.333% - 6.66px);
+  object-fit: cover;
+  border-radius: 6px;
+}
+/* Galeri slider için */
+.bd-gallery-slider {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 16px;
+  padding-bottom: 12px;
+  -webkit-overflow-scrolling: touch; /* mobil için */
+}
+
+.bd-gallery-slider::-webkit-scrollbar {
+  height: 6px;
+}
+
+.bd-gallery-slider::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,0.3);
+  border-radius: 3px;
+}
+
+.bd-gallery-slide {
+  flex: 0 0 calc((100% / 3) - 10.66px); /* 3 fotoğraf sığacak şekilde */
+  height: 180px;
+  scroll-snap-align: start;
+  position: relative;
+}
+
+.bd-gallery-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
