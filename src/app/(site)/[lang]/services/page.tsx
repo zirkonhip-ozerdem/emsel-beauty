@@ -1,6 +1,5 @@
 "use client";
-
-import { useState } from "react";
+import Link from "next/link";
 import "./style.css";
  
 const services = [
@@ -37,51 +36,46 @@ const services = [
     items: ["İsveç Masajı", "Aromaterapi Yağları", "Lenf Drenajı", "Sırt & Boyun Odaklı"],
   },
 ];
-
+ 
 export default function ServicesPage() {
-  const [, setActive] = useState<number | null>(null);
-
   return (
-    <>
-      <div className="services-page">
-        <header className="page-header">
-          <p className="page-eyebrow">Emsel Beauty &amp; Care Studio</p>
-          <h1 className="page-title">Profesyonel Güzellik<br />Hizmetleri</h1>
-          <p className="page-sub">
-            Uzman ekibimiz ile cildinizin ve güzelliğinizin en iyi halini keşfedin. Her hizmet,
-            sizin için özel olarak tasarlandı.
-          </p>
-        </header>
-
-        <section className="services-grid">
-          {services.map((s) => (
-            <div className="scard" key={s.id} onClick={() => setActive(s.id)}>
-              <div className="scard-img-wrap">
-                <img className="scard-img" src={s.img} alt={s.title} />
-                <div className="scard-img-overlay" />
-                <span className="scard-cat-pill">{s.category}</span>
-                <div className="scard-title-bar"><h2>{s.title}</h2></div>
-              </div>
-              <div className="scard-body">
-                <p className="scard-desc">{s.desc}</p>
-                <div className="scard-items">
-                  {s.items.map((item) => (
-                    <div className="scard-item" key={item}>
-                      <span>{item}</span>
-                      <span className="scard-item-dot" />
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="scard-footer">
-                <a href="#randevu" className="btn-reserve">Rezervasyon Yap</a>
+    <div className="services-page">
+      <header className="page-header">
+        <p className="page-eyebrow">Emsel Beauty &amp; Care Studio</p>
+        <h1 className="page-title">Profesyonel Güzellik<br />Hizmetleri</h1>
+        <p className="page-sub">
+          Uzman ekibimiz ile cildinizin ve güzelliğinizin en iyi halini keşfedin. Her hizmet,
+          sizin için özel olarak tasarlandı.
+        </p>
+      </header>
+ 
+      <section className="services-grid">
+        {services.map((s) => (
+          <Link key={s.id} href={`/tr/services/${s.id}`} className="scard" style={{ textDecoration: "none" }}>
+            <div className="scard-img-wrap">
+              <img className="scard-img" src={s.img} alt={s.title} />
+              <div className="scard-img-overlay" />
+              <span className="scard-cat-pill">{s.category}</span>
+              <div className="scard-title-bar"><h2>{s.title}</h2></div>
+            </div>
+            <div className="scard-body">
+              <p className="scard-desc">{s.desc}</p>
+              <div className="scard-items">
+                {s.items.map((item) => (
+                  <div className="scard-item" key={item}>
+                    <span>{item}</span>
+                    <span className="scard-item-dot" />
+                  </div>
+                ))}
               </div>
             </div>
-          ))}
-        </section>
-
-        
-      </div>
-    </>
+            <div className="scard-footer">
+              <span className="btn-reserve">Detayları Gör</span>
+            </div>
+          </Link>
+        ))}
+      </section>
+    </div>
   );
 }
+ 
