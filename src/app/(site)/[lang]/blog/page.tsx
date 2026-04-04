@@ -67,7 +67,6 @@ const LABELS: Record<
 type BlogPost = SiteDictionary["blogPage"]["posts"][number];
 type BlogPageProps = {
   params: LangRouteParams;
-  searchParams?: Promise<{ page?: string | string[] }>;
 };
 
 // Tüm post verileri + görseller frontend'e aktarılıyor
@@ -85,19 +84,13 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
   return getPageMetadata(locale, "blog");
 }
 
-export default async function BlogPage({ params, searchParams }: BlogPageProps) {
+export default async function BlogPage({ params }: BlogPageProps) {
   const locale = await resolveLocale(params);
   const dictionary = getDictionary(locale);
   const headingFont = "font-display";
   const labels = LABELS[locale];
-  const resolvedSearchParams = await searchParams;
-  const pageParam = Array.isArray(resolvedSearchParams?.page)
-    ? resolvedSearchParams.page[0]
-    : resolvedSearchParams?.page;
 
   const allPosts = dictionary.blogPage.posts;
-  const totalPages = Math.ceil(allPosts.length / PER_PAGE);
-  const currentPage = Math.max(1, Math.min(Number(pageParam ?? 1), totalPages));
 
   // Tüm postları serialize et (client bileşeni kullanacak)
   const allSerialized: SerializedPost[] = allPosts.map((p, i) => ({
@@ -125,7 +118,7 @@ export default async function BlogPage({ params, searchParams }: BlogPageProps) 
         {/* Client bileşeni: "Daha Fazla" + pagination + kart render */}
         <BlogClientWrapper
           allPosts={allSerialized}
-          initialPage={currentPage}
+          initialPage={1}
           perPage={PER_PAGE}
           locale={locale}
           headingFont={headingFont}
