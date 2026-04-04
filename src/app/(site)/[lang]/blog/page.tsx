@@ -1,12 +1,22 @@
+<<<<<<< HEAD
 //BLOG PAGE.TSX
 import type { Metadata } from "next";
 import Image from "next/image";
 
+=======
+// src/app/(site)/[lang]/blog/page.tsx
+// Server component — pagination URL-based (SEO uyumlu), "Daha Fazla" client-side
+
+import type { Metadata } from "next";
+
+import type { Locale } from "@/i18n/config";
+>>>>>>> feat/son-islemler
 import type { SiteDictionary } from "@/i18n/dictionaries";
 import { getDictionary } from "@/i18n/dictionaries";
 import { getPageMetadata } from "@/i18n/metadata";
 import { resolveLocale, type LangRouteParams } from "@/i18n/server";
 import "./blog.css";
+<<<<<<< HEAD
 
 const INITIAL_VISIBLE = 10;
 
@@ -16,6 +26,12 @@ const CARD_BACKGROUNDS = [
   "linear-gradient(160deg, #f5f0e8 0%, #ede6d8 55%, #e6dcc8 100%)",
   "linear-gradient(160deg, #e8ede0 0%, #dce8c8 55%, #d0e0b4 100%)",
 ] as const;
+=======
+import { slugify } from "@/lib/slugify";
+import { BlogClientWrapper } from "./BlogClientWrapper"; // ← yeni client bileşeni
+
+const PER_PAGE = 10;
+>>>>>>> feat/son-islemler
 
 const BLOG_IMAGES = [
   "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80",
@@ -30,25 +46,58 @@ const BLOG_IMAGES = [
   "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?auto=format&fit=crop&w=900&q=80",
 ] as const;
 
+<<<<<<< HEAD
 const LABELS: Record<string, { readMore: string; continueReading: string; subtitle: string }> = {
+=======
+const LABELS: Record<
+  Locale,
+  {
+    readMore: string;
+    continueReading: string;
+    subtitle: string;
+    prev: string;
+    next: string;
+    page: string;
+  }
+> = {
+>>>>>>> feat/son-islemler
   tr: {
     readMore: "Devamını Oku",
     continueReading: "Daha Fazla Göster",
     subtitle: "Bakım, estetik ve marka dünyasından seçkiler",
+<<<<<<< HEAD
+=======
+    prev: "Önceki",
+    next: "Sonraki",
+    page: "Sayfa",
+>>>>>>> feat/son-islemler
   },
   en: {
     readMore: "Read More",
     continueReading: "Load More",
     subtitle: "Curated stories on beauty, care and brand culture",
+<<<<<<< HEAD
+=======
+    prev: "Previous",
+    next: "Next",
+    page: "Page",
+>>>>>>> feat/son-islemler
   },
   de: {
     readMore: "Mehr Lesen",
     continueReading: "Mehr Anzeigen",
     subtitle: "Ausgewahlte Inhalte aus Beauty, Care und Markenwelt",
+<<<<<<< HEAD
+=======
+    prev: "Zuruck",
+    next: "Weiter",
+    page: "Seite",
+>>>>>>> feat/son-islemler
   },
 };
 
 type BlogPost = SiteDictionary["blogPage"]["posts"][number];
+<<<<<<< HEAD
 type BlogPageProps = { params: LangRouteParams };
 
 function BlogCard({
@@ -112,6 +161,21 @@ const btnColor    = "#8a6e36";
     </article>
   );
 }
+=======
+type BlogPageProps = {
+  params: LangRouteParams;
+};
+
+// Tüm post verileri + görseller frontend'e aktarılıyor
+export type SerializedPost = {
+  title: string;
+  description: string;
+  meta?: string;
+  slug: string;
+  imageSrc: string;
+  index: number;
+};
+>>>>>>> feat/son-islemler
 
 export async function generateMetadata({ params }: BlogPageProps): Promise<Metadata> {
   const locale = await resolveLocale(params);
@@ -122,16 +186,33 @@ export default async function BlogPage({ params }: BlogPageProps) {
   const locale = await resolveLocale(params);
   const dictionary = getDictionary(locale);
   const headingFont = "font-display";
+<<<<<<< HEAD
   const labels = LABELS[locale] ?? LABELS.tr;
 
   const allPosts = dictionary.blogPage.posts;
   const firstBatch = allPosts.slice(0, INITIAL_VISIBLE);
   const hasMore = allPosts.length > INITIAL_VISIBLE;
+=======
+  const labels = LABELS[locale];
+
+  const allPosts = dictionary.blogPage.posts;
+
+  // Tüm postları serialize et (client bileşeni kullanacak)
+  const allSerialized: SerializedPost[] = allPosts.map((p, i) => ({
+    title: p.title,
+    description: p.description,
+    meta: "meta" in p ? (p.meta as string | undefined) : undefined,
+    slug: slugify(p.title),
+    imageSrc: BLOG_IMAGES[i % BLOG_IMAGES.length],
+    index: i,
+  }));
+>>>>>>> feat/son-islemler
 
   return (
     <div className="blog-page">
       <header className="page-header">
         <div className="blog-divider" />
+<<<<<<< HEAD
 
         <h1 className="page-title">
           Blog, markanın sadece anlattığı değil
@@ -141,10 +222,18 @@ export default async function BlogPage({ params }: BlogPageProps) {
 
         <p className="page-sub">{labels.subtitle}</p>
 
+=======
+        <h1 className="page-title">
+          Blog, markanın sadece anlattığı değil <br />
+          yön verdiği bir alana dönüşüyor.
+        </h1>
+        <p className="page-sub">{labels.subtitle}</p>
+>>>>>>> feat/son-islemler
         <div className="blog-divider" />
       </header>
 
       <div className="blog-container">
+<<<<<<< HEAD
         <section className="blog-grid">
           {firstBatch.map((post, i) => (
             <BlogCard
@@ -165,6 +254,18 @@ export default async function BlogPage({ params }: BlogPageProps) {
             </a>
           </div>
         )}
+=======
+        {/* Client bileşeni: "Daha Fazla" + pagination + kart render */}
+        <BlogClientWrapper
+          allPosts={allSerialized}
+          initialPage={1}
+          perPage={PER_PAGE}
+          locale={locale}
+          headingFont={headingFont}
+          labels={labels}
+          basePath={`/${locale}/blog`}
+        />
+>>>>>>> feat/son-islemler
       </div>
     </div>
   );

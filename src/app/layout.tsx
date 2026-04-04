@@ -27,6 +27,14 @@ export const metadata: Metadata = {
   },
   description:
     "Emsel Beauty icin Next.js tabanli, cok dilli site ve ayri admin panel mimarisi.",
+<<<<<<< HEAD
+=======
+  icons: {
+    icon: "/favicon-emsel.png",
+    shortcut: "/favicon-emsel.png",
+    apple: "/favicon-emsel.png",
+  },
+>>>>>>> feat/son-islemler
 };
 
 export default function RootLayout({

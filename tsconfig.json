@@ -30,6 +30,10 @@
   },
   "include": [
     "next-env.d.ts",
+<<<<<<< HEAD
+=======
+    "**/*.d.ts",
+>>>>>>> feat/son-islemler
     "**/*.ts",
     "**/*.tsx",
     "**/*.mts",

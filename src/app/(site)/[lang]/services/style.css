@@ -1,10 +1,21 @@
+<<<<<<< HEAD
 *, *::before, *::after {
+=======
+.services-page,
+.services-page *,
+.services-page *::before,
+.services-page *::after {
+>>>>>>> feat/son-islemler
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+<<<<<<< HEAD
 :root {
+=======
+.services-page {
+>>>>>>> feat/son-islemler
   --brown-dark: #3b2a1a;
   --brown-mid: #6b4c32;
   --brown-light: #9c7a5a;
@@ -29,7 +40,11 @@
   width: 100%;
 }
 
+<<<<<<< HEAD
 .page-header {
+=======
+.services-page .page-header {
+>>>>>>> feat/son-islemler
   text-align: center;
   padding: 72px 24px 52px;
   border-bottom: 1px solid var(--border);
@@ -37,7 +52,11 @@
   backdrop-filter: blur(4px);
 }
 
+<<<<<<< HEAD
 .page-eyebrow {
+=======
+.services-page .page-eyebrow {
+>>>>>>> feat/son-islemler
   font-family: var(--font-sans), sans-serif;
   font-size: 9px;
   letter-spacing: 0.35em;
@@ -50,8 +69,13 @@
   gap: 14px;
 }
 
+<<<<<<< HEAD
 .page-eyebrow::before,
 .page-eyebrow::after {
+=======
+.services-page .page-eyebrow::before,
+.services-page .page-eyebrow::after {
+>>>>>>> feat/son-islemler
   content: '';
   width: 48px;
   height: 0.5px;
@@ -59,7 +83,11 @@
   display: block;
 }
 
+<<<<<<< HEAD
 .page-title {
+=======
+.services-page .page-title {
+>>>>>>> feat/son-islemler
   font-family: var(--font-display), serif;
   font-size: 34px;
   font-weight: 600;
@@ -70,7 +98,11 @@
   line-height: 1.3;
 }
 
+<<<<<<< HEAD
 .page-sub {
+=======
+.services-page .page-sub {
+>>>>>>> feat/son-islemler
   font-family: var(--font-body), serif;
   font-size: 16px;
   font-style: italic;

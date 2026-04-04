@@ -78,4 +78,8 @@ export default function ServicesPage() {
     </div>
   );
 }
+<<<<<<< HEAD
  
+=======
+ 
+>>>>>>> feat/son-islemler
