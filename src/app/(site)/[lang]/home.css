@@ -35,8 +35,7 @@
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
   padding: 0 18px;
-  background: url("/background/back-1.jpeg") center / cover no-repeat;
-}
+ }
 
 .home-hero-banner {
   display: flex;

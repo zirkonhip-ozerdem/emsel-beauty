@@ -64,7 +64,6 @@ export function SiteHeader({ locale, dictionary }: SiteHeaderProps) {
   const pathname = usePathname() ?? getLocalizedPath(locale, "home");
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const buttonFont = "font-sans";
   const phoneHref = dictionary.footer.phone.replace(/[^+\d]/g, "") || dictionary.footer.phone;
   const allRouteKeys = [...headerLeftRouteKeys, ...headerRightRouteKeys] as HeaderRouteKey[];
   const mobileSubmenus: Partial<Record<HeaderRouteKey, string[]>> = {
@@ -146,7 +145,7 @@ export function SiteHeader({ locale, dictionary }: SiteHeaderProps) {
       <div className="site-header-shell">
         <div className="site-header-overlay pointer-events-none absolute inset-0 opacity-90" />
 
-        <div className="relative hidden w-full grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-8 px-8 !py-0.5 xl:grid xl:px-14 2xl:px-20">
+        <div className="relative hidden w-full grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-8 px-8 py-0.5! xl:grid xl:px-14 2xl:px-20">
           <nav className="flex flex-wrap justify-end gap-x-8 gap-y-2">
             {headerLeftRouteKeys.map((routeKey) => {
               const item = buildNavItem(routeKey);
@@ -183,7 +182,7 @@ export function SiteHeader({ locale, dictionary }: SiteHeaderProps) {
             />
           </Link>
 
-          <div className="flex items-center justify-start gap-5">
+          <div className="flex items-center justify-start">
             <nav className="flex flex-wrap items-center gap-x-8 gap-y-2">
               {headerRightRouteKeys.map((routeKey) => {
                 const item = buildNavItem(routeKey);
@@ -204,17 +203,10 @@ export function SiteHeader({ locale, dictionary }: SiteHeaderProps) {
                 );
               })}
             </nav>
-
-            <Link
-              href={getLocalizedPath(locale, "contact")}
-              className={`${buttonFont} site-header-cta`}
-            >
-              {dictionary.header.consultation}
-            </Link>
           </div>
         </div>
 
-        <div className="relative hidden space-y-2 px-5 !py-1.5 md:block xl:hidden">
+        <div className="relative hidden space-y-2 px-5 py-1.5! md:block xl:hidden">
           <div className="site-header-tablet-row">
             <nav className="site-header-tablet-nav justify-end">
               {headerLeftRouteKeys.map((routeKey) => {
@@ -274,14 +266,7 @@ export function SiteHeader({ locale, dictionary }: SiteHeaderProps) {
             </nav>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-3 border-t border-header-line !pt-1.5">
-            <Link
-              href={getLocalizedPath(locale, "contact")}
-              className={`${buttonFont} site-header-cta px-6`}
-            >
-              {dictionary.header.consultation}
-            </Link>
-
+          <div className="flex flex-wrap items-center justify-center gap-2 border-t border-header-line pt-1.5!">
             <div className="flex flex-wrap items-center justify-center gap-2">
               {siteLocales.map((currentLocale) => {
                 const href = swapLocaleInPath(pathname, currentLocale);
@@ -305,8 +290,8 @@ export function SiteHeader({ locale, dictionary }: SiteHeaderProps) {
           </div>
         </div>
 
-        <div className="relative space-y-1.5 px-5 !py-1.5 md:hidden">
-          <div className="grid grid-cols-[48px_1fr_48px] items-center gap-3 border-b border-header-line !pb-1.5">
+        <div className="relative space-y-1.5 px-5 py-1.5! md:hidden">
+          <div className="grid grid-cols-[48px_1fr_48px] items-center gap-3 border-b border-header-line pb-1.5!">
             <button
               type="button"
               className="site-header-mobile-toggle ml-1"
@@ -426,13 +411,6 @@ export function SiteHeader({ locale, dictionary }: SiteHeaderProps) {
             </nav>
 
             <div className="site-header-mobile-actions">
-              <Link
-                href={getLocalizedPath(locale, "contact")}
-                className={`${buttonFont} site-header-mobile-cta`}
-              >
-                {dictionary.header.consultation}
-              </Link>
-
               <div className="site-header-mobile-locales">
                 {siteLocales.map((currentLocale) => {
                   const href = swapLocaleInPath(pathname, currentLocale);

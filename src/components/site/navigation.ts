@@ -5,6 +5,7 @@ export const headerLeftRouteKeys = ["home", "services", "blog"] as const satisfi
 export const headerRightRouteKeys = [
   "corporate",
   "products",
+  "campaigns",
 ] as const satisfies readonly SiteRouteKey[];
 
 export const footerRouteKeys = [

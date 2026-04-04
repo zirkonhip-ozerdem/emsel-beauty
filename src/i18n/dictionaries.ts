@@ -43,6 +43,7 @@ export interface SiteDictionary {
     products: string;
     services: string;
     blog: string;
+    campaigns: string;
     contact: string;
     corporate: string;
   };
@@ -68,6 +69,7 @@ export interface SiteDictionary {
     products: SeoEntry;
     services: SeoEntry;
     blog: SeoEntry;
+    campaigns: SeoEntry;
     contact: SeoEntry;
     corporate: SeoEntry;
   };
@@ -211,6 +213,7 @@ const dictionaries = {
       products: "Ürünlerimiz",
       services: "Hizmetlerimiz",
       blog: "Blog",
+      campaigns: "Kampanyalar",
       contact: "Iletisim",
       corporate: "Kurumsal",
     },
@@ -259,6 +262,11 @@ const dictionaries = {
         title: "Blog",
         description:
           "Bakim ritulleri, trend yorumlari ve marka editoryalini blog sayfasinda okuyun.",
+      },
+      campaigns: {
+        title: "Kampanyalar",
+        description:
+          "Donemsel bakim firsatlari, ozel paketler ve sinirli sureli teklifleri kampanyalar sayfasinda inceleyin.",
       },
       contact: {
         title: "Iletisim",
@@ -665,6 +673,7 @@ const dictionaries = {
       products: "Products",
       services: "Services",
       blog: "Blog",
+      campaigns: "Campaigns",
       contact: "Contact",
       corporate: "Corporate",
     },
@@ -713,6 +722,11 @@ const dictionaries = {
         title: "Blog",
         description:
           "Read editorial notes, care routines and beauty trend content on the Emsel Beauty blog.",
+      },
+      campaigns: {
+        title: "Campaigns",
+        description:
+          "Review seasonal beauty offers, curated bundles and limited-time packages on the campaigns page.",
       },
       contact: {
         title: "Contact",
@@ -1122,6 +1136,7 @@ const dictionaries = {
       products: "منتجاتنا",
       services: "خدماتنا",
       blog: "المدونة",
+      campaigns: "الحملات",
       contact: "التواصل",
       corporate: "المؤسسية",
     },
@@ -1170,6 +1185,11 @@ const dictionaries = {
         title: "المدونة",
         description:
           "اقرأ الملاحظات التحريرية وروتين العناية ومحتوى اتجاهات الجمال في مدونة Emsel Beauty.",
+      },
+      campaigns: {
+        title: "الحملات",
+        description:
+          "راجع العروض الموسمية والباقات الخاصة والفرص محدودة المدة في صفحة الحملات.",
       },
       contact: {
         title: "التواصل",

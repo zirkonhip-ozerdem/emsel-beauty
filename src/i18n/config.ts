@@ -9,6 +9,7 @@ export const siteRouteSegments = {
   products: "products",
   services: "services",
   blog: "blog",
+  campaigns: "campaigns",
   contact: "contact",
   corporate: "corporate",
 } as const;
