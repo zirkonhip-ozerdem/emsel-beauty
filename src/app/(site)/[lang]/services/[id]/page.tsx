@@ -1,7 +1,6 @@
-"use client";
-import { useState, use } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { siteLocales } from "@/i18n/config";
 import "./detail.css";
 
 /* ─── TYPES ─────────────────────────────── */
@@ -22,6 +21,13 @@ interface Service {
   process: Process[];
   faqs: FAQ[];
 }
+
+type PageProps = {
+  params: Promise<{
+    lang: string;
+    id: string;
+  }>;
+};
 
 /* ─── DATA ───────────────────────────────── */
 const services: Service[] = [
@@ -140,9 +146,17 @@ const services: Service[] = [
 ];
 
 /* ─── PAGE ───────────────────────────────── */
-export default function ServiceDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params);
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
+export function generateStaticParams() {
+  return siteLocales.flatMap((lang) =>
+    services.map((service) => ({
+      lang,
+      id: String(service.id),
+    })),
+  );
+}
+
+export default async function ServiceDetailPage({ params }: PageProps) {
+  const { id, lang } = await params;
 
   const service = services.find((s) => s.id === Number(id));
   if (!service) notFound();
@@ -153,9 +167,9 @@ export default function ServiceDetailPage({ params }: { params: Promise<{ id: st
     <>
       {/* BREADCRUMB */}
       <div className="detail-breadcrumb">
-        <Link href="/">Anasayfa</Link>
+        <Link href={`/${lang}`}>Anasayfa</Link>
         <span className="detail-breadcrumb-sep">/</span>
-        <Link href="/hizmetlerimiz">Hizmetlerimiz</Link>
+        <Link href={`/${lang}/services`}>Hizmetlerimiz</Link>
         <span className="detail-breadcrumb-sep">/</span>
         <span>{service.title}</span>
       </div>
@@ -181,7 +195,7 @@ export default function ServiceDetailPage({ params }: { params: Promise<{ id: st
               <span className="detail-meta-value">{service.sessions}</span>
             </div>
           </div>
-          <Link href="/online-rezervasyon" className="detail-btn-primary">
+          <Link href={`/${lang}/contact`} className="detail-btn-primary">
             Online Rezervasyon
           </Link>
         </div>
@@ -248,16 +262,13 @@ export default function ServiceDetailPage({ params }: { params: Promise<{ id: st
         <h2 className="detail-section-title">Sıkça Sorulan Sorular</h2>
         <div className="detail-faq-list">
           {service.faqs.map((faq, i) => (
-            <div className="detail-faq-item" key={i}>
-              <button
-                className="detail-faq-q"
-                onClick={() => setOpenFaq(openFaq === i ? null : i)}
-              >
+            <details className="detail-faq-item" key={i}>
+              <summary className="detail-faq-q">
                 <span>{faq.q}</span>
-                <span className={`detail-faq-icon${openFaq === i ? " open" : ""}`}>+</span>
-              </button>
-              {openFaq === i && <div className="detail-faq-a">{faq.a}</div>}
-            </div>
+                <span className="detail-faq-icon">+</span>
+              </summary>
+              <div className="detail-faq-a">{faq.a}</div>
+            </details>
           ))}
         </div>
       </section>
@@ -268,7 +279,7 @@ export default function ServiceDetailPage({ params }: { params: Promise<{ id: st
         <h2 className="detail-section-title">İlginizi Çekebilir</h2>
         <div className="detail-related-grid">
           {related.map((s) => (
-            <Link key={s.id} href={`/hizmetlerimiz/${s.id}`} className="detail-rcard">
+            <Link key={s.id} href={`/${lang}/services/${s.id}`} className="detail-rcard">
               <div className="detail-rcard-img-wrap">
                 <img src={s.img} alt={s.title} className="detail-rcard-img" />
                 <span className="detail-rcard-cat">{s.category}</span>

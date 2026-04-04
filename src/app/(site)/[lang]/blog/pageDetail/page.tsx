@@ -157,10 +157,10 @@ export default async function BlogDetailPage({ params }: Props) {
   const { lang, slug } = await params;
   if (!siteLocales.includes(lang as Locale)) notFound();
 
-  const locale = lang as Locale;
-  const dict = getDictionary(locale);
+  const locale      = lang as Locale;
+  const dict        = getDictionary(locale);
   const headingFont = "font-display";
-  const ui = UI[locale];
+  const ui          = UI[locale];
 
   const allPosts  = dict.blogPage.posts;
   const postIndex = allPosts.findIndex((p) => slugify(p.title) === slug);

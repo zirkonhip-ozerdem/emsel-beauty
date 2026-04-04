@@ -464,8 +464,4 @@ export function SiteHeader({ locale, dictionary }: SiteHeaderProps) {
       ) : null}
     </header>
   );
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> feat/son-islemler

@@ -1,10 +1,10 @@
 "use client";
 // src/app/(site)/[lang]/blog/BlogClientWrapper.tsx
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import type { SerializedPost } from "./page";
 
 type Labels = {
@@ -190,26 +190,21 @@ export function BlogClientWrapper({
   labels,
   basePath,
 }: Props) {
-  const router = useRouter();
+  const router   = useRouter();
+  const pathname = usePathname();
 
   const totalPages  = Math.ceil(allPosts.length / perPage);
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [visibleCount, setVisibleCount] = useState(currentPage * perPage);
   const [loading, setLoading] = useState(false);
   const [newBatch, setNewBatch] = useState<number[]>([]); // yeni gelen index'ler animasyon için
+  const prevCountRef = useRef(visibleCount);
 
-  // URL'deki page parametresine client tarafında senkron ol
+  // URL'deki page parametresine göre senkron
   useEffect(() => {
-    const search = typeof window === "undefined" ? "" : window.location.search;
-    const params = new URLSearchParams(search);
-    const rawPage = Number(params.get("page") ?? initialPage);
-    const safePage = Number.isFinite(rawPage)
-      ? Math.max(1, Math.min(rawPage, totalPages))
-      : initialPage;
-
-    setCurrentPage(safePage);
-    setVisibleCount(safePage * perPage);
-  }, [initialPage, perPage, totalPages]);
+    setCurrentPage(initialPage);
+    setVisibleCount(initialPage * perPage);
+  }, [initialPage, perPage]);
 
   const displayedPosts = allPosts.slice(0, visibleCount);
   const hasMore = visibleCount < allPosts.length;

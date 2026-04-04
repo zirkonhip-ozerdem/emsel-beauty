@@ -1,11 +1,5 @@
-
-<<<<<<< HEAD
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        :root {
-=======
         .kp, .kp *, .kp *::before, .kp *::after { box-sizing: border-box; margin: 0; padding: 0; }
         .kp {
->>>>>>> feat/son-islemler
           --brown-dark: #3b2a1a;
           --brown-mid:  #6b4c32;
           --gold:       #c9a84c;
