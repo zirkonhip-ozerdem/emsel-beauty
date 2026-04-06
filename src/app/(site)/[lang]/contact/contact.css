@@ -246,8 +246,8 @@
 /* Form grid — sol kişisel bilgiler | sağ randevu detayları */
 .cp-form-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px 48px;
+  grid-template-columns: 1fr;
+  gap: 24px;
 }
 
 /* Sol sütun — 3 field dikey */
@@ -257,30 +257,11 @@
   gap: 20px;
 }
 
-/* Sağ sütun — üstte inline row, altta textarea */
-.cp-form-col-right {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-/* Hizmet + Tarih + Saat yan yana — 3 eşit sütun */
-.cp-inline-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 14px;
-}
-
 /* Tek field sarmalayıcı */
 .cp-field {
   display: flex;
   flex-direction: column;
   gap: 6px;
-}
-
-/* Textarea'nın bulunduğu field: kalan yüksekliği doldurur */
-.cp-field-grow {
-  flex: 1;
 }
 
 /* Label — küçük uppercase */
@@ -297,8 +278,7 @@
    border-radius: 0 → lüks düz çizgi estetik (corporate sayfasıyla uyumlu)
    Focus'ta altın halo */
 .cp-input,
-.cp-select,
-.cp-textarea {
+.cp-select{
   background: rgba(255, 255, 255, 0.82);
   border: 1px solid var(--cp-gold-border);
   border-radius: 0;
@@ -313,14 +293,14 @@
   -webkit-appearance: none;
   appearance: none;
 }
-.cp-input::placeholder,
-.cp-textarea::placeholder {
+
+.cp-input::placeholder{
   color: var(--cp-mid);
   font-style: italic;
 }
+
 .cp-input:focus,
-.cp-select:focus,
-.cp-textarea:focus {
+.cp-select:focus{
   border-color: var(--cp-gold);
   box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.16);
 }
@@ -342,13 +322,6 @@
 .cp-select {
   padding-right: 30px;
   cursor: pointer;
-}
-
-/* Textarea */
-.cp-textarea {
-  resize: vertical;
-  min-height: 130px;
-  flex: 1;
 }
 
 /* ─── GÖNDER BUTONU ──────────────────────────────────────────────────────────

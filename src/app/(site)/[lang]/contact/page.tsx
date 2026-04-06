@@ -22,5 +22,7 @@ export async function generateMetadata({
 // ─── Page (server component) ─────────────────────────────────────────────────
 export default async function ContactPage({ params }: ContactPageProps) {
   const locale = await resolveLocale(params);
+  // Client bileşene locale bilgisini geçiriyoruz;
+  // gerçek içerik (adres, telefon, mail) buradan düzenlenebilir.
   return <ContactClient locale={locale} />;
 }
