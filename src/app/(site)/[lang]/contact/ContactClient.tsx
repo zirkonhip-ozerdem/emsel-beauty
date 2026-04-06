@@ -19,13 +19,6 @@ const SERVICES = [
   "Saç Bakımı",
 ];
 
-// Saat dilimlerini buradan yönet.
-const TIMES = [
-  "09:00","10:00","11:00","12:00",
-  "13:00","14:00","15:00","16:00",
-  "17:00","18:00","19:00",
-];
-
 // ─── İLETİŞİM BİLGİLERİ ──────────────────────────────────────────────────────
 // Gerçek adres/telefon/mail bilgilerini buradan değiştir.
 const CONTACT_INFO = {
@@ -41,17 +34,12 @@ const CONTACT_INFO = {
 // ─── FORM STATE TİPİ ─────────────────────────────────────────────────────────
 type FormState = {
   name: string;
-  email: string;
   phone: string;
   service: string;
-  date: string;
-  time: string;
-  message: string;
 };
 
 const EMPTY_FORM: FormState = {
-  name: "", email: "", phone: "",
-  service: "", date: "", time: "", message: "",
+  name: "", phone: "", service: ""
 };
 
 // ─── COMPONENT ───────────────────────────────────────────────────────────────
@@ -213,22 +201,6 @@ export default function ContactClient({ locale }: { locale: Locale }) {
                 </div>
 
                 <div className="cp-field">
-                  <label className="cp-label" htmlFor="cp-email">
-                    E-Posta Adresiniz
-                  </label>
-                  <input
-                    id="cp-email"
-                    name="email"
-                    type="email"
-                    className="cp-input"
-                    placeholder="ornek@eposta.com"
-                    value={form.email}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-
-                <div className="cp-field">
                   <label className="cp-label" htmlFor="cp-phone">
                     Telefon Numaranız
                   </label>
@@ -242,24 +214,6 @@ export default function ContactClient({ locale }: { locale: Locale }) {
                     onChange={handleChange}
                   />
                 </div>
-
-              </div>
-              {/* ── SOL SÜTUN SONU ── */}
-
-              {/* ── SAĞ SÜTUN: Randevu Detayları ──
-                  Üst kısım: Hizmet + Tarih + Saat yan yana (.cp-inline-row)
-                  Alt kısım: Mesaj textarea */}
-              <div className="cp-form-col-right">
-
-                {/* Hizmet — Tarih — Saat: 3'lü grid
-                    Select elemanları .cp-select-wrap içinde;
-                    özel ok işareti ::after pseudo ile eklendi. */}
-                <div className="cp-inline-row">
-
-                  <div className="cp-field">
-                    <label className="cp-label" htmlFor="cp-service">
-                      Hizmet
-                    </label>
                     <div className="cp-select-wrap">
                       <select
                         id="cp-service"
@@ -275,66 +229,8 @@ export default function ContactClient({ locale }: { locale: Locale }) {
                         ))}
                       </select>
                     </div>
-                  </div>
-
-                  <div className="cp-field">
-                    <label className="cp-label" htmlFor="cp-date">
-                      Tarih
-                    </label>
-                    <input
-                      id="cp-date"
-                      name="date"
-                      type="date"
-                      className="cp-input"
-                      value={form.date}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-
-                  <div className="cp-field">
-                    <label className="cp-label" htmlFor="cp-time">
-                      Saat
-                    </label>
-                    <div className="cp-select-wrap">
-                      <select
-                        id="cp-time"
-                        name="time"
-                        className="cp-select"
-                        value={form.time}
-                        onChange={handleChange}
-                        required
-                      >
-                        <option value="" disabled>Saat</option>
-                        {TIMES.map((t) => (
-                          <option key={t} value={t}>{t}</option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-
-                </div>
-                {/* ── Inline row sonu ── */}
-
-                {/* MESAJ — textarea
-                    resize: vertical izni var, min-height: 120px */}
-                <div className="cp-field cp-field-grow">
-                  <label className="cp-label" htmlFor="cp-message">
-                    Mesajınız
-                  </label>
-                  <textarea
-                    id="cp-message"
-                    name="message"
-                    className="cp-textarea"
-                    placeholder="Özel bir isteğiniz veya notunuz varsa buraya yazabilirsiniz…"
-                    value={form.message}
-                    onChange={handleChange}
-                  />
-                </div>
-
               </div>
-              {/* ── SAĞ SÜTUN SONU ── */}
-
+              {/* ── SOL SÜTUN SONU ── */}
             </div>
             {/* ── Form grid sonu ── */}
 
