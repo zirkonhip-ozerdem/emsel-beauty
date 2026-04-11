@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
 import { SiteHeader } from "@/components/site/site-header";
+import { SiteReservationFab } from "@/components/site/site-reservation-fab";
 import SiteFooter from "@/components/site/site-footer";
 import { getDirection, siteLocales } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
@@ -49,6 +50,7 @@ export default async function SiteLayout({
         {children}
       </main>
       <SiteFooter locale={locale} dictionary={dictionary} />
+      <SiteReservationFab locale={locale} dictionary={dictionary} />
     </div>
   );
 }

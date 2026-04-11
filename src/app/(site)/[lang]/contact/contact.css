@@ -388,11 +388,11 @@
 }
 
 /* ─── SABİT WHATSAPP BUTONU ──────────────────────────────────────────────────
-   Sol alt köşe, z-index: 999 → her zaman üstte */
+   Sağ alt köşe, z-index: 999 → her zaman üstte */
 .cp-whatsapp {
   position: fixed;
   bottom: 28px;
-  left: 28px;
+  right: 28px;
   width: 52px;
   height: 52px;
   background: #25d366;

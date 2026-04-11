@@ -258,8 +258,8 @@ export default function ContactClient({ locale }: { locale: Locale }) {
 
       {/* ════════════════════════════════════════════════════
           SABİT WHATSAPP BUTONU
-          position: fixed; bottom/left: 28px; z-index: 999
-          Tasarımdaki sol alt köşedeki yeşil daireye karşılık gelir.
+          position: fixed; bottom/right: 28px; z-index: 999
+          Tasarımdaki sağ alt köşedeki yeşil daireye karşılık gelir.
           href'te CONTACT_INFO.whatsapp kullanılır.
       ════════════════════════════════════════════════════ */}
       <a
