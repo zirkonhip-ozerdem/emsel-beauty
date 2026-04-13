@@ -1,62 +1,70 @@
-const modules = [
-  {
-    title: "Urunler",
-    description:
-      "Kategori, koleksiyon, one cikan kartlar ve urun detay akislari icin yonetim alani.",
-  },
-  {
-    title: "Hizmetler",
-    description:
-      "Seanslar, paketler, sureler, randevu notlari ve ekip atamalari icin hazir modul.",
-  },
-  {
-    title: "Blog",
-    description:
-      "Cok dilli siteye gidecek editoral icerikleri panelden yonetmek icin genisleyebilir yapi.",
-  },
-  {
-    title: "Iletisim",
-    description:
-      "Form basvurulari, is birligi talepleri ve randevu istekleri icin tek merkezli akıs.",
-  },
-];
+import Link from "next/link";
+
+import { AdminPageHeader } from "@/components/admin/admin-page-header";
+import { getAdminDashboardCounts } from "@/lib/admin/crud";
+import { adminResources } from "@/lib/admin/resources";
+import { isDatabaseReady, withOptionalDatabase } from "@/lib/admin/server";
 
 const nextSteps = [
-  "Veri modeli ve veritabanı baglantisi",
-  "Kimlik dogrulama ve rol sistemi",
-  "CRUD ekranlari ve media upload akisi",
-  "Blog detay, kategori ve etiklet yönetimi",
+  "Supabase DATABASE_URL ve DIRECT_URL degerlerini env dosyalarina ekle",
+  "Prisma migrate veya db push ile tablolari olustur",
+  "Prisma seed ile ilk site ayari ve hikaye verilerini bas",
+  "Sonraki adimda public site sayfalarini DB tabanli hale getir",
 ];
 
-export default function AdminPage() {
+export default async function AdminPage() {
+  const databaseReady = isDatabaseReady();
+  const counts = await withOptionalDatabase(
+    {
+      campaigns: 0,
+      users: 0,
+      who: 0,
+      "site-settings": 0,
+      products: 0,
+      services: 0,
+      "blog-posts": 0,
+      "contact-appointments": 0,
+    },
+    () => getAdminDashboardCounts(),
+  );
+
   return (
     <div className="space-y-6">
-      <section className="rounded-[34px] border border-border bg-white/80 p-6 shadow-[var(--shadow)] sm:p-8">
-        <span className="inline-flex rounded-full bg-accent-soft px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-accent-strong">
-          Dashboard
-        </span>
-        <h1 className="font-display mt-5 text-4xl text-foreground sm:text-5xl">
-          Admin panel iskeleti hazir.
-        </h1>
-        <p className="mt-4 max-w-3xl text-base leading-8 text-muted">
-          Site tarafini cok dilli kurarken paneli tek dilli ve operasyon odakli
-          tuttuk. Bu ayirim, editor ekip icin gereksiz karmaşayi azaltir ve
-          veri yonetimini netlestirir.
-        </p>
-      </section>
+      <AdminPageHeader
+        eyebrow="Dashboard"
+        title="Prisma tabanli admin panel hazir."
+        description="Bu panel, dbdiagram uzerinden cikardigimiz modullere gore kuruldu. Supabase baglantisini yaptigimiz anda tum CRUD ekranlari ayni omurga ile calisacak."
+      />
 
-      <section className="grid gap-5 md:grid-cols-2">
-        {modules.map((module) => (
+      {!databaseReady ? (
+        <section className="rounded-[28px] border border-dashed border-[#d4bd95] bg-[#fff8ec] p-5 text-sm leading-7 text-[#7b6b4a]">
+          Veritabani baglantisi henuz env tarafinda tanimli degil. Bu normal; ekranlar
+          hazir, Supabase baglantisini ekledigimiz anda listeleme ve kaydetme islemleri
+          aktif olacak.
+        </section>
+      ) : null}
+
+      <section className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+        {adminResources.map((module) => (
           <article
-            key={module.title}
-            className="rounded-[28px] border border-border bg-surface-strong p-5"
+            key={module.key}
+            className="rounded-[28px] border border-border bg-white/85 p-5 shadow-[var(--shadow)]"
           >
-            <h2 className="text-xl font-semibold text-foreground">
-              {module.title}
-            </h2>
-            <p className="mt-3 text-sm leading-7 text-muted">
+            <div className="flex items-start justify-between gap-3">
+              <h2 className="text-xl font-semibold text-foreground">{module.title}</h2>
+              <span className="rounded-full bg-accent-soft/40 px-3 py-1 text-xs font-semibold text-accent-strong">
+                {counts[module.key]}
+              </span>
+            </div>
+            <p className="mt-3 min-h-[84px] text-sm leading-7 text-muted">
               {module.description}
             </p>
+            <Link
+              href={module.href}
+              className="mt-4 inline-flex rounded-full bg-accent-strong px-4 py-2 text-sm font-semibold text-white"
+            >
+              Modulu ac
+            </Link>
           </article>
         ))}
       </section>

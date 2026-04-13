@@ -2,8 +2,6 @@
 // Server component — pagination URL-based (SEO uyumlu), "Daha Fazla" client-side
 
 import type { Metadata } from "next";
-import Image from "next/image";
-import Link from "next/link";
 
 import type { Locale } from "@/i18n/config";
 import type { SiteDictionary } from "@/i18n/dictionaries";
@@ -122,6 +120,7 @@ export default async function BlogPage({ params, searchParams }: BlogPageProps) 
       <div className="blog-container">
         {/* Client bileşeni: "Daha Fazla" + pagination + kart render */}
         <BlogClientWrapper
+          key={`${locale}-${currentPage}`}
           allPosts={allSerialized}
           initialPage={currentPage}
           perPage={PER_PAGE}

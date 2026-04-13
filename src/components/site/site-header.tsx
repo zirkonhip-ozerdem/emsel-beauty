@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useEffectEvent, useState } from "react";
 
 import { headerLeftRouteKeys, headerRightRouteKeys } from "@/components/site/navigation";
 import {
@@ -84,8 +84,12 @@ export function SiteHeader({ locale, dictionary }: SiteHeaderProps) {
     };
   }, []);
 
-  useEffect(() => {
+  const closeMobileMenu = useEffectEvent(() => {
     setIsMobileMenuOpen(false);
+  });
+
+  useEffect(() => {
+    closeMobileMenu();
   }, [pathname]);
 
   useEffect(() => {

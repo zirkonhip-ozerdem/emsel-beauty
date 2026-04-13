@@ -1,0 +1,391 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum UserStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+  BANNED
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+enum AdminRole {
+  ADMIN
+}
+
+enum AdminAuthEventType {
+  LOGIN_SUCCESS
+  LOGIN_FAILED
+  LOGIN_LOCKED
+  LOGIN_RATE_LIMITED
+  LOGIN_SUSPICIOUS
+  SESSION_REFRESHED
+  LOGOUT
+  SESSION_REVOKED
+}
+
+model Admin {
+  id             Int            @id @default(autoincrement())
+  email          String         @unique @db.VarChar(255)
+  passwordHash   String         @map("password_hash") @db.VarChar(255)
+  role           AdminRole      @default(ADMIN)
+  lastLogin      DateTime?      @map("last_login")
+  failedAttempts Int            @default(0) @map("failed_attempts")
+  lockedUntil    DateTime?      @map("locked_until")
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+  sessions       AdminSession[] @relation("AdminSessions")
+  authLogs       AdminAuthLog[]
+
+  @@map("admins")
+}
+
+model AdminSession {
+  id              String    @id @default(cuid())
+  sessionToken    String    @unique @map("session_token") @db.VarChar(255)
+  userId          Int       @map("user_id")
+  expires         DateTime
+  userAgent       String?   @map("user_agent") @db.VarChar(255)
+  ipAddress       String?   @map("ip_address") @db.VarChar(64)
+  revokedAt       DateTime? @map("revoked_at")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  admin           Admin     @relation("AdminSessions", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], map: "idx_sessions_user_id")
+  @@index([expires], map: "idx_sessions_expires")
+  @@map("sessions")
+}
+
+model AdminAuthLog {
+  id         Int                @id @default(autoincrement())
+  adminId    Int?               @map("admin_id")
+  email      String?            @db.VarChar(255)
+  ipAddress  String?            @map("ip_address") @db.VarChar(64)
+  userAgent  String?            @map("user_agent") @db.VarChar(255)
+  eventType  AdminAuthEventType @map("event_type")
+  details    String?            @db.Text
+  createdAt  DateTime           @default(now()) @map("created_at")
+  admin      Admin?             @relation(fields: [adminId], references: [id], onDelete: SetNull)
+
+  @@index([email, createdAt], map: "idx_admin_auth_logs_email_created")
+  @@index([ipAddress, createdAt], map: "idx_admin_auth_logs_ip_created")
+  @@map("admin_auth_logs")
+}
+
+model Campaign {
+  id        Int       @id @default(autoincrement())
+  titleTr   String    @db.VarChar(100)
+  titleEn   String    @db.VarChar(100)
+  titleDe   String    @db.VarChar(100)
+  seoUrlTr  String    @unique @map("seo_url_tr") @db.VarChar(255)
+  seoUrlEn  String    @unique @map("seo_url_en") @db.VarChar(255)
+  seoUrlDe  String    @unique @map("seo_url_de") @db.VarChar(255)
+  descTr    String?   @db.Text
+  descEn    String?   @db.Text
+  descDe    String?   @db.Text
+  badgeTr   String?   @map("badge_tr") @db.VarChar(80)
+  badgeEn   String?   @map("badge_en") @db.VarChar(80)
+  badgeDe   String?   @map("badge_de") @db.VarChar(80)
+  imageUrl  String?   @map("image_url") @db.VarChar(500)
+  startsAt  DateTime? @map("starts_at")
+  endsAt    DateTime? @map("ends_at")
+  sortOrder Int       @default(0) @map("sort_order")
+  isActive  Boolean   @default(true) @map("status")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  @@index([isActive], map: "idx_campaigns_status")
+  @@index([sortOrder], map: "idx_campaigns_sort_order")
+  @@map("campaigns")
+}
+
+model User {
+  id          Int        @id @default(autoincrement())
+  firstName   String     @map("first_name") @db.VarChar(100)
+  lastName    String     @map("last_name") @db.VarChar(100)
+  email       String?    @unique @db.VarChar(255)
+  phoneNumber String?    @unique @map("phone_number") @db.VarChar(20)
+  status      UserStatus @default(PENDING)
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+model WhoSection {
+  id        Int      @id @default(autoincrement())
+  titleTr   String?  @map("title_tr") @db.VarChar(150)
+  titleEn   String?  @map("title_en") @db.VarChar(150)
+  titleDe   String?  @map("title_de") @db.VarChar(150)
+  whoDescTr String?  @map("who_desc_tr") @db.Text
+  whoDescEn String?  @map("who_desc_en") @db.Text
+  whoDescDe String?  @map("who_desc_de") @db.Text
+  imageUrl  String?  @map("image_url") @db.VarChar(500)
+  sortOrder Int      @default(0) @map("sort_order")
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([sortOrder], map: "idx_who_sort_order")
+  @@map("who")
+}
+
+model SiteSetting {
+  id                 Int      @id @default(autoincrement())
+  siteName           String   @map("site_name") @db.VarChar(100)
+  siteSeoKeywords    String   @map("site_seo_keywords") @db.VarChar(255)
+  siteSeoDescription String   @map("site_seo_description") @db.VarChar(255)
+  email              String?  @unique @db.VarChar(255)
+  phoneNumber        String?  @unique @map("phone_number") @db.VarChar(20)
+  wpNumber           String?  @unique @map("wp_number") @db.VarChar(20)
+  addressTr          String?  @map("address_tr") @db.VarChar(255)
+  addressEn          String?  @map("address_en") @db.VarChar(255)
+  addressDe          String?  @map("address_de") @db.VarChar(255)
+  mapEmbedUrl        String?  @map("map_embed_url") @db.VarChar(500)
+  workingHoursTr     String?  @map("working_hours_tr") @db.VarChar(200)
+  workingHoursEn     String?  @map("working_hours_en") @db.VarChar(200)
+  workingHoursDe     String?  @map("working_hours_de") @db.VarChar(200)
+  logoUrl            String?  @map("logo_url") @db.VarChar(500)
+  faviconUrl         String?  @map("favicon_url") @db.VarChar(500)
+  instagramUrl       String?  @map("instagram_url") @db.VarChar(500)
+  facebookUrl        String?  @map("facebook_url") @db.VarChar(500)
+  xUrl               String?  @map("x_url") @db.VarChar(500)
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @updatedAt @map("updated_at")
+
+  @@map("site_settings")
+}
+
+model Product {
+  id                 Int              @id @default(autoincrement())
+  nameTr             String           @map("name_tr") @db.VarChar(150)
+  nameEn             String           @map("name_en") @db.VarChar(150)
+  nameDe             String           @map("name_de") @db.VarChar(150)
+  slugTr             String           @unique @map("slug_tr") @db.VarChar(180)
+  slugEn             String           @unique @map("slug_en") @db.VarChar(180)
+  slugDe             String           @unique @map("slug_de") @db.VarChar(180)
+  shortDescriptionTr String?          @map("short_description_tr") @db.Text
+  shortDescriptionEn String?          @map("short_description_en") @db.Text
+  shortDescriptionDe String?          @map("short_description_de") @db.Text
+  descriptionTr      String           @map("description_tr") @db.Text
+  descriptionEn      String           @map("description_en") @db.Text
+  descriptionDe      String           @map("description_de") @db.Text
+  imageUrl           String?          @map("image_url") @db.VarChar(500)
+  imageAltTr         String?          @map("image_alt_tr") @db.VarChar(255)
+  imageAltEn         String?          @map("image_alt_en") @db.VarChar(255)
+  imageAltDe         String?          @map("image_alt_de") @db.VarChar(255)
+  price              Decimal          @db.Decimal(12, 2)
+  stock              Int              @default(0)
+  currency           String           @default("TRY") @db.Char(3)
+  isFeatured         Boolean          @default(false) @map("is_featured")
+  isActive           Boolean          @default(true) @map("is_active")
+  sortOrder          Int              @default(0) @map("sort_order")
+  createdAt          DateTime         @default(now()) @map("created_at")
+  updatedAt          DateTime         @updatedAt @map("updated_at")
+  galleries          ProductGallery[]
+
+  @@index([isActive], map: "idx_products_is_active")
+  @@index([createdAt], map: "idx_products_created_at")
+  @@index([sortOrder], map: "idx_products_sort_order")
+  @@map("products")
+}
+
+model ProductGallery {
+  id         Int      @id @default(autoincrement())
+  productId  Int      @map("product_id")
+  imageUrl   String   @map("image_url") @db.VarChar(500)
+  imageAltTr String?  @map("image_alt_tr") @db.VarChar(255)
+  imageAltEn String?  @map("image_alt_en") @db.VarChar(255)
+  imageAltDe String?  @map("image_alt_de") @db.VarChar(255)
+  sortOrder  Int      @default(0) @map("sort_order")
+  createdAt  DateTime @default(now()) @map("created_at")
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId, sortOrder], map: "idx_product_gallery_sort")
+  @@map("product_gallery")
+}
+
+model Service {
+  id                 Int                  @id @default(autoincrement())
+  categoryTr         String?              @map("category_tr") @db.VarChar(150)
+  categoryEn         String?              @map("category_en") @db.VarChar(150)
+  categoryDe         String?              @map("category_de") @db.VarChar(150)
+  nameTr             String               @map("name_tr") @db.VarChar(150)
+  nameEn             String               @map("name_en") @db.VarChar(150)
+  nameDe             String               @map("name_de") @db.VarChar(150)
+  slugTr             String               @unique @map("slug_tr") @db.VarChar(180)
+  slugEn             String               @unique @map("slug_en") @db.VarChar(180)
+  slugDe             String               @unique @map("slug_de") @db.VarChar(180)
+  shortDescriptionTr String?              @map("short_description_tr") @db.VarChar(300)
+  shortDescriptionEn String?              @map("short_description_en") @db.VarChar(300)
+  shortDescriptionDe String?              @map("short_description_de") @db.VarChar(300)
+  longDescriptionTr  String?              @map("long_description_tr") @db.Text
+  longDescriptionEn  String?              @map("long_description_en") @db.Text
+  longDescriptionDe  String?              @map("long_description_de") @db.Text
+  badgeTr            String?              @map("badge_tr") @db.VarChar(120)
+  badgeEn            String?              @map("badge_en") @db.VarChar(120)
+  badgeDe            String?              @map("badge_de") @db.VarChar(120)
+  sessionsLabelTr    String?              @map("sessions_label_tr") @db.VarChar(80)
+  sessionsLabelEn    String?              @map("sessions_label_en") @db.VarChar(80)
+  sessionsLabelDe    String?              @map("sessions_label_de") @db.VarChar(80)
+  durationMinutes    Int?                 @map("duration_minutes")
+  imageUrl           String?              @map("image_url") @db.VarChar(500)
+  imageAltTr         String?              @map("image_alt_tr") @db.VarChar(255)
+  imageAltEn         String?              @map("image_alt_en") @db.VarChar(255)
+  imageAltDe         String?              @map("image_alt_de") @db.VarChar(255)
+  isActive           Boolean              @default(true) @map("is_active")
+  sortOrder          Int                  @default(0) @map("sort_order")
+  createdAt          DateTime             @default(now()) @map("created_at")
+  updatedAt          DateTime             @updatedAt @map("updated_at")
+  galleries          ServiceGallery[]
+  features           ServiceFeature[]
+  processSteps       ServiceProcessStep[]
+  faqs               ServiceFaq[]
+
+  @@index([isActive], map: "idx_services_is_active")
+  @@index([sortOrder], map: "idx_services_sort_order")
+  @@map("services")
+}
+
+model ServiceGallery {
+  id         Int      @id @default(autoincrement())
+  serviceId  Int      @map("service_id")
+  imageUrl   String   @map("image_url") @db.VarChar(500)
+  imageAltTr String?  @map("image_alt_tr") @db.VarChar(255)
+  imageAltEn String?  @map("image_alt_en") @db.VarChar(255)
+  imageAltDe String?  @map("image_alt_de") @db.VarChar(255)
+  sortOrder  Int      @default(0) @map("sort_order")
+  createdAt  DateTime @default(now()) @map("created_at")
+  service    Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@index([serviceId, sortOrder], map: "idx_service_gallery_sort")
+  @@map("service_gallery")
+}
+
+model ServiceFeature {
+  id        Int      @id @default(autoincrement())
+  serviceId Int      @map("service_id")
+  labelTr   String   @map("label_tr") @db.VarChar(255)
+  labelEn   String   @map("label_en") @db.VarChar(255)
+  labelDe   String   @map("label_de") @db.VarChar(255)
+  sortOrder Int      @default(0) @map("sort_order")
+  createdAt DateTime @default(now()) @map("created_at")
+  service   Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@index([serviceId, sortOrder], map: "idx_service_feature_sort")
+  @@map("service_features")
+}
+
+model ServiceProcessStep {
+  id            Int      @id @default(autoincrement())
+  serviceId     Int      @map("service_id")
+  stepNumber    Int      @map("step_number")
+  titleTr       String   @map("title_tr") @db.VarChar(255)
+  titleEn       String   @map("title_en") @db.VarChar(255)
+  titleDe       String   @map("title_de") @db.VarChar(255)
+  descriptionTr String   @map("description_tr") @db.Text
+  descriptionEn String   @map("description_en") @db.Text
+  descriptionDe String   @map("description_de") @db.Text
+  sortOrder     Int      @default(0) @map("sort_order")
+  createdAt     DateTime @default(now()) @map("created_at")
+  service       Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@index([serviceId, sortOrder], map: "idx_service_process_sort")
+  @@map("service_process_steps")
+}
+
+model ServiceFaq {
+  id         Int      @id @default(autoincrement())
+  serviceId  Int      @map("service_id")
+  questionTr String   @map("question_tr") @db.Text
+  questionEn String   @map("question_en") @db.Text
+  questionDe String   @map("question_de") @db.Text
+  answerTr   String   @map("answer_tr") @db.Text
+  answerEn   String   @map("answer_en") @db.Text
+  answerDe   String   @map("answer_de") @db.Text
+  sortOrder  Int      @default(0) @map("sort_order")
+  createdAt  DateTime @default(now()) @map("created_at")
+  service    Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@index([serviceId, sortOrder], map: "idx_service_faq_sort")
+  @@map("service_faqs")
+}
+
+model BlogPost {
+  id            Int           @id @default(autoincrement())
+  titleTr       String        @map("title_tr") @db.VarChar(200)
+  titleEn       String        @map("title_en") @db.VarChar(200)
+  titleDe       String        @map("title_de") @db.VarChar(200)
+  seoUrlTr      String        @unique @map("seo_url_tr") @db.VarChar(255)
+  seoUrlEn      String        @unique @map("seo_url_en") @db.VarChar(255)
+  seoUrlDe      String        @unique @map("seo_url_de") @db.VarChar(255)
+  metaTr        String?       @map("meta_tr") @db.VarChar(80)
+  metaEn        String?       @map("meta_en") @db.VarChar(80)
+  metaDe        String?       @map("meta_de") @db.VarChar(80)
+  descriptionTr String        @map("description_tr") @db.Text
+  descriptionEn String        @map("description_en") @db.Text
+  descriptionDe String        @map("description_de") @db.Text
+  bodyTr        String?       @map("body_tr") @db.Text
+  bodyEn        String?       @map("body_en") @db.Text
+  bodyDe        String?       @map("body_de") @db.Text
+  imageUrl      String        @map("image_url") @db.VarChar(500)
+  imageAltTr    String?       @map("image_alt_tr") @db.VarChar(255)
+  imageAltEn    String?       @map("image_alt_en") @db.VarChar(255)
+  imageAltDe    String?       @map("image_alt_de") @db.VarChar(255)
+  readTimeMin   Int           @default(1) @map("read_time_min")
+  publishedAt   DateTime?     @map("published_at")
+  status        Boolean       @default(true)
+  sortOrder     Int           @default(0) @map("sort_order")
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+  galleries     BlogGallery[]
+
+  @@index([status], map: "idx_blog_posts_status")
+  @@index([publishedAt], map: "idx_blog_posts_published_at")
+  @@index([sortOrder], map: "idx_blog_posts_sort_order")
+  @@map("blog_posts")
+}
+
+model BlogGallery {
+  id         Int      @id @default(autoincrement())
+  postId     Int      @map("post_id")
+  imageUrl   String   @map("image_url") @db.VarChar(500)
+  imageAltTr String?  @map("image_alt_tr") @db.VarChar(255)
+  imageAltEn String?  @map("image_alt_en") @db.VarChar(255)
+  imageAltDe String?  @map("image_alt_de") @db.VarChar(255)
+  sortOrder  Int      @default(0) @map("sort_order")
+  createdAt  DateTime @default(now()) @map("created_at")
+  post       BlogPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([postId, sortOrder], map: "idx_blog_gallery_sort")
+  @@map("blog_gallery")
+}
+
+model ContactAppointment {
+  id        Int               @id @default(autoincrement())
+  name      String            @db.VarChar(120)
+  phone     String?           @db.VarChar(30)
+  service   String            @db.VarChar(100)
+  status    AppointmentStatus @default(PENDING)
+  locale    String            @default("tr") @db.VarChar(5)
+  createdAt DateTime          @default(now()) @map("created_at")
+  updatedAt DateTime          @updatedAt @map("updated_at")
+
+  @@index([status], map: "idx_contact_appointments_status")
+  @@index([createdAt], map: "idx_contact_appointments_created_at")
+  @@map("contact_appointments")
+}

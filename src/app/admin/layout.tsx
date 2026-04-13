@@ -1,69 +1,50 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import Link from "next/link";
+import { AdminLogoutButton } from "@/components/admin/admin-logout-button";
+import { AdminSidebar } from "@/components/admin/admin-sidebar";
+import { getAdminDashboardCounts } from "@/lib/admin/crud";
+import { requireAdminAccess } from "@/lib/auth/admin-auth";
+import { withOptionalDatabase } from "@/lib/admin/server";
 
 export const metadata: Metadata = {
   title: "Admin Paneli",
-  description: "Emsel Beauty yonetim paneli icin baslangic yerlesimi.",
+  description: "Emsel Beauty yonetim paneli.",
 };
 
-const navigationItems = [
-  "Dashboard",
-  "Urun Yonetimi",
-  "Hizmet Yonetimi",
-  "Blog Icerikleri",
-  "Iletisim Talepleri",
-  "Site Ayarlari",
-];
+export const dynamic = "force-dynamic";
 
-export default function AdminLayout({
+const emptyCounts = {
+  campaigns: 0,
+  users: 0,
+  who: 0,
+  "site-settings": 0,
+  products: 0,
+  services: 0,
+  "blog-posts": 0,
+  "contact-appointments": 0,
+};
+
+export default async function AdminLayout({
   children,
 }: Readonly<{
   children: ReactNode;
 }>) {
+  await requireAdminAccess();
+
+  const counts = await withOptionalDatabase(emptyCounts, () =>
+    getAdminDashboardCounts(),
+  );
+
   return (
     <div className="min-h-screen bg-[#f6efe7]">
-      <div className="mx-auto grid max-w-7xl gap-6 px-4 py-8 lg:grid-cols-[280px_minmax(0,1fr)] lg:px-8">
-        <aside className="rounded-[34px] border border-border bg-white/80 p-6 shadow-[var(--shadow)]">
-          <div className="space-y-3">
-            <p className="font-display text-3xl text-foreground">
-              Emsel Admin
-            </p>
-            <p className="text-sm leading-7 text-muted">
-              Bu alan tek dilli olarak planlandi. Icerik operasyonlarini sade,
-              hizli ve ekip odakli yonetmek icin ayri tutuluyor.
-            </p>
+      <div className="mx-auto grid max-w-[1480px] gap-6 px-4 py-8 lg:grid-cols-[300px_minmax(0,1fr)] lg:px-8">
+        <AdminSidebar counts={counts} />
+        <main className="min-w-0 space-y-4">
+          <div className="flex justify-end">
+            <AdminLogoutButton />
           </div>
-
-          <nav className="mt-8 flex flex-col gap-2">
-            {navigationItems.map((item, index) => (
-              <div
-                key={item}
-                className={`rounded-[20px] px-4 py-3 text-sm ${
-                  index === 0
-                    ? "bg-accent-strong text-white"
-                    : "bg-surface-strong text-foreground"
-                }`}
-              >
-                {item}
-              </div>
-            ))}
-          </nav>
-
-          <div className="mt-8 rounded-[24px] bg-accent-soft p-4">
-            <p className="text-sm font-semibold text-foreground">
-              Siteye don
-            </p>
-            <Link
-              href="/tr"
-              className="mt-3 inline-flex rounded-full bg-accent-strong px-4 py-2 text-sm font-semibold text-white"
-            >
-              Turkce anasayfayi ac
-            </Link>
-          </div>
-        </aside>
-
-        <main>{children}</main>
+          {children}
+        </main>
       </div>
     </div>
   );
