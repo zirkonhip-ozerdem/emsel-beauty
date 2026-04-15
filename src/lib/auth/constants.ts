@@ -12,4 +12,4 @@ export const ACCESS_COOKIE_NAME = "emsel_admin_access";
 export const REFRESH_COOKIE_NAME = "emsel_admin_refresh";
 export const CSRF_COOKIE_NAME = "emsel_admin_csrf";
 
-export const GENERIC_LOGIN_ERROR_MESSAGE = "E-posta veya sifre hatali";
+export const GENERIC_LOGIN_ERROR_MESSAGE = "E-posta veya şifre hatalı";

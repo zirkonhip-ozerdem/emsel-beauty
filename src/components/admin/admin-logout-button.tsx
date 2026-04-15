@@ -46,7 +46,7 @@ export function AdminLogoutButton() {
       disabled={isPending}
       className="rounded-full border border-border px-4 py-2 text-sm font-semibold text-foreground transition hover:bg-surface-strong disabled:cursor-not-allowed disabled:opacity-60"
     >
-      {isPending ? "Cikis yapiliyor..." : "Cikis yap"}
+      {isPending ? "Çıkış yapılıyor..." : "Çıkış yap"}
     </button>
   );
 }

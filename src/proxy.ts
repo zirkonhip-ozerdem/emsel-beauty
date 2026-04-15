@@ -32,22 +32,19 @@ function unauthorizedResponse(request: NextRequest) {
 }
 
 export async function proxy(request: NextRequest) {
-  const activeSession = await getActiveAdminSessionFromRequest(request);
-
-  if (!activeSession || activeSession.admin.role !== "ADMIN") {
-    return unauthorizedResponse(request);
-  }
-
   const accessToken = request.cookies.get("emsel_admin_access")?.value;
   const accessPayload = accessToken
     ? await verifyAdminAccessToken(accessToken)
     : null;
 
-  if (
-    accessPayload?.role === "ADMIN" &&
-    accessPayload.userId === activeSession.admin.id
-  ) {
+  if (accessPayload?.role === "ADMIN") {
     return NextResponse.next();
+  }
+
+  const activeSession = await getActiveAdminSessionFromRequest(request);
+
+  if (!activeSession || activeSession.admin.role !== "ADMIN") {
+    return unauthorizedResponse(request);
   }
 
   const refreshed = await refreshAdminSessionFromRequest(request);

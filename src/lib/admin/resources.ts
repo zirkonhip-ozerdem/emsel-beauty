@@ -33,7 +33,7 @@ function localizedFields(
   }));
 }
 
-function sortField(name = "sortOrder", label = "Siralama") {
+function sortField(name = "sortOrder", label = "Sıralama") {
   return {
     type: "number",
     name,
@@ -62,12 +62,12 @@ function section(title: string, fields: AdminField[], description?: string) {
 
 const campaignSections = [
   section(
-    "Cok Dilli Basliklar",
-    localizedFields("title", "Kampanya basligi", "text", {
+    "Çok Dilli Başlıklar",
+    localizedFields("title", "Kampanya başlığı", "text", {
       required: true,
-      placeholder: "Ornek: Bahar rituel paketi",
+      placeholder: "Örnek: Bahar ritüel paketi",
     }),
-    "Panel tek dilli olacak ama web tarafi TR / EN / DE olarak yayinlanacak.",
+    "Panel tek dilli olacak ama web tarafı TR / EN / DE olarak yayınlanacak.",
   ),
   section(
     "SEO URL ve Rozet",
@@ -77,30 +77,30 @@ const campaignSections = [
         placeholder: "bahar-rituel-paketi",
       }),
       ...localizedFields("badge", "Rozet / Etiket", "text", {
-        placeholder: "Ornek: Yeni sezon",
+        placeholder: "Örnek: Yeni sezon",
       }),
     ],
   ),
-  section("Aciklama", localizedFields("desc", "Kisa aciklama", "textarea")),
-  section("Medya ve Yayin", [
+  section("Açıklama", localizedFields("desc", "Kısa açıklama", "textarea")),
+  section("Medya ve Yayın", [
     {
       type: "url",
       name: "imageUrl",
-      label: "Kampanya gorseli URL",
+      label: "Kampanya görseli URL",
       placeholder: "https://...",
     },
     {
       type: "datetime-local",
       name: "startsAt",
-      label: "Baslangic tarihi",
+      label: "Başlangıç tarihi",
     },
     {
       type: "datetime-local",
       name: "endsAt",
-      label: "Bitis tarihi",
+      label: "Bitiş tarihi",
     },
     sortField(),
-    booleanField("isActive", "Yayinda"),
+    booleanField("isActive", "Yayında"),
   ]),
 ];
 
@@ -138,7 +138,7 @@ const userSections = [
       options: [
         { label: "Beklemede", value: "PENDING" },
         { label: "Aktif", value: "ACTIVE" },
-        { label: "Askida", value: "SUSPENDED" },
+        { label: "Askıda", value: "SUSPENDED" },
         { label: "Engelli", value: "BANNED" },
       ],
     },
@@ -146,18 +146,18 @@ const userSections = [
 ];
 
 const whoSections = [
-  section("Cok Dilli Baslik", localizedFields("title", "Bolum basligi", "text")),
+  section("Çok Dilli Başlık", localizedFields("title", "Bölüm başlığı", "text")),
   section(
-    "Cok Dilli Icerik",
-    localizedFields("whoDesc", "Aciklama", "textarea", {
-      placeholder: "Kurumsal hikaye, vizyon veya marka metni",
+    "Çok Dilli İçerik",
+    localizedFields("whoDesc", "Açıklama", "textarea", {
+      placeholder: "Kurumsal hikâye, vizyon veya marka metni",
     }),
   ),
-  section("Gorsel ve Durum", [
+  section("Görsel ve Durum", [
     {
       type: "url",
       name: "imageUrl",
-      label: "Gorsel URL",
+      label: "Görsel URL",
       placeholder: "https://...",
     },
     sortField(),
@@ -170,7 +170,7 @@ const siteSettingsSections = [
     {
       type: "text",
       name: "siteName",
-      label: "Site adi",
+      label: "Site adı",
       required: true,
     },
     {
@@ -178,16 +178,16 @@ const siteSettingsSections = [
       name: "siteSeoKeywords",
       label: "SEO anahtar kelimeler",
       required: true,
-      placeholder: "emsel beauty, spa, guzellik",
+      placeholder: "emsel beauty, spa, güzellik",
     },
     {
       type: "textarea",
       name: "siteSeoDescription",
-      label: "SEO aciklamasi",
+      label: "SEO açıklaması",
       required: true,
     },
   ]),
-  section("Iletisim", [
+  section("İletişim", [
     {
       type: "email",
       name: "email",
@@ -202,7 +202,7 @@ const siteSettingsSections = [
     {
       type: "tel",
       name: "wpNumber",
-      label: "WhatsApp numarasi",
+      label: "WhatsApp numarası",
       placeholder: "+905551234567",
     },
     {
@@ -212,8 +212,8 @@ const siteSettingsSections = [
       placeholder: "https://www.google.com/maps/embed?...",
     },
   ]),
-  section("Adresler", localizedFields("address", "Acik adres", "textarea")),
-  section("Calisma Saatleri", localizedFields("workingHours", "Calisma saatleri", "text")),
+  section("Adresler", localizedFields("address", "Açık adres", "textarea")),
+  section("Çalışma Saatleri", localizedFields("workingHours", "Çalışma saatleri", "text")),
   section("Marka ve Sosyal Medya", [
     {
       type: "url",
@@ -246,27 +246,27 @@ const siteSettingsSections = [
 ];
 
 const productSections = [
-  section("Urun Adi", localizedFields("name", "Urun adi", "text", { required: true })),
+  section("Ürün Adı", localizedFields("name", "Ürün adı", "text", { required: true })),
   section("Slug", localizedFields("slug", "Slug", "text", { required: true })),
   section(
-    "Kisa Aciklama",
-    localizedFields("shortDescription", "Kisa aciklama", "textarea"),
+    "Kısa Açıklama",
+    localizedFields("shortDescription", "Kısa açıklama", "textarea"),
   ),
   section(
-    "Detay Aciklama",
-    localizedFields("description", "Detay aciklama", "textarea", {
+    "Detay Açıklama",
+    localizedFields("description", "Detay açıklama", "textarea", {
       required: true,
     }),
   ),
-  section("Kapak Gorseli", [
+  section("Kapak Görseli", [
     {
       type: "url",
       name: "imageUrl",
-      label: "Kapak gorseli URL",
+      label: "Kapak görseli URL",
     },
-    ...localizedFields("imageAlt", "Kapak gorseli alt metni", "text"),
+    ...localizedFields("imageAlt", "Kapak görseli alt metni", "text"),
   ]),
-  section("Satis Bilgileri", [
+  section("Satış Bilgileri", [
     {
       type: "number",
       name: "price",
@@ -295,15 +295,15 @@ const productSections = [
       ],
     },
     sortField(),
-    booleanField("isFeatured", "One cikan urun"),
-    booleanField("isActive", "Yayinda"),
+    booleanField("isFeatured", "Öne çıkan ürün"),
+    booleanField("isActive", "Yayında"),
   ]),
   section("Galeri", [
     {
       type: "repeater",
       name: "galleries",
-      label: "Urun galerisi",
-      itemLabel: "Galeri gorseli",
+      label: "Ürün galerisi",
+      itemLabel: "Galeri görseli",
       defaultItem: {
         imageUrl: "",
         imageAltTr: "",
@@ -315,7 +315,7 @@ const productSections = [
         {
           type: "url",
           name: "imageUrl",
-          label: "Gorsel URL",
+          label: "Görsel URL",
         },
         ...localizedFields("imageAlt", "Alt metin", "text"),
         sortField(),
@@ -326,42 +326,42 @@ const productSections = [
 
 const serviceSections = [
   section("Kategori", localizedFields("category", "Kategori", "text")),
-  section("Hizmet Adi", localizedFields("name", "Hizmet adi", "text", { required: true })),
+  section("Hizmet Adı", localizedFields("name", "Hizmet adı", "text", { required: true })),
   section("Slug", localizedFields("slug", "Slug", "text", { required: true })),
-  section("Kart Aciklamasi", localizedFields("shortDescription", "Kisa aciklama", "textarea")),
+  section("Kart Açıklaması", localizedFields("shortDescription", "Kısa açıklama", "textarea")),
   section(
-    "Detay Aciklama",
-    localizedFields("longDescription", "Uzun aciklama", "textarea"),
+    "Detay Açıklama",
+    localizedFields("longDescription", "Uzun açıklama", "textarea"),
   ),
   section("Etiketler", [
     ...localizedFields("badge", "Rozet", "text"),
     ...localizedFields("sessionsLabel", "Seans etiketi", "text"),
   ]),
-  section("Kapak Gorseli", [
+  section("Kapak Görseli", [
     {
       type: "url",
       name: "imageUrl",
-      label: "Kapak gorseli URL",
+      label: "Kapak görseli URL",
     },
-    ...localizedFields("imageAlt", "Gorsel alt metni", "text"),
+    ...localizedFields("imageAlt", "Görsel alt metni", "text"),
   ]),
-  section("Yayin Ayarlari", [
+  section("Yayın Ayarları", [
     {
       type: "number",
       name: "durationMinutes",
-      label: "Sure (dakika)",
+      label: "Süre (dakika)",
       min: 0,
       step: 1,
     },
     sortField(),
-    booleanField("isActive", "Yayinda"),
+    booleanField("isActive", "Yayında"),
   ]),
   section("Galeri", [
     {
       type: "repeater",
       name: "galleries",
       label: "Galeri",
-      itemLabel: "Galeri gorseli",
+      itemLabel: "Galeri görseli",
       defaultItem: {
         imageUrl: "",
         imageAltTr: "",
@@ -373,19 +373,19 @@ const serviceSections = [
         {
           type: "url",
           name: "imageUrl",
-          label: "Gorsel URL",
+          label: "Görsel URL",
         },
         ...localizedFields("imageAlt", "Alt metin", "text"),
         sortField(),
       ],
     },
   ]),
-  section("One Cikan Maddeler", [
+  section("Öne Çıkan Maddeler", [
     {
       type: "repeater",
       name: "features",
-      label: "Ozellikler",
-      itemLabel: "Ozellik",
+      label: "Özellikler",
+      itemLabel: "Özellik",
       defaultItem: {
         labelTr: "",
         labelEn: "",
@@ -395,12 +395,12 @@ const serviceSections = [
       fields: [...localizedFields("label", "Madde", "text"), sortField()],
     },
   ]),
-  section("Surec Adimlari", [
+  section("Süreç Adımları", [
     {
       type: "repeater",
       name: "processSteps",
-      label: "Surec adimlari",
-      itemLabel: "Adim",
+      label: "Süreç adımları",
+      itemLabel: "Adım",
       defaultItem: {
         stepNumber: 1,
         titleTr: "",
@@ -415,17 +415,17 @@ const serviceSections = [
         {
           type: "number",
           name: "stepNumber",
-          label: "Adim numarasi",
+          label: "Adım numarası",
           min: 1,
           step: 1,
         },
-        ...localizedFields("title", "Adim basligi", "text"),
-        ...localizedFields("description", "Adim aciklamasi", "textarea"),
+        ...localizedFields("title", "Adım başlığı", "text"),
+        ...localizedFields("description", "Adım açıklaması", "textarea"),
         sortField(),
       ],
     },
   ]),
-  section("Sik Sorulan Sorular", [
+  section("Sık Sorulan Sorular", [
     {
       type: "repeater",
       name: "faqs",
@@ -450,30 +450,30 @@ const serviceSections = [
 ];
 
 const blogSections = [
-  section("Baslik", localizedFields("title", "Blog basligi", "text", { required: true })),
+  section("Başlık", localizedFields("title", "Blog başlığı", "text", { required: true })),
   section("SEO URL", localizedFields("seoUrl", "Slug", "text", { required: true })),
   section("Kategori Etiketi", localizedFields("meta", "Meta etiket", "text")),
   section(
-    "Kart Aciklamasi",
-    localizedFields("description", "Liste aciklamasi", "textarea", {
+    "Kart Açıklaması",
+    localizedFields("description", "Liste açıklaması", "textarea", {
       required: true,
     }),
   ),
-  section("Makale Icerigi", localizedFields("body", "Makale icerigi", "textarea")),
-  section("Hero Gorseli", [
+  section("Makale İçeriği", localizedFields("body", "Makale içeriği", "textarea")),
+  section("Hero Görseli", [
     {
       type: "url",
       name: "imageUrl",
-      label: "Ana gorsel URL",
+      label: "Ana görsel URL",
       required: true,
     },
     ...localizedFields("imageAlt", "Alt metin", "text"),
   ]),
-  section("Yayin Bilgisi", [
+  section("Yayın Bilgisi", [
     {
       type: "number",
       name: "readTimeMin",
-      label: "Okuma suresi (dk)",
+      label: "Okuma süresi (dk)",
       min: 1,
       step: 1,
       required: true,
@@ -481,17 +481,17 @@ const blogSections = [
     {
       type: "datetime-local",
       name: "publishedAt",
-      label: "Yayin tarihi",
+      label: "Yayın tarihi",
     },
     sortField(),
-    booleanField("status", "Yayinda"),
+    booleanField("status", "Yayında"),
   ]),
   section("Galeri", [
     {
       type: "repeater",
       name: "galleries",
       label: "Galeri",
-      itemLabel: "Galeri gorseli",
+      itemLabel: "Galeri görseli",
       defaultItem: {
         imageUrl: "",
         imageAltTr: "",
@@ -503,7 +503,7 @@ const blogSections = [
         {
           type: "url",
           name: "imageUrl",
-          label: "Gorsel URL",
+          label: "Görsel URL",
         },
         ...localizedFields("imageAlt", "Alt metin", "text"),
         sortField(),
@@ -538,8 +538,8 @@ const appointmentSections = [
       label: "Dil",
       required: true,
       options: [
-        { label: "Turkce", value: "tr" },
-        { label: "English", value: "en" },
+        { label: "Türkçe", value: "tr" },
+        { label: "İngilizce", value: "en" },
         { label: "Deutsch", value: "de" },
       ],
     },
@@ -550,9 +550,9 @@ const appointmentSections = [
       required: true,
       options: [
         { label: "Beklemede", value: "PENDING" },
-        { label: "Onaylandi", value: "CONFIRMED" },
-        { label: "Iptal edildi", value: "CANCELLED" },
-        { label: "Tamamlandi", value: "COMPLETED" },
+        { label: "Onaylandı", value: "CONFIRMED" },
+        { label: "İptal edildi", value: "CANCELLED" },
+        { label: "Tamamlandı", value: "COMPLETED" },
       ],
     },
   ]),
@@ -563,17 +563,17 @@ export const adminResources: AdminResourceDefinition[] = [
     key: "campaigns",
     title: "Kampanyalar",
     singular: "Kampanya",
-    description: "Anasayfa ve landing alanlarinda yayinlanacak kampanyalari yonet.",
+    description: "Anasayfa ve landing alanlarında yayınlanacak kampanyaları yönet.",
     href: "/admin/campaigns",
     apiPath: "/api/admin/campaigns",
-    emptyState: "Henuz kampanya kaydi yok.",
+    emptyState: "Henüz kampanya kaydı yok.",
     createLabel: "Yeni kampanya",
     columns: [
-      { key: "titleTr", label: "TR baslik" },
+      { key: "titleTr", label: "TR başlık" },
       { key: "badgeTr", label: "Rozet", placeholder: "-" },
-      { key: "isActive", label: "Durum", type: "boolean", trueLabel: "Yayinda", falseLabel: "Pasif" },
-      { key: "startsAt", label: "Baslangic", type: "date", placeholder: "-" },
-      { key: "updatedAt", label: "Guncellendi", type: "date" },
+      { key: "isActive", label: "Durum", type: "boolean", trueLabel: "Yayında", falseLabel: "Pasif" },
+      { key: "startsAt", label: "Başlangıç", type: "date", placeholder: "-" },
+      { key: "updatedAt", label: "Güncellendi", type: "date" },
     ],
     formSections: campaignSections,
     defaultValues: {
@@ -595,16 +595,24 @@ export const adminResources: AdminResourceDefinition[] = [
       sortOrder: 0,
       isActive: true,
     },
+    autoFillRules: [
+      { source: "titleTr", targets: ["seoUrlTr"], transform: "slugify" },
+      { source: "titleEn", targets: ["seoUrlEn"], transform: "slugify" },
+      { source: "titleDe", targets: ["seoUrlDe"], transform: "slugify" },
+      { source: "titleTr", targets: ["badgeTr"], transform: "copy" },
+      { source: "titleEn", targets: ["badgeEn"], transform: "copy" },
+      { source: "titleDe", targets: ["badgeDe"], transform: "copy" },
+    ],
   },
   {
     key: "users",
-    title: "Kullanicilar",
-    singular: "Kullanici",
-    description: "Admin, editor veya potansiyel musteri kayitlarini tek yerde takip et.",
+    title: "Kullanıcılar",
+    singular: "Kullanıcı",
+    description: "Admin, editör veya potansiyel müşteri kayıtlarını tek yerde takip et.",
     href: "/admin/users",
     apiPath: "/api/admin/users",
-    emptyState: "Henuz kullanici kaydi yok.",
-    createLabel: "Yeni kullanici",
+    emptyState: "Henüz kullanıcı kaydı yok.",
+    createLabel: "Yeni kullanıcı",
     columns: [
       { key: "firstName", label: "Ad" },
       { key: "lastName", label: "Soyad" },
@@ -624,17 +632,17 @@ export const adminResources: AdminResourceDefinition[] = [
   {
     key: "who",
     title: "Hikayemiz",
-    singular: "Hikaye bolumu",
-    description: "Ana sayfadaki kurumsal hikaye bloklarini ve sira yapisini yonet.",
+    singular: "Hikâye bölümü",
+    description: "Ana sayfadaki kurumsal hikâye bloklarını ve sıra yapısını yönet.",
     href: "/admin/who",
     apiPath: "/api/admin/who",
-    emptyState: "Henuz hikaye bolumu eklenmedi.",
-    createLabel: "Yeni hikaye bolumu",
+    emptyState: "Henüz hikâye bölümü eklenmedi.",
+    createLabel: "Yeni hikâye bölümü",
     columns: [
-      { key: "titleTr", label: "TR baslik", placeholder: "-" },
-      { key: "sortOrder", label: "Sira" },
+      { key: "titleTr", label: "TR başlık", placeholder: "-" },
+      { key: "sortOrder", label: "Sıra" },
       { key: "isActive", label: "Durum", type: "boolean", trueLabel: "Aktif", falseLabel: "Pasif" },
-      { key: "updatedAt", label: "Guncellendi", type: "date" },
+      { key: "updatedAt", label: "Güncellendi", type: "date" },
     ],
     formSections: whoSections,
     defaultValues: {
@@ -651,19 +659,19 @@ export const adminResources: AdminResourceDefinition[] = [
   },
   {
     key: "site-settings",
-    title: "Site Ayarlari",
-    singular: "Site ayari",
-    description: "Genel marka, SEO, footer ve iletisim verilerini tek merkezden yonet.",
+    title: "Site Ayarları",
+    singular: "Site ayarı",
+    description: "Genel marka, SEO, footer ve iletişim verilerini tek merkezden yönet.",
     href: "/admin/site-settings",
     apiPath: "/api/admin/site-settings",
-    emptyState: "Site ayari kaydi henuz olusturulmadi.",
-    createLabel: "Site ayari olustur",
+    emptyState: "Site ayarı kaydı henüz oluşturulmadı.",
+    createLabel: "Site ayarı oluştur",
     singleton: true,
     columns: [
-      { key: "siteName", label: "Site adi" },
+      { key: "siteName", label: "Site adı" },
       { key: "email", label: "E-posta", placeholder: "-" },
       { key: "phoneNumber", label: "Telefon", placeholder: "-" },
-      { key: "updatedAt", label: "Guncellendi", type: "date" },
+      { key: "updatedAt", label: "Güncellendi", type: "date" },
     ],
     formSections: siteSettingsSections,
     defaultValues: {
@@ -689,19 +697,19 @@ export const adminResources: AdminResourceDefinition[] = [
   },
   {
     key: "products",
-    title: "Urunler",
-    singular: "Urun",
-    description: "Cok dilli urun katalogu, fiyat ve stok bilgisini yonet.",
+    title: "Ürünler",
+    singular: "Ürün",
+    description: "Çok dilli ürün kataloğu, fiyat ve stok bilgisini yönet.",
     href: "/admin/products",
     apiPath: "/api/admin/products",
-    emptyState: "Henuz urun kaydi yok.",
-    createLabel: "Yeni urun",
+    emptyState: "Henüz ürün kaydı yok.",
+    createLabel: "Yeni ürün",
     columns: [
-      { key: "nameTr", label: "TR urun adi" },
+      { key: "nameTr", label: "TR ürün adı" },
       { key: "price", label: "Fiyat", type: "money", currencyKey: "currency" },
       { key: "stock", label: "Stok" },
-      { key: "isFeatured", label: "One cikan", type: "boolean", trueLabel: "Evet", falseLabel: "Hayir" },
-      { key: "isActive", label: "Durum", type: "boolean", trueLabel: "Yayinda", falseLabel: "Pasif" },
+      { key: "isFeatured", label: "Öne çıkan", type: "boolean", trueLabel: "Evet", falseLabel: "Hayır" },
+      { key: "isActive", label: "Durum", type: "boolean", trueLabel: "Yayında", falseLabel: "Pasif" },
     ],
     formSections: productSections,
     defaultValues: {
@@ -734,17 +742,17 @@ export const adminResources: AdminResourceDefinition[] = [
     key: "services",
     title: "Hizmetler",
     singular: "Hizmet",
-    description: "Hizmet katalogu, surec adimlari, galeri ve SSS bloklarini yonet.",
+    description: "Hizmet kataloğu, süreç adımları, galeri ve SSS bloklarını yönet.",
     href: "/admin/services",
     apiPath: "/api/admin/services",
-    emptyState: "Henuz hizmet kaydi yok.",
+    emptyState: "Henüz hizmet kaydı yok.",
     createLabel: "Yeni hizmet",
     columns: [
-      { key: "nameTr", label: "TR hizmet adi" },
+      { key: "nameTr", label: "TR hizmet adı" },
       { key: "categoryTr", label: "Kategori", placeholder: "-" },
-      { key: "durationMinutes", label: "Sure", placeholder: "-" },
-      { key: "features", label: "Ozellik", type: "count" },
-      { key: "isActive", label: "Durum", type: "boolean", trueLabel: "Yayinda", falseLabel: "Pasif" },
+      { key: "durationMinutes", label: "Süre", placeholder: "-" },
+      { key: "features", label: "Özellik", type: "count" },
+      { key: "isActive", label: "Durum", type: "boolean", trueLabel: "Yayında", falseLabel: "Pasif" },
     ],
     formSections: serviceSections,
     defaultValues: {
@@ -784,18 +792,18 @@ export const adminResources: AdminResourceDefinition[] = [
   },
   {
     key: "blog-posts",
-    title: "Blog Yazilari",
-    singular: "Blog yazisi",
-    description: "Liste ve detay sayfalarina gidecek cok dilli editoral icerikleri yonet.",
+    title: "Blog Yazıları",
+    singular: "Blog yazısı",
+    description: "Liste ve detay sayfalarına gidecek çok dilli editoryal içerikleri yönet.",
     href: "/admin/blog-posts",
     apiPath: "/api/admin/blog-posts",
-    emptyState: "Henuz blog yazisi yok.",
-    createLabel: "Yeni blog yazisi",
+    emptyState: "Henüz blog yazısı yok.",
+    createLabel: "Yeni blog yazısı",
     columns: [
-      { key: "titleTr", label: "TR baslik" },
+      { key: "titleTr", label: "TR başlık" },
       { key: "metaTr", label: "Meta", placeholder: "-" },
-      { key: "publishedAt", label: "Yayin tarihi", type: "date", placeholder: "-" },
-      { key: "status", label: "Durum", type: "boolean", trueLabel: "Yayinda", falseLabel: "Taslak" },
+      { key: "publishedAt", label: "Yayın tarihi", type: "date", placeholder: "-" },
+      { key: "status", label: "Durum", type: "boolean", trueLabel: "Yayında", falseLabel: "Taslak" },
       { key: "galleries", label: "Galeri", type: "count" },
     ],
     formSections: blogSections,
@@ -830,10 +838,10 @@ export const adminResources: AdminResourceDefinition[] = [
     key: "contact-appointments",
     title: "Randevu Talepleri",
     singular: "Randevu talebi",
-    description: "Iletisim formu ve online rezervasyon taleplerini operasyon ekibi icin yonet.",
+    description: "İletişim formu ve online rezervasyon taleplerini operasyon ekibi için yönet.",
     href: "/admin/contact-appointments",
     apiPath: "/api/admin/contact-appointments",
-    emptyState: "Henuz randevu talebi yok.",
+    emptyState: "Henüz randevu talebi yok.",
     createLabel: "Yeni talep",
     columns: [
       { key: "name", label: "Ad Soyad" },
@@ -841,7 +849,7 @@ export const adminResources: AdminResourceDefinition[] = [
       { key: "service", label: "Hizmet" },
       { key: "locale", label: "Dil" },
       { key: "status", label: "Durum" },
-      { key: "createdAt", label: "Olusturuldu", type: "date" },
+      { key: "createdAt", label: "Oluşturuldu", type: "date" },
     ],
     formSections: appointmentSections,
     defaultValues: {

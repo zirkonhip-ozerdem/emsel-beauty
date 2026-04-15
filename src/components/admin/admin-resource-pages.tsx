@@ -29,7 +29,7 @@ function formatCell(column: AdminColumn, record: RecordShape) {
   }
 
   if (column.type === "boolean") {
-    return rawValue ? column.trueLabel ?? "Evet" : column.falseLabel ?? "Hayir";
+    return rawValue ? column.trueLabel ?? "Evet" : column.falseLabel ?? "Hayır";
   }
 
   if (column.type === "date") {
@@ -80,8 +80,8 @@ function formatCell(column: AdminColumn, record: RecordShape) {
 function DatabaseNotice() {
   return (
     <section className="rounded-[28px] border border-dashed border-[#d4bd95] bg-[#fff8ec] p-5 text-sm leading-7 text-[#7b6b4a]">
-      Veritabani baglantisi henuz tanimli degil. `DATABASE_URL` degerini
-      ekledigimiz anda bu ekranlar dogrudan canli CRUD akisi ile calisacak.
+      Veritabanı bağlantısı henüz tanımlı değil. `DATABASE_URL` değerini
+      eklediğimiz anda bu ekranlar doğrudan canlı CRUD akışı ile çalışacak.
     </section>
   );
 }
@@ -105,7 +105,7 @@ export async function AdminResourceListPage({
     : `${resource.href}/new`;
   const primaryLabel = resource.singleton
     ? singletonRecord
-      ? "Ayarlari duzenle"
+      ? "Ayarları düzenle"
       : resource.createLabel
     : resource.createLabel;
 
@@ -113,7 +113,7 @@ export async function AdminResourceListPage({
     <div className="space-y-6">
       <AdminPageHeader
         eyebrow={resource.title}
-        title={`${resource.title} yonetimi`}
+        title={`${resource.title} yönetimi`}
         description={resource.description}
         action={
           <Link
@@ -132,8 +132,8 @@ export async function AdminResourceListPage({
           <div className="rounded-[24px] border border-dashed border-border px-5 py-10 text-center">
             <p className="text-lg font-semibold text-foreground">{resource.emptyState}</p>
             <p className="mt-2 text-sm leading-7 text-muted">
-              Ilk kaydi actigimizda listeler, API route’lari ve admin formlari ayni
-              akistan calisacak.
+              İlk kaydı açtığımızda listeler, API route’ları ve admin formları aynı
+              akıştan çalışacak.
             </p>
           </div>
         ) : (
@@ -150,7 +150,7 @@ export async function AdminResourceListPage({
                     </th>
                   ))}
                   <th className="px-4 pb-2 text-right text-xs font-semibold uppercase tracking-[0.16em] text-muted">
-                    Islemler
+                    İşlemler
                   </th>
                 </tr>
               </thead>
@@ -174,7 +174,7 @@ export async function AdminResourceListPage({
                             href={`${resource.href}/${recordId}/edit`}
                             className="rounded-full bg-accent-soft/50 px-3 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-accent-strong"
                           >
-                            Duzenle
+                            Düzenle
                           </Link>
                           <AdminDeleteButton endpoint={`${resource.apiPath}/${recordId}`} />
                         </div>
@@ -202,8 +202,8 @@ export function AdminResourceCreatePage({
     <div className="space-y-6">
       <AdminPageHeader
         eyebrow={resource.title}
-        title={`${resource.singular} olustur`}
-        description={`${resource.title} icin yeni bir kayit olusturuyoruz. Panelde girdigin veriler daha sonra public siteyi dinamik besleyecek.`}
+        title={`${resource.singular} oluştur`}
+        description={`${resource.title} için yeni bir kayıt oluşturuyoruz. Panelde girdiğin veriler daha sonra public siteyi dinamik besleyecek.`}
       />
 
       {!isDatabaseReady() ? <DatabaseNotice /> : null}
@@ -234,8 +234,8 @@ export async function AdminResourceEditPage({
       <div className="space-y-6">
         <AdminPageHeader
           eyebrow={resource.title}
-          title={`${resource.singular} duzenle`}
-          description="Duzenleme sayfasi hazir; veritabani baglantisi aktif oldugunda kaydi dogrudan cekip duzenleyecegiz."
+          title={`${resource.singular} düzenle`}
+          description="Düzenleme sayfası hazır; veritabanı bağlantısı aktif olduğunda kaydı doğrudan çekip düzenleyeceğiz."
         />
         <DatabaseNotice />
       </div>
@@ -254,8 +254,8 @@ export async function AdminResourceEditPage({
     <div className="space-y-6">
       <AdminPageHeader
         eyebrow={resource.title}
-        title={`${resource.singular} duzenle`}
-        description={`${resource.singular} kaydi burada guncellenir. Kaydetme sonrasinda listeye geri donuyoruz.`}
+        title={`${resource.singular} düzenle`}
+        description={`${resource.singular} kaydı burada güncellenir. Kaydetme sonrasında listeye geri dönüyoruz.`}
       />
 
       <AdminRecordForm

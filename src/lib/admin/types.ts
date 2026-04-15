@@ -55,6 +55,14 @@ export type AdminSection = {
   fields: AdminField[];
 };
 
+export type AdminAutoFillTransform = "copy" | "slugify";
+
+export type AdminAutoFillRule = {
+  source: string;
+  targets: string[];
+  transform: AdminAutoFillTransform;
+};
+
 export type AdminColumnType =
   | "text"
   | "boolean"
@@ -85,4 +93,5 @@ export type AdminResourceDefinition = {
   columns: AdminColumn[];
   formSections: AdminSection[];
   defaultValues: Record<string, unknown>;
+  autoFillRules?: AdminAutoFillRule[];
 };

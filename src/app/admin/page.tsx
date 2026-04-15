@@ -6,10 +6,10 @@ import { adminResources } from "@/lib/admin/resources";
 import { isDatabaseReady, withOptionalDatabase } from "@/lib/admin/server";
 
 const nextSteps = [
-  "DATABASE_URL degerini env dosyalarina ekle",
-  "Prisma migrate veya db push ile tablolari olustur",
-  "Prisma seed ile ilk site ayari ve hikaye verilerini bas",
-  "Sonraki adimda public site sayfalarini DB tabanli hale getir",
+  "DATABASE_URL değerini env dosyalarına ekle",
+  "Prisma migrate veya db push ile tabloları oluştur",
+  "Prisma seed ile ilk site ayarı ve hikâye verilerini bas",
+  "Sonraki adımda public site sayfalarını DB tabanlı hale getir",
 ];
 
 export default async function AdminPage() {
@@ -31,15 +31,15 @@ export default async function AdminPage() {
   return (
     <div className="space-y-6">
       <AdminPageHeader
-        eyebrow="Dashboard"
-        title="Prisma tabanli admin panel hazir."
-        description="Bu panel, dbdiagram uzerinden cikardigimiz modullere gore kuruldu. Supabase baglantisini yaptigimiz anda tum CRUD ekranlari ayni omurga ile calisacak."
+        eyebrow="Gösterge Paneli"
+        title="Prisma tabanlı admin panel hazır."
+        description="Bu panel, dbdiagram üzerinden çıkardığımız modüllere göre kuruldu. Supabase bağlantısını yaptığımız anda tüm CRUD ekranları aynı omurga ile çalışacak."
       />
 
       {!databaseReady ? (
         <section className="rounded-[28px] border border-dashed border-[#d4bd95] bg-[#fff8ec] p-5 text-sm leading-7 text-[#7b6b4a]">
-          Veritabani baglantisi henuz env tarafinda tanimli degil. Bu normal; ekranlar
-          hazir, Supabase baglantisini ekledigimiz anda listeleme ve kaydetme islemleri
+          Veritabanı bağlantısı henüz env tarafında tanımlı değil. Bu normal; ekranlar
+          hazır, Supabase bağlantısını eklediğimiz anda listeleme ve kaydetme işlemleri
           aktif olacak.
         </section>
       ) : null}
@@ -63,7 +63,7 @@ export default async function AdminPage() {
               href={module.href}
               className="mt-4 inline-flex rounded-full bg-accent-strong px-4 py-2 text-sm font-semibold text-white"
             >
-              Modulu ac
+              Modülü aç
             </Link>
           </article>
         ))}
@@ -71,7 +71,7 @@ export default async function AdminPage() {
 
       <section className="rounded-[34px] border border-border bg-white/75 p-6">
         <h2 className="font-display text-3xl text-foreground">
-          Sonraki teknik adimlar
+          Sonraki teknik adımlar
         </h2>
         <div className="mt-5 grid gap-4 md:grid-cols-2">
           {nextSteps.map((step, index) => (

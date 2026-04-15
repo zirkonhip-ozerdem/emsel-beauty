@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
     return new Response(
       JSON.stringify({
         ok: false,
-        message: "E-posta veya sifre hatali",
+        message: "E-posta veya şifre hatalı",
       }),
       {
         status: 400,

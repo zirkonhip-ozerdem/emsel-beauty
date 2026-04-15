@@ -10,7 +10,7 @@ export function validatePasswordStrength(password: string) {
     return {
       ok: false,
       message:
-        "Sifre en az 12 karakter olmali; buyuk harf, kucuk harf, rakam ve sembol icermelidir.",
+        "Şifre en az 12 karakter olmalı; büyük harf, küçük harf, rakam ve sembol içermelidir.",
     };
   }
 

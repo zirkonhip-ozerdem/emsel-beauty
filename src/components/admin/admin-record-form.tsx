@@ -3,8 +3,10 @@
 import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition } from "react";
 
+import { slugify } from "@/lib/slugify";
 import type {
   AdminField,
+  AdminAutoFillRule,
   AdminInputField,
   AdminRepeaterField,
   AdminResourceDefinition,
@@ -96,6 +98,14 @@ function getInputDisplayValue(field: AdminInputField, value: unknown) {
   return stringValue;
 }
 
+function applyAutoFillTransform(value: string, transform: AdminAutoFillRule["transform"]) {
+  if (transform === "slugify") {
+    return slugify(value);
+  }
+
+  return value;
+}
+
 export function AdminRecordForm({
   resource,
   mode,
@@ -115,16 +125,55 @@ export function AdminRecordForm({
   const formTitle = useMemo(
     () =>
       mode === "create"
-        ? `${resource.singular} olustur`
-        : `${resource.singular} duzenle`,
+        ? `${resource.singular} oluştur`
+        : `${resource.singular} düzenle`,
     [mode, resource.singular],
   );
 
   const updateField = (field: AdminInputField, value: string | boolean) => {
-    setFormState((current) => ({
-      ...current,
-      [field.name]: normalizeInputValue(field, value),
-    }));
+    setFormState((current) => {
+      const normalizedValue = normalizeInputValue(field, value);
+      const nextState = {
+        ...current,
+        [field.name]: normalizedValue,
+      };
+
+      const sourceRules = resource.autoFillRules?.filter(
+        (rule) => rule.source === field.name,
+      );
+
+      if (
+        !sourceRules?.length ||
+        typeof normalizedValue !== "string"
+      ) {
+        return nextState;
+      }
+
+      const previousSourceValue =
+        typeof current[field.name] === "string" ? String(current[field.name]) : "";
+
+      for (const rule of sourceRules) {
+        const nextAutoValue = applyAutoFillTransform(normalizedValue, rule.transform);
+        const previousAutoValue = applyAutoFillTransform(
+          previousSourceValue,
+          rule.transform,
+        );
+
+        for (const target of rule.targets) {
+          const currentTargetValue =
+            typeof current[target] === "string" ? String(current[target]) : "";
+
+          if (
+            currentTargetValue === "" ||
+            currentTargetValue === previousAutoValue
+          ) {
+            nextState[target] = nextAutoValue;
+          }
+        }
+      }
+
+      return nextState;
+    });
   };
 
   const updateRepeaterField = (
@@ -200,16 +249,15 @@ export function AdminRecordForm({
         | null;
 
       if (!response.ok) {
-        setError(payload?.message ?? "Kayit kaydedilemedi.");
+        setError(payload?.message ?? "Kayıt kaydedilemedi.");
         return;
       }
 
       setSuccess(
-        mode === "create" ? "Kayit olusturuldu." : "Degisiklikler kaydedildi.",
+        mode === "create" ? "Kayıt oluşturuldu." : "Değişiklikler kaydedildi.",
       );
 
       router.push(returnPath);
-      router.refresh();
     });
   };
 
@@ -225,9 +273,9 @@ export function AdminRecordForm({
           </h2>
         </div>
         <p className="max-w-3xl text-sm leading-7 text-muted">
-          Tüm alanlar admin panelinden yönetilecek şekilde kurgulandi. TR / EN /
-          DE alanlarini birlikte doldurman, public sitedeki cok dilli akisi
-          dogrudan besleyecek.
+          Tüm alanlar admin panelinden yönetilecek şekilde kurgulandı. TR / EN /
+          DE alanlarını birlikte doldurman, public sitedeki çok dilli akışı
+          doğrudan besleyecek.
         </p>
       </div>
 
@@ -281,7 +329,7 @@ export function AdminRecordForm({
                       <div className="mt-4 space-y-4">
                         {items.length === 0 ? (
                           <div className="rounded-[18px] border border-dashed border-border px-4 py-6 text-sm text-muted">
-                            Henuz {field.itemLabel.toLowerCase()} eklenmedi.
+                            Henüz {field.itemLabel.toLowerCase()} eklenmedi.
                           </div>
                         ) : null}
 
@@ -299,7 +347,7 @@ export function AdminRecordForm({
                                 onClick={() => removeRepeaterItem(field, index)}
                                 className="text-xs font-semibold uppercase tracking-[0.12em] text-[#9c4b38]"
                               >
-                                Kaldir
+                                Kaldır
                               </button>
                             </div>
 
@@ -466,27 +514,27 @@ export function AdminRecordForm({
         ))}
       </div>
 
-      <div className="mt-8 flex flex-col gap-4 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mt-8 flex flex-col gap-4 border-t border-border pt-6">
         <div className="space-y-2">
           {error ? <p className="text-sm text-red-700">{error}</p> : null}
           {success ? <p className="text-sm text-green-700">{success}</p> : null}
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center justify-end gap-3">
           <button
             type="button"
             onClick={() => router.push(returnPath)}
-            className="rounded-full border border-border px-5 py-3 text-sm font-semibold text-foreground"
+            className="min-w-[120px] rounded-full border border-border px-5 py-3 text-sm font-semibold text-foreground"
           >
-            Vazgec
+            Vazgeç
           </button>
           <button
             type="button"
             onClick={handleSubmit}
             disabled={isPending}
-            className="rounded-full bg-accent-strong px-5 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
+            className="min-w-[120px] rounded-full border border-[#8a6e36] bg-[linear-gradient(135deg,#f2d688_0%,#c5a059_48%,#8a6e36_100%)] px-5 py-3 text-sm font-semibold text-[#4f452b] shadow-[0_14px_32px_rgba(138,110,54,0.22)] transition hover:brightness-[1.03] disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {isPending ? "Kaydediliyor..." : mode === "create" ? "Kaydi olustur" : "Degisiklikleri kaydet"}
+            {isPending ? mode === "create" ? "Kaydediliyor..." : "Güncelleniyor..." : mode === "create" ? "Kaydet" : "Güncelle"}
           </button>
         </div>
       </div>

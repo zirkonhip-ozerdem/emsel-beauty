@@ -31,7 +31,7 @@ export function AdminDeleteButton({
 
   const handleDelete = () => {
     const confirmed = window.confirm(
-      "Bu kaydi silmek istediginize emin misiniz? Bu islem geri alinmaz.",
+      "Bu kaydı silmek istediğinize emin misiniz? Bu işlem geri alınmaz.",
     );
 
     if (!confirmed) {
@@ -54,7 +54,7 @@ export function AdminDeleteButton({
         | null;
 
       if (!response.ok) {
-        setError(payload?.message ?? "Kayit silinemedi.");
+        setError(payload?.message ?? "Kayıt silinemedi.");
         return;
       }
 

@@ -3,6 +3,14 @@ import { NextResponse } from "next/server";
 
 import { hasDatabaseConfig, prisma } from "@/lib/prisma";
 
+function isMissingPreparedStatementError(error: unknown) {
+  return (
+    error instanceof Error &&
+    error.message.includes("prepared statement") &&
+    error.message.includes("does not exist")
+  );
+}
+
 export function isDatabaseReady() {
   return hasDatabaseConfig();
 }
@@ -22,7 +30,7 @@ export function adminDbUnavailableResponse() {
     {
       ok: false,
       message:
-        "Veritabani baglantisi henuz tanimli degil. DATABASE_URL degerini ekleyince API aktif olacak.",
+        "Veritabanı bağlantısı henüz tanımlı değil. DATABASE_URL değerini ekleyince API aktif olacak.",
     },
     { status: 503 },
   );
@@ -70,6 +78,16 @@ export async function withOptionalDatabase<T>(
   try {
     return await resolver(prisma);
   } catch (error) {
+    if (isMissingPreparedStatementError(error)) {
+      try {
+        await prisma.$disconnect();
+        return await resolver(prisma);
+      } catch (retryError) {
+        console.error(retryError);
+        return fallbackValue;
+      }
+    }
+
     console.error(error);
     return fallbackValue;
   }

@@ -17,18 +17,18 @@ export default async function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#f6efe7] px-4 py-12">
+    <div className="flex min-h-screen items-center justify-center bg-[#f6efe7] px-4 py-12 [font-family:var(--font-manrope),sans-serif]">
       <div className="w-full max-w-md rounded-[34px] border border-border bg-white/92 p-8 shadow-[var(--shadow)]">
         <div className="space-y-3 text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-accent-strong">
             Emsel Beauty
           </p>
           <h1 className="font-display text-4xl text-foreground">
-            Admin girisi
+            Admin girişi
           </h1>
           <p className="text-sm leading-7 text-muted">
-            Bu alan yalnizca yetkili admin kullanicilar icindir. Oturum actiktan
-            sonra tum admin rotalari koruma altina alinmis olacak.
+            Bu alan yalnızca yetkili admin kullanıcılar içindir. Oturum açtıktan
+            sonra tüm admin rotaları koruma altına alınmış olacak.
           </p>
         </div>
 

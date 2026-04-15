@@ -36,6 +36,27 @@ type AdminRecordForAuth = {
   lockedUntil: Date | null;
 };
 
+function isMissingPreparedStatementError(error: unknown) {
+  return (
+    error instanceof Error &&
+    error.message.includes("prepared statement") &&
+    error.message.includes("does not exist")
+  );
+}
+
+async function withPrismaReconnectRetry<T>(operation: () => Promise<T>) {
+  try {
+    return await operation();
+  } catch (error) {
+    if (!isMissingPreparedStatementError(error)) {
+      throw error;
+    }
+
+    await prisma.$disconnect().catch(() => undefined);
+    return operation();
+  }
+}
+
 function genericLoginErrorResponse(status = 401) {
   return NextResponse.json(
     {
@@ -196,7 +217,7 @@ export async function assertAdminApiAccess(request: NextRequest) {
 
   if (!payload || payload.role !== "ADMIN") {
     const response = NextResponse.json(
-      { ok: false, message: "Oturum suresi doldu. Lutfen tekrar giris yapin." },
+      { ok: false, message: "Oturum süresi doldu. Lütfen tekrar giriş yapın." },
       { status: 401 },
     );
     clearAuthCookies(response);
@@ -213,7 +234,7 @@ export async function assertAdminApiAccess(request: NextRequest) {
       return {
         ok: false as const,
         response: NextResponse.json(
-          { ok: false, message: "CSRF dogrulamasi basarisiz." },
+          { ok: false, message: "CSRF doğrulaması başarısız." },
           { status: 403 },
         ),
       };
@@ -235,7 +256,7 @@ export async function handleAdminLogin(request: NextRequest, body: {
     return NextResponse.json(
       {
         ok: false,
-        message: "Veritabani baglantisi henuz tanimli degil.",
+        message: "Veritabanı bağlantısı henüz tanımlı değil.",
       },
       { status: 503 },
     );
@@ -245,7 +266,7 @@ export async function handleAdminLogin(request: NextRequest, body: {
     return NextResponse.json(
       {
         ok: false,
-        message: "CSRF dogrulamasi basarisiz.",
+        message: "CSRF doğrulaması başarısız.",
       },
       { status: 403 },
     );
@@ -261,7 +282,7 @@ export async function handleAdminLogin(request: NextRequest, body: {
       ipAddress,
       userAgent,
       eventType: "LOGIN_RATE_LIMITED",
-      details: `IP dakika limiti asildi. Retry after ${rateLimit.retryAfterSeconds}s`,
+      details: `IP dakika limiti aşıldı. Retry after ${rateLimit.retryAfterSeconds}s`,
     });
 
     const response = genericLoginErrorResponse(429);
@@ -276,7 +297,7 @@ export async function handleAdminLogin(request: NextRequest, body: {
       ipAddress,
       userAgent,
       eventType: "LOGIN_SUSPICIOUS",
-      details: "10+ deneme/saat esigi asildi.",
+      details: "10+ deneme/saat eşiği aşıldı.",
     });
   }
 
@@ -327,8 +348,8 @@ export async function handleAdminLogin(request: NextRequest, body: {
         userAgent,
         eventType: shouldLock ? "LOGIN_LOCKED" : "LOGIN_FAILED",
         details: shouldLock
-          ? "5 hatali deneme nedeniyle hesap 15 dakika kilitlendi."
-          : "Hatali sifre girildi.",
+          ? "5 hatalı deneme nedeniyle hesap 15 dakika kilitlendi."
+          : "Hatalı şifre girildi.",
       });
     } else {
       await logAdminAuthEvent({
@@ -336,7 +357,7 @@ export async function handleAdminLogin(request: NextRequest, body: {
         ipAddress,
         userAgent,
         eventType: "LOGIN_FAILED",
-        details: "Kayitli olmayan e-posta ile giris denemesi.",
+        details: "Kayıtlı olmayan e-posta ile giriş denemesi.",
       });
     }
 
@@ -364,7 +385,7 @@ export async function handleAdminLogin(request: NextRequest, body: {
     ipAddress,
     userAgent,
     eventType: "LOGIN_SUCCESS",
-    details: "Admin girisi basarili.",
+    details: "Admin girişi başarılı.",
   });
 
   const response = NextResponse.json({
@@ -391,17 +412,19 @@ export async function handleAdminLogout(request: NextRequest) {
   const userAgent = getUserAgent(request);
 
   if (hasDatabaseConfig() && refreshToken) {
-    const session = await prisma.adminSession.findUnique({
-      where: { sessionToken: refreshToken },
-      include: {
-        admin: {
-          select: {
-            id: true,
-            email: true,
+    const session = await withPrismaReconnectRetry(() =>
+      prisma.adminSession.findUnique({
+        where: { sessionToken: refreshToken },
+        include: {
+          admin: {
+            select: {
+              id: true,
+              email: true,
+            },
           },
         },
-      },
-    });
+      }),
+    );
 
     if (session) {
       await prisma.adminSession.update({
@@ -417,7 +440,7 @@ export async function handleAdminLogout(request: NextRequest) {
         ipAddress,
         userAgent,
         eventType: "LOGOUT",
-        details: "Admin oturumu kapatildi.",
+        details: "Admin oturumu kapatıldı.",
       });
     }
   }
@@ -441,18 +464,20 @@ export async function refreshAdminSessionFromRequest(request: NextRequest) {
     return null;
   }
 
-  const session = await prisma.adminSession.findUnique({
-    where: { sessionToken: refreshToken },
-    include: {
-      admin: {
-        select: {
-          id: true,
-          email: true,
-          role: true,
+  const session = await withPrismaReconnectRetry(() =>
+    prisma.adminSession.findUnique({
+      where: { sessionToken: refreshToken },
+      include: {
+        admin: {
+          select: {
+            id: true,
+            email: true,
+            role: true,
+          },
         },
       },
-    },
-  });
+    }),
+  );
 
   if (!session || session.revokedAt || session.expires <= new Date()) {
     return null;
@@ -492,18 +517,20 @@ export async function getActiveAdminSessionFromRequest(request: NextRequest) {
     return null;
   }
 
-  const session = await prisma.adminSession.findUnique({
-    where: { sessionToken: refreshToken },
-    include: {
-      admin: {
-        select: {
-          id: true,
-          email: true,
-          role: true,
+  const session = await withPrismaReconnectRetry(() =>
+    prisma.adminSession.findUnique({
+      where: { sessionToken: refreshToken },
+      include: {
+        admin: {
+          select: {
+            id: true,
+            email: true,
+            role: true,
+          },
         },
       },
-    },
-  });
+    }),
+  );
 
   if (!session || session.revokedAt || session.expires <= new Date()) {
     return null;

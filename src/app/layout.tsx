@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     template: "%s | Emsel Beauty",
   },
   description:
-    "Emsel Beauty icin Next.js tabanli, cok dilli site ve ayri admin panel mimarisi.",
+    "Emsel Beauty için Next.js tabanlı, çok dilli site ve ayrı admin panel mimarisi.",
   icons: {
     icon: [
       { url: "/favicon-emsel.png", type: "image/png" },

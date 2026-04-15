@@ -17,7 +17,7 @@ export async function GET() {
       },
       auth: {
         basePath: "/api/auth",
-        description: "Kimlik dogrulama endpointleri",
+        description: "Kimlik doğrulama endpointleri",
       },
     },
   });

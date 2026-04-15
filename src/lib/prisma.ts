@@ -1,76 +1,75 @@
-import { existsSync, readFileSync } from "node:fs";
-import { resolve } from "node:path";
 import { PrismaClient } from "@prisma/client";
 
 declare global {
   var prisma: PrismaClient | undefined;
+  var prismaDatabaseUrl: string | undefined;
 }
 
-function stripWrappingQuotes(value: string) {
-  if (
-    (value.startsWith('"') && value.endsWith('"')) ||
-    (value.startsWith("'") && value.endsWith("'"))
-  ) {
-    return value.slice(1, -1);
+function normalizeDatabaseUrl(value?: string) {
+  if (!value) {
+    return value;
   }
 
-  return value;
-}
+  try {
+    const url = new URL(value);
+    const isSupabaseTransactionPooler =
+      url.hostname.includes("pooler.supabase.com") && url.port === "6543";
 
-function loadRuntimeDatabaseUrl() {
-  if (process.env.DATABASE_URL) {
-    return;
-  }
-
-  for (const filename of [".env.local", ".env"]) {
-    const envPath = resolve(process.cwd(), filename);
-
-    if (!existsSync(envPath)) {
-      continue;
+    if (!isSupabaseTransactionPooler) {
+      return value;
     }
 
-    const fileContent = readFileSync(envPath, "utf8");
-    const lines = fileContent.split(/\r?\n/);
-
-    for (const rawLine of lines) {
-      const line = rawLine.trim();
-
-      if (!line || line.startsWith("#")) {
-        continue;
-      }
-
-      const separatorIndex = line.indexOf("=");
-
-      if (separatorIndex <= 0) {
-        continue;
-      }
-
-      const key = line.slice(0, separatorIndex).trim();
-
-      if (key !== "DATABASE_URL") {
-        continue;
-      }
-
-      process.env.DATABASE_URL = stripWrappingQuotes(
-        line.slice(separatorIndex + 1).trim(),
-      );
-      return;
+    if (!url.searchParams.has("pgbouncer")) {
+      url.searchParams.set("pgbouncer", "true");
     }
+
+    if (!url.searchParams.has("connection_limit")) {
+      url.searchParams.set("connection_limit", "1");
+    }
+
+    return url.toString();
+  } catch {
+    return value;
   }
 }
 
-loadRuntimeDatabaseUrl();
+const runtimeDatabaseUrl = normalizeDatabaseUrl(process.env.DATABASE_URL);
+
+if (runtimeDatabaseUrl) {
+  process.env.DATABASE_URL = runtimeDatabaseUrl;
+}
 
 export function hasDatabaseConfig() {
-  return Boolean(process.env.DATABASE_URL);
+  return Boolean(runtimeDatabaseUrl);
 }
 
-export const prisma =
-  global.prisma ??
-  new PrismaClient({
+function createPrismaClient(databaseUrl?: string) {
+  return new PrismaClient({
+    datasources: databaseUrl
+      ? {
+          db: {
+            url: databaseUrl,
+          },
+        }
+      : undefined,
     log: process.env.NODE_ENV === "development" ? ["warn", "error"] : ["error"],
   });
+}
+
+const shouldReuseExistingClient =
+  Boolean(global.prisma) && global.prismaDatabaseUrl === runtimeDatabaseUrl;
+
+if (!shouldReuseExistingClient && global.prisma) {
+  void global.prisma.$disconnect().catch(() => {
+    // Hot reload sırasında eski bağlantı kapanmasa bile yeni client oluşturmayı engellemiyoruz.
+  });
+}
+
+export const prisma = shouldReuseExistingClient
+  ? (global.prisma as PrismaClient)
+  : createPrismaClient(runtimeDatabaseUrl);
 
 if (process.env.NODE_ENV !== "production") {
   global.prisma = prisma;
+  global.prismaDatabaseUrl = runtimeDatabaseUrl;
 }

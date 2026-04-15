@@ -39,7 +39,7 @@ export function AdminLoginForm() {
 
         setCsrfReady(true);
       } catch {
-        setError("Giris guvenlik kontrolu hazirlanamadi. Sayfayi yenileyip tekrar deneyin.");
+        setError("Giriş güvenlik kontrolü hazırlanamadı. Sayfayı yenileyip tekrar deneyin.");
       }
     };
 
@@ -55,7 +55,7 @@ export function AdminLoginForm() {
       const csrfToken = getCookieValue("emsel_admin_csrf");
 
       if (!csrfToken) {
-        setError("Guvenlik anahtari alinamadi. Sayfayi yenileyip tekrar deneyin.");
+        setError("Güvenlik anahtarı alınamadı. Sayfayı yenileyip tekrar deneyin.");
         return;
       }
 
@@ -79,14 +79,14 @@ export function AdminLoginForm() {
           | null;
 
         if (!response.ok || !payload?.ok) {
-          setError(payload?.message ?? "Giris yapilamadi.");
+          setError(payload?.message ?? "Giriş yapılamadı.");
           return;
         }
 
         router.replace(payload.redirectTo ?? "/admin");
         router.refresh();
       } catch {
-        setError("Sunucuya baglanirken bir hata olustu. Lutfen tekrar deneyin.");
+        setError("Sunucuya bağlanırken bir hata oluştu. Lütfen tekrar deneyin.");
       }
     });
   };
@@ -111,7 +111,7 @@ export function AdminLoginForm() {
 
       <div className="space-y-2">
         <label className="text-sm font-semibold text-foreground" htmlFor="admin-password">
-          Sifre
+          Şifre
         </label>
         <input
           id="admin-password"
@@ -136,7 +136,7 @@ export function AdminLoginForm() {
         disabled={isPending || !csrfReady}
         className="group inline-flex w-full items-center justify-center gap-3 rounded-full border border-[#8a6e36] bg-[linear-gradient(135deg,#f2d688_0%,#c5a059_48%,#8a6e36_100%)] px-5 py-3 text-sm font-semibold text-[#fffaf0] shadow-[0_14px_32px_rgba(138,110,54,0.28)] transition hover:brightness-[1.04] disabled:cursor-not-allowed disabled:opacity-60"
       >
-        <span>{isPending ? "Giris yapiliyor..." : "Admin paneline gir"}</span>
+        <span>{isPending ? "Giriş yapılıyor..." : "Admin paneline gir"}</span>
         <span
           aria-hidden="true"
           className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-[rgba(255,250,240,0.18)] text-base leading-none transition-transform duration-200 group-hover:translate-x-0.5"
