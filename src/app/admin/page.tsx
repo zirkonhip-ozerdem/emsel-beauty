@@ -6,7 +6,7 @@ import { adminResources } from "@/lib/admin/resources";
 import { isDatabaseReady, withOptionalDatabase } from "@/lib/admin/server";
 
 const nextSteps = [
-  "Supabase DATABASE_URL ve DIRECT_URL degerlerini env dosyalarina ekle",
+  "DATABASE_URL degerini env dosyalarina ekle",
   "Prisma migrate veya db push ile tablolari olustur",
   "Prisma seed ile ilk site ayari ve hikaye verilerini bas",
   "Sonraki adimda public site sayfalarini DB tabanli hale getir",

@@ -9,7 +9,27 @@ import {
   REFRESH_TOKEN_MAX_AGE_SECONDS,
 } from "@/lib/auth/constants";
 
+function isLocalHostname(hostname: string) {
+  return hostname === "localhost" || hostname === "127.0.0.1" || hostname === "::1";
+}
+
 function isSecureCookie() {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+
+  if (siteUrl) {
+    try {
+      const parsedUrl = new URL(siteUrl);
+
+      if (isLocalHostname(parsedUrl.hostname)) {
+        return false;
+      }
+
+      return parsedUrl.protocol === "https:";
+    } catch {
+      return process.env.NODE_ENV === "production";
+    }
+  }
+
   return process.env.NODE_ENV === "production";
 }
 

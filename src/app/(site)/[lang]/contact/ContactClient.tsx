@@ -54,7 +54,7 @@ export default function ContactClient({ locale }: { locale: Locale }) {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   }
 
-  // Form gönderimi — buraya EmailJS, fetch("/api/contact") vs. bağlanabilir
+  // Form gönderimi — buraya fetch("/api/site/contact-appointments") bağlanabilir
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     console.log("Form verisi:", form); // → gerçek API çağrısıyla değiştir

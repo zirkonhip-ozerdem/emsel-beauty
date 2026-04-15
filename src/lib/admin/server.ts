@@ -22,7 +22,7 @@ export function adminDbUnavailableResponse() {
     {
       ok: false,
       message:
-        "Veritabani baglantisi henuz tanimli degil. Supabase DATABASE_URL ve DIRECT_URL degerlerini ekleyince API aktif olacak.",
+        "Veritabani baglantisi henuz tanimli degil. DATABASE_URL degerini ekleyince API aktif olacak.",
     },
     { status: 503 },
   );

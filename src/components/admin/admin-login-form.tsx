@@ -26,11 +26,21 @@ export function AdminLoginForm() {
 
   useEffect(() => {
     const bootstrapCsrf = async () => {
-      await fetch("/api/auth/csrf", {
-        method: "GET",
-        credentials: "include",
-      });
-      setCsrfReady(true);
+      try {
+        const response = await fetch("/api/auth/csrf", {
+          method: "GET",
+          credentials: "include",
+          cache: "no-store",
+        });
+
+        if (!response.ok) {
+          throw new Error("CSRF bootstrap failed.");
+        }
+
+        setCsrfReady(true);
+      } catch {
+        setError("Giris guvenlik kontrolu hazirlanamadi. Sayfayi yenileyip tekrar deneyin.");
+      }
     };
 
     void bootstrapCsrf();
@@ -44,30 +54,40 @@ export function AdminLoginForm() {
 
       const csrfToken = getCookieValue("emsel_admin_csrf");
 
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify({
-          email,
-          password,
-          csrfToken,
-        }),
-      });
-
-      const payload = (await response.json().catch(() => null)) as
-        | { ok?: boolean; message?: string; redirectTo?: string }
-        | null;
-
-      if (!response.ok || !payload?.ok) {
-        setError(payload?.message ?? "Giris yapilamadi.");
+      if (!csrfToken) {
+        setError("Guvenlik anahtari alinamadi. Sayfayi yenileyip tekrar deneyin.");
         return;
       }
 
-      router.replace(payload.redirectTo ?? "/admin");
-      router.refresh();
+      try {
+        const response = await fetch("/api/auth/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          cache: "no-store",
+          body: JSON.stringify({
+            email,
+            password,
+            csrfToken,
+          }),
+        });
+
+        const payload = (await response.json().catch(() => null)) as
+          | { ok?: boolean; message?: string; redirectTo?: string }
+          | null;
+
+        if (!response.ok || !payload?.ok) {
+          setError(payload?.message ?? "Giris yapilamadi.");
+          return;
+        }
+
+        router.replace(payload.redirectTo ?? "/admin");
+        router.refresh();
+      } catch {
+        setError("Sunucuya baglanirken bir hata olustu. Lutfen tekrar deneyin.");
+      }
     });
   };
 
@@ -114,9 +134,15 @@ export function AdminLoginForm() {
       <button
         type="submit"
         disabled={isPending || !csrfReady}
-        className="inline-flex w-full items-center justify-center rounded-full bg-accent-strong px-5 py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60"
+        className="group inline-flex w-full items-center justify-center gap-3 rounded-full border border-[#8a6e36] bg-[linear-gradient(135deg,#f2d688_0%,#c5a059_48%,#8a6e36_100%)] px-5 py-3 text-sm font-semibold text-[#fffaf0] shadow-[0_14px_32px_rgba(138,110,54,0.28)] transition hover:brightness-[1.04] disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {isPending ? "Giris yapiliyor..." : "Admin paneline gir"}
+        <span>{isPending ? "Giris yapiliyor..." : "Admin paneline gir"}</span>
+        <span
+          aria-hidden="true"
+          className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-[rgba(255,250,240,0.18)] text-base leading-none transition-transform duration-200 group-hover:translate-x-0.5"
+        >
+          {isPending ? "..." : "→"}
+        </span>
       </button>
     </form>
   );

@@ -80,9 +80,8 @@ function formatCell(column: AdminColumn, record: RecordShape) {
 function DatabaseNotice() {
   return (
     <section className="rounded-[28px] border border-dashed border-[#d4bd95] bg-[#fff8ec] p-5 text-sm leading-7 text-[#7b6b4a]">
-      Veritabani baglantisi henuz tanimli degil. Supabase icin `DATABASE_URL` ve
-      `DIRECT_URL` degerlerini ekledigimiz anda bu ekranlar dogrudan canli CRUD
-      akisi ile calisacak.
+      Veritabani baglantisi henuz tanimli degil. `DATABASE_URL` degerini
+      ekledigimiz anda bu ekranlar dogrudan canli CRUD akisi ile calisacak.
     </section>
   );
 }
