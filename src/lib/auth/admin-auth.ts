@@ -199,13 +199,13 @@ export async function requireAdminAccess() {
   const accessToken = cookieStore.get("emsel_admin_access")?.value;
 
   if (!accessToken) {
-    redirect("/login");
+    redirect("/admin-login");
   }
 
   const payload = await verifyAdminAccessToken(accessToken);
 
   if (!payload || payload.role !== "ADMIN") {
-    redirect("/login");
+    redirect("/admin-login");
   }
 
   return payload;

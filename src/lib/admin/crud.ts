@@ -293,15 +293,36 @@ export function getAdminCrudHandler(resourceKey: AdminResourceKey) {
   return adminCrud[resourceKey] as unknown as AdminCrudRouteHandler;
 }
 
-export async function getAdminDashboardCounts() {
-  return {
-    campaigns: await adminCrud.campaigns.count(),
-    users: await adminCrud.users.count(),
-    who: await adminCrud.who.count(),
-    "site-settings": await adminCrud["site-settings"].count(),
-    products: await adminCrud.products.count(),
-    services: await adminCrud.services.count(),
-    "blog-posts": await adminCrud["blog-posts"].count(),
-    "contact-appointments": await adminCrud["contact-appointments"].count(),
-  };
+const adminCountHandlers = {
+  campaigns: adminCrud.campaigns.count,
+  users: adminCrud.users.count,
+  who: adminCrud.who.count,
+  "site-settings": adminCrud["site-settings"].count,
+  products: adminCrud.products.count,
+  services: adminCrud.services.count,
+  "blog-posts": adminCrud["blog-posts"].count,
+  "contact-appointments": adminCrud["contact-appointments"].count,
+} satisfies Record<AdminResourceKey, () => Promise<number>>;
+
+const adminCountKeys = Object.keys(adminCountHandlers) as AdminResourceKey[];
+const adminCountKeySet = new Set<string>(adminCountKeys);
+
+export type AdminDashboardCounts = Partial<Record<AdminResourceKey, number>>;
+
+export function isAdminCountKey(value: string): value is AdminResourceKey {
+  return adminCountKeySet.has(value);
+}
+
+export async function getAdminDashboardCounts(
+  resourceKeys: readonly AdminResourceKey[] = adminCountKeys,
+): Promise<AdminDashboardCounts> {
+  const uniqueKeys = Array.from(new Set(resourceKeys));
+  const countEntries = await Promise.all(
+    uniqueKeys.map(async (resourceKey) => [
+      resourceKey,
+      await adminCountHandlers[resourceKey](),
+    ] as const),
+  );
+
+  return Object.fromEntries(countEntries) as AdminDashboardCounts;
 }

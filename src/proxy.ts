@@ -25,13 +25,20 @@ function unauthorizedResponse(request: NextRequest) {
     return response;
   }
 
-  const loginUrl = new URL("/login", request.url);
+  const loginUrl = new URL("/admin-login", request.url);
   const response = NextResponse.redirect(loginUrl);
   clearAuthCookies(response);
   return response;
 }
 
 export async function proxy(request: NextRequest) {
+  if (
+    request.nextUrl.pathname === "/api/admin/login" ||
+    request.nextUrl.pathname === "/api/admin/csrf"
+  ) {
+    return NextResponse.next();
+  }
+
   const accessToken = request.cookies.get("emsel_admin_access")?.value;
   const accessPayload = accessToken
     ? await verifyAdminAccessToken(accessToken)

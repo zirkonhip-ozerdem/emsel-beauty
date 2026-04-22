@@ -5,6 +5,7 @@ out.zip
 .turbo
 .DS_Store
 *.log
+public/uploads
 
 .env
 .env.local
