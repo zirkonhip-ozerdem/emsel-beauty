@@ -1,35 +1,8 @@
-//ContactClient.tsx sayfası
 "use client";
 // src/app/(site)/[lang]/contact/ContactClient.tsx
-// Bağımlılık yok — yalnızca React useState kullanır.
-// CSS: ./contact.css dosyasından import edilir.
-
 import { useState } from "react";
 import "./contact.css";
-import type { Locale } from "@/i18n/config";
-
-// ─── SABİTLER ────────────────────────────────────────────────────────────────
-// Hizmet listesini buradan yönet — select kutusunu bu array besler.
-const SERVICES = [
-  "Kafa Masajı",
-  "Tırnak Sanatı",
-  "Vuket Seçenekleri",
-  "Yüz Bakımı",
-  "Aromaterapi",
-  "Saç Bakımı",
-];
-
-// ─── İLETİŞİM BİLGİLERİ ──────────────────────────────────────────────────────
-// Gerçek adres/telefon/mail bilgilerini buradan değiştir.
-const CONTACT_INFO = {
-  address: ["Aliben Mah. Güzellik Cad. No:12", "Beşiktaş / İstanbul", "Türkiye"],
-  phone: "+90 555 123 45 67",
-  email: "iletisim@emselbeauty.com",
-  // Google Maps embed URL'ini kendi konumunla değiştir.
-  mapSrc:
-    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3010!2d28.97!3d41.01!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDHCsDAwJzM2LjAiTiAyOMKwNTgnMTIuMCJF!5e0!3m2!1str!2str!4v1",
-  whatsapp: "905551234567",
-};
+import type { ContactPageContent } from "@/lib/site/contact-page";
 
 // ─── FORM STATE TİPİ ─────────────────────────────────────────────────────────
 type FormState = {
@@ -43,7 +16,7 @@ const EMPTY_FORM: FormState = {
 };
 
 // ─── COMPONENT ───────────────────────────────────────────────────────────────
-export default function ContactClient({ locale }: { locale: Locale }) {
+export default function ContactClient({ content }: { content: ContactPageContent }) {
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
   const [submitted, setSubmitted] = useState(false);
 
@@ -54,7 +27,7 @@ export default function ContactClient({ locale }: { locale: Locale }) {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   }
 
-  // Form gönderimi — buraya fetch("/api/site/contact-appointments") bağlanabilir
+  // Form gonderimi daha sonra site API'sine baglanacak.
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     console.log("Form verisi:", form); // → gerçek API çağrısıyla değiştir
@@ -75,9 +48,9 @@ export default function ContactClient({ locale }: { locale: Locale }) {
       ════════════════════════════════════════════════════ */}
       <div className="cp-header">
         <div className="cp-divider" />
-        <h1 className="cp-title">İletişim &mdash; Bize Ulaşın</h1>
+        <h1 className="cp-title">{content.headerTitle}</h1>
         <p className="cp-subtitle">
-          Randevu almak veya bilgi edinmek için
+          {content.headerSubtitle}
         </p>
         <div className="cp-divider" />
       </div>
@@ -98,14 +71,14 @@ export default function ContactClient({ locale }: { locale: Locale }) {
               iframe üzerinde CSS filter: sepia(20%) uygulandı
               → mermer tonu ile uyumlu görünür.
               4 köşede altın L-şekli dekoratif çerçeve elemanları (.cp-corner) var.
-              Google Maps embed src'ini CONTACT_INFO.mapSrc'ten alır. */}
+              Google Maps embed src'ini server helper'dan alir. */}
           <div className="cp-map-wrap">
             <span className="cp-corner tl" />
             <span className="cp-corner tr" />
             <span className="cp-corner bl" />
             <span className="cp-corner br" />
             <iframe
-              src={CONTACT_INFO.mapSrc}
+              src={content.contactInfo.mapSrc}
               title="Emsel Beauty Konum"
               loading="lazy"
               allowFullScreen
@@ -122,9 +95,9 @@ export default function ContactClient({ locale }: { locale: Locale }) {
 
             {/* ADRES */}
             <div className="cp-info-item">
-              <span className="cp-info-label">Adres</span>
+              <span className="cp-info-label">{content.labels.address}</span>
               <p className="cp-info-value">
-                {CONTACT_INFO.address.map((line, i) => (
+                {content.contactInfo.address.map((line, i) => (
                   <span key={i}>{line}<br /></span>
                 ))}
               </p>
@@ -132,30 +105,34 @@ export default function ContactClient({ locale }: { locale: Locale }) {
 
             {/* TELEFON */}
             <div className="cp-info-item">
-              <span className="cp-info-label">Telefon</span>
+              <span className="cp-info-label">{content.labels.phone}</span>
               <p className="cp-info-value">
-                <a href={`tel:${CONTACT_INFO.phone.replace(/\s/g, "")}`}>
-                  {CONTACT_INFO.phone}
+                <a href={`tel:${content.contactInfo.phone.replace(/\s/g, "")}`}>
+                  {content.contactInfo.phone}
                 </a>
               </p>
             </div>
 
             {/* E-POSTA */}
             <div className="cp-info-item">
-              <span className="cp-info-label">E-Posta</span>
+              <span className="cp-info-label">{content.labels.email}</span>
               <p className="cp-info-value">
-                <a href={`mailto:${CONTACT_INFO.email}`}>
-                  {CONTACT_INFO.email}
+                <a href={`mailto:${content.contactInfo.email}`}>
+                  {content.contactInfo.email}
                 </a>
               </p>
             </div>
 
             {/* ÇALIŞMA SAATLERİ */}
             <div className="cp-info-item">
-              <span className="cp-info-label">Çalışma Saatleri</span>
+              <span className="cp-info-label">{content.labels.workingHours}</span>
               <p className="cp-info-value">
-                Pzt–Cmt: 09:00 – 20:00<br />
-                Pazar: 10:00 – 18:00
+                {content.contactInfo.workingHours.map((line, index) => (
+                  <span key={index}>
+                    {line}
+                    <br />
+                  </span>
+                ))}
               </p>
             </div>
 
@@ -173,7 +150,7 @@ export default function ContactClient({ locale }: { locale: Locale }) {
         <div className="cp-appointment">
 
           {/* Bölüm başlığı + dekoratif ornament */}
-          <h2 className="cp-section-title">Online Randevu</h2>
+          <h2 className="cp-section-title">{content.labels.appointmentTitle}</h2>
           <div className="cp-ornament">✦ &nbsp;·&nbsp; ✦</div>
 
           <form onSubmit={handleSubmit} noValidate>
@@ -186,14 +163,14 @@ export default function ContactClient({ locale }: { locale: Locale }) {
 
                 <div className="cp-field">
                   <label className="cp-label" htmlFor="cp-name">
-                    Adınız Soyadınız
+                    {content.labels.fullName}
                   </label>
                   <input
                     id="cp-name"
                     name="name"
                     type="text"
                     className="cp-input"
-                    placeholder="Adınız ve soyadınız"
+                    placeholder={content.labels.fullNamePlaceholder}
                     value={form.name}
                     onChange={handleChange}
                     required
@@ -209,7 +186,7 @@ export default function ContactClient({ locale }: { locale: Locale }) {
                     name="phone"
                     type="tel"
                     className="cp-input"
-                    placeholder="+90 5xx xxx xx xx"
+                    placeholder={content.labels.phonePlaceholder}
                     value={form.phone}
                     onChange={handleChange}
                   />
@@ -223,8 +200,8 @@ export default function ContactClient({ locale }: { locale: Locale }) {
                         onChange={handleChange}
                         required
                       >
-                        <option value="" disabled>Seçiniz</option>
-                        {SERVICES.map((s) => (
+                        <option value="" disabled>{content.labels.servicePlaceholder}</option>
+                        {content.services.map((s) => (
                           <option key={s} value={s}>{s}</option>
                         ))}
                       </select>
@@ -239,13 +216,13 @@ export default function ContactClient({ locale }: { locale: Locale }) {
                 Hover'da ::before pseudo-element ile soldan sağa altın dolum animasyonu.
                 max-width: 300px, margin: 0 auto → ortalanmış. */}
             <button type="submit" className="cp-submit-btn">
-              <span>Randevu Talebini Gönder</span>
+              <span>{content.labels.submit}</span>
             </button>
 
             {/* Başarılı gönderim mesajı — fadeIn animasyonuyla görünür */}
             {submitted && (
               <div className="cp-success">
-                ✦ &nbsp; Randevu talebiniz başarıyla alındı. En kısa sürede sizinle iletişime geçeceğiz.
+                ✦ &nbsp; {content.labels.success}
               </div>
             )}
 
@@ -260,10 +237,10 @@ export default function ContactClient({ locale }: { locale: Locale }) {
           SABİT WHATSAPP BUTONU
           position: fixed; bottom/right: 28px; z-index: 999
           Tasarımdaki sağ alt köşedeki yeşil daireye karşılık gelir.
-          href'te CONTACT_INFO.whatsapp kullanılır.
+          href'te helper'dan gelen WhatsApp numarasi kullanilir.
       ════════════════════════════════════════════════════ */}
       <a
-        href={`https://wa.me/${CONTACT_INFO.whatsapp}`}
+        href={`https://wa.me/${content.contactInfo.whatsapp}`}
         target="_blank"
         rel="noopener noreferrer"
         className="cp-whatsapp"

@@ -4,11 +4,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import RichTextEditor from "@/components/admin/RichTextEditor";
 import { getAdminCsrfToken, slugifyAdminText } from "@/lib/admin/client-utils";
 
 const inputClass =
   "w-full rounded-md border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none transition focus:border-[#c5a059] focus:ring-2 focus:ring-[#f2d688]/50";
-const textareaClass = `${inputClass} min-h-32 resize-y`;
 
 export default function NewCampaignPage() {
   const router = useRouter();
@@ -235,27 +235,21 @@ export default function NewCampaignPage() {
           <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-700">
             Açıklama
           </h2>
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-            <textarea
-              name="descTr"
+          <div className="grid grid-cols-1 gap-6">
+            <RichTextEditor
               value={form.descTr}
-              onChange={handleInput}
-              placeholder="Açıklama (TR)"
-              className={textareaClass}
+              onChange={(value) => setForm((prev) => ({ ...prev, descTr: value }))}
+              placeholder="Aciklama (TR)"
             />
-            <textarea
-              name="descEn"
+            <RichTextEditor
               value={form.descEn}
-              onChange={handleInput}
+              onChange={(value) => setForm((prev) => ({ ...prev, descEn: value }))}
               placeholder="Description (EN)"
-              className={textareaClass}
             />
-            <textarea
-              name="descDe"
+            <RichTextEditor
               value={form.descDe}
-              onChange={handleInput}
+              onChange={(value) => setForm((prev) => ({ ...prev, descDe: value }))}
               placeholder="Beschreibung (DE)"
-              className={textareaClass}
             />
           </div>
         </section>

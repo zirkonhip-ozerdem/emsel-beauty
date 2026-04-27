@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
+import RichTextEditor from "@/components/admin/RichTextEditor";
 import {
   getAdminCsrfToken,
   slugifyAdminText,
@@ -13,7 +14,6 @@ import {
 
 const inputClass =
   "w-full rounded-md border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none transition focus:border-[#c5a059] focus:ring-2 focus:ring-[#f2d688]/50";
-const textareaClass = `${inputClass} min-h-32 resize-y`;
 
 type Campaign = {
   titleTr: string;
@@ -254,10 +254,10 @@ export default function EditCampaignPage() {
 
         <section className="mt-10 space-y-4">
           <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-700">Açıklama</h2>
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-            <textarea name="descTr" value={form.descTr} onChange={handleInput} className={textareaClass} />
-            <textarea name="descEn" value={form.descEn} onChange={handleInput} className={textareaClass} />
-            <textarea name="descDe" value={form.descDe} onChange={handleInput} className={textareaClass} />
+          <div className="grid grid-cols-1 gap-6">
+            <RichTextEditor value={form.descTr} onChange={(value) => setForm((prev) => ({ ...prev, descTr: value }))} />
+            <RichTextEditor value={form.descEn} onChange={(value) => setForm((prev) => ({ ...prev, descEn: value }))} />
+            <RichTextEditor value={form.descDe} onChange={(value) => setForm((prev) => ({ ...prev, descDe: value }))} />
           </div>
         </section>
 

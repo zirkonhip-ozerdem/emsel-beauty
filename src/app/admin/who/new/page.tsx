@@ -4,11 +4,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import RichTextEditor from "@/components/admin/RichTextEditor";
 import { getAdminCsrfToken } from "@/lib/admin/client-utils";
 
 const inputClass =
   "w-full rounded-md border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none transition focus:border-[#c5a059] focus:ring-2 focus:ring-[#f2d688]/50";
-const textareaClass = `${inputClass} min-h-40 resize-y`;
 
 export default function NewWhoPage() {
   const router = useRouter();
@@ -105,10 +105,10 @@ export default function NewWhoPage() {
 
         <section className="mt-10 space-y-4">
           <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-700">İçerik</h2>
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-            <textarea name="whoDescTr" value={form.whoDescTr} onChange={handleInput} placeholder="İçerik TR" className={textareaClass} />
-            <textarea name="whoDescEn" value={form.whoDescEn} onChange={handleInput} placeholder="Content EN" className={textareaClass} />
-            <textarea name="whoDescDe" value={form.whoDescDe} onChange={handleInput} placeholder="Inhalt DE" className={textareaClass} />
+          <div className="grid grid-cols-1 gap-6">
+            <RichTextEditor value={form.whoDescTr} onChange={(value) => setForm((prev) => ({ ...prev, whoDescTr: value }))} minHeight={260} placeholder="Icerik TR" />
+            <RichTextEditor value={form.whoDescEn} onChange={(value) => setForm((prev) => ({ ...prev, whoDescEn: value }))} minHeight={260} placeholder="Content EN" />
+            <RichTextEditor value={form.whoDescDe} onChange={(value) => setForm((prev) => ({ ...prev, whoDescDe: value }))} minHeight={260} placeholder="Inhalt DE" />
           </div>
         </section>
 

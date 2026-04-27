@@ -13,7 +13,6 @@ import {
 
 type Service = {
   id: number;
-  categoryTr: string | null;
   nameTr: string;
   nameEn: string;
   slugTr: string;
@@ -104,7 +103,6 @@ export default function ServicesPage() {
               <tr>
                 <th className="px-6 py-3 text-left">Görsel</th>
                 <th className="px-6 py-3 text-left">Hizmet</th>
-                <th className="px-6 py-3 text-left">Kategori</th>
                 <th className="px-6 py-3 text-left">Süre</th>
                 <th className="px-6 py-3 text-left">Durum</th>
                 <th className="px-6 py-3 text-left">Güncelleme</th>
@@ -125,7 +123,6 @@ export default function ServicesPage() {
                     <div className="font-medium text-gray-800">{service.nameTr}</div>
                     <div className="text-xs text-gray-500">/{service.slugTr}</div>
                   </td>
-                  <td className="px-6 py-4 text-gray-600">{service.categoryTr ?? "-"}</td>
                   <td className="px-6 py-4 text-gray-600">{service.durationMinutes ? `${service.durationMinutes} dk` : "-"}</td>
                   <td className="px-6 py-4">
                     <span className={`inline-flex rounded-full px-2 py-1 text-xs ${service.isActive ? "bg-green-100 text-green-700" : "bg-gray-200 text-gray-600"}`}>
@@ -150,7 +147,9 @@ export default function ServicesPage() {
         {services.map((service) => (
           <div key={service.id} className="rounded-xl border bg-white p-4">
             <div className="font-semibold text-gray-800">{service.nameTr}</div>
-            <div className="mt-1 text-xs text-gray-500">{service.categoryTr ?? "Kategori yok"}</div>
+            <div className="mt-1 text-xs text-gray-500">
+              {service.durationMinutes ? `${service.durationMinutes} dk` : "Süre yok"}
+            </div>
             <div className="mt-3 flex justify-end gap-4 border-t pt-3">
               <Link href={`/admin/services/${service.id}/edit`} className="text-sm text-blue-600">Düzenle</Link>
               <button type="button" onClick={() => setDeleteId(service.id)} className="text-sm text-red-600">Sil</button>

@@ -81,6 +81,31 @@ textarea {
   font: inherit;
 }
 
+.admin-rich-editor {
+  --editor-min-height: 220px;
+}
+
+.admin-rich-editor .ck {
+  border-color: rgba(138, 110, 54, 0.18);
+}
+
+.admin-rich-editor .ck.ck-toolbar {
+  border-color: rgba(138, 110, 54, 0.18);
+  background: #fffdf8;
+}
+
+.admin-rich-editor .ck.ck-editor__main > .ck-editor__editable {
+  min-height: var(--editor-min-height);
+  border-color: rgba(138, 110, 54, 0.18);
+  background: #fff;
+  color: #4f452b;
+}
+
+.admin-rich-editor .ck.ck-editor__main > .ck-editor__editable:focus {
+  border-color: #c5a059;
+  box-shadow: 0 0 0 2px rgba(242, 214, 136, 0.5);
+}
+
 ::selection {
   background: rgba(197, 160, 89, 0.28);
 }

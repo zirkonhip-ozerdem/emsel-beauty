@@ -1,47 +1,74 @@
 import type { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { revalidateTag } from "next/cache";
 
 import {
-  deleteAdminResource,
-  listAdminResource,
-} from "@/lib/admin/api-resource-handlers";
+  adminJsonError,
+  adminJsonSuccess,
+} from "@/lib/admin/server";
+import {
+  parseAdminDeleteBodyId,
+  parseAdminRouteBody,
+  requireAdminRouteAccess,
+  toAdminRouteError,
+} from "@/lib/admin/modules/shared/route-helpers";
+import { productInputSchema } from "@/lib/admin/modules/products/schema";
+import { productAdminService } from "@/lib/admin/modules/products/service";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
-// ✅ Ürünleri listeleme (aynı kalıyor)
-export function GET(request: NextRequest) {
-  return listAdminResource(request, "products");
+export async function GET(request: NextRequest) {
+  const blockedResponse = await requireAdminRouteAccess(request);
+
+  if (blockedResponse) {
+    return blockedResponse;
+  }
+
+  const records = await productAdminService.list();
+  return adminJsonSuccess(records);
 }
 
-// 🔥 ÜRÜN OLUŞTURMA (BURAYI DEĞİŞTİRDİK)
 export async function POST(request: NextRequest) {
+  const blockedResponse = await requireAdminRouteAccess(request);
+
+  if (blockedResponse) {
+    return blockedResponse;
+  }
+
   try {
-    const body = await request.json();
-
-    const product = await prisma.product.create({
-      data: {
-        nameTr: body.nameTr,
-        nameEn: body.nameEn,
-        nameDe: body.nameDe,
-        descriptionTr: body.descriptionTr,
-        descriptionEn: body.descriptionEn,
-        descriptionDe: body.descriptionDe,
-      },
-    });
-
-    return NextResponse.json(product);
-  } catch (error) {
-    console.error("CREATE ERROR:", error);
-    return NextResponse.json(
-      { error: "Ürün oluşturulamadı" },
-      { status: 500 }
+    const data = await parseAdminRouteBody(
+      request,
+      "products",
+      productInputSchema,
     );
+    const createdRecord = await productAdminService.create(data);
+    revalidateTag("products", "max");
+
+    return adminJsonSuccess(createdRecord, "Kayıt oluşturuldu.");
+  } catch (error) {
+    return toAdminRouteError(error, "Kayıt oluşturulamadı.");
   }
 }
 
-// ✅ Silme aynı kalıyor
-export function DELETE(request: NextRequest) {
-  return deleteAdminResource(request, "products");
+export async function DELETE(request: NextRequest) {
+  const blockedResponse = await requireAdminRouteAccess(request);
+
+  if (blockedResponse) {
+    return blockedResponse;
+  }
+
+  const id = await parseAdminDeleteBodyId(request);
+
+  if (!id) {
+    return adminJsonError("Geçersiz kayıt ID değeri.", 400);
+  }
+
+  try {
+    await productAdminService.remove(id);
+    revalidateTag("products", "max");
+    return adminJsonSuccess({ id }, "Kayıt silindi.");
+  } catch (error) {
+    console.error(error);
+    return adminJsonError("Kayıt silinemedi.", 500);
+  }
 }

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
+import RichTextEditor from "@/components/admin/RichTextEditor";
 import {
   getAdminCsrfToken,
   slugifyAdminText,
@@ -13,7 +14,6 @@ import {
 
 const inputClass =
   "w-full rounded-md border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none transition focus:border-[#c5a059] focus:ring-2 focus:ring-[#f2d688]/50";
-const textareaClass = `${inputClass} min-h-32 resize-y`;
 
 type BlogGallery = {
   imageUrl: string | null;
@@ -264,19 +264,19 @@ export default function EditBlogPostPage() {
 
         <section className="mt-10 space-y-4">
           <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-700">Kart Açıklaması</h2>
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-            <textarea name="descriptionTr" value={form.descriptionTr} onChange={handleInput} className={textareaClass} />
-            <textarea name="descriptionEn" value={form.descriptionEn} onChange={handleInput} className={textareaClass} />
-            <textarea name="descriptionDe" value={form.descriptionDe} onChange={handleInput} className={textareaClass} />
+          <div className="grid grid-cols-1 gap-6">
+            <RichTextEditor value={form.descriptionTr} onChange={(value) => setForm((prev) => ({ ...prev, descriptionTr: value }))} />
+            <RichTextEditor value={form.descriptionEn} onChange={(value) => setForm((prev) => ({ ...prev, descriptionEn: value }))} />
+            <RichTextEditor value={form.descriptionDe} onChange={(value) => setForm((prev) => ({ ...prev, descriptionDe: value }))} />
           </div>
         </section>
 
         <section className="mt-10 space-y-4">
           <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-700">Makale İçeriği</h2>
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-            <textarea name="bodyTr" value={form.bodyTr} onChange={handleInput} className={`${textareaClass} min-h-52`} />
-            <textarea name="bodyEn" value={form.bodyEn} onChange={handleInput} className={`${textareaClass} min-h-52`} />
-            <textarea name="bodyDe" value={form.bodyDe} onChange={handleInput} className={`${textareaClass} min-h-52`} />
+          <div className="grid grid-cols-1 gap-6">
+            <RichTextEditor value={form.bodyTr} onChange={(value) => setForm((prev) => ({ ...prev, bodyTr: value }))} minHeight={300} />
+            <RichTextEditor value={form.bodyEn} onChange={(value) => setForm((prev) => ({ ...prev, bodyEn: value }))} minHeight={300} />
+            <RichTextEditor value={form.bodyDe} onChange={(value) => setForm((prev) => ({ ...prev, bodyDe: value }))} minHeight={300} />
           </div>
         </section>
 
@@ -299,9 +299,49 @@ export default function EditBlogPostPage() {
         </section>
 
         <section className="mt-10 grid grid-cols-1 gap-6 border-t pt-6 sm:grid-cols-3">
-          <input type="number" name="readTimeMin" min={1} value={form.readTimeMin} onChange={handleInput} className={inputClass} />
-          <input type="datetime-local" name="publishedAt" value={form.publishedAt} onChange={handleInput} className={inputClass} />
-          <input type="number" name="sortOrder" min={0} value={form.sortOrder} onChange={handleInput} className={inputClass} />
+          <div className="space-y-2">
+            <label htmlFor="readTimeMin" className="text-xs font-semibold uppercase tracking-wide text-gray-700">
+              Okuma Suresi
+            </label>
+            <input
+              id="readTimeMin"
+              type="number"
+              name="readTimeMin"
+              min={1}
+              value={form.readTimeMin}
+              onChange={handleInput}
+              placeholder="Okuma suresi (dk)"
+              className={inputClass}
+            />
+          </div>
+          <div className="space-y-2">
+            <label htmlFor="publishedAt" className="text-xs font-semibold uppercase tracking-wide text-gray-700">
+              Yayin Tarihi
+            </label>
+            <input
+              id="publishedAt"
+              type="datetime-local"
+              name="publishedAt"
+              value={form.publishedAt}
+              onChange={handleInput}
+              className={inputClass}
+            />
+          </div>
+          <div className="space-y-2">
+            <label htmlFor="sortOrder" className="text-xs font-semibold uppercase tracking-wide text-gray-700">
+              Siralama
+            </label>
+            <input
+              id="sortOrder"
+              type="number"
+              name="sortOrder"
+              min={0}
+              value={form.sortOrder}
+              onChange={handleInput}
+              placeholder="Siralama degeri"
+              className={inputClass}
+            />
+          </div>
         </section>
 
         <label className="mt-6 flex items-center gap-3 text-sm font-medium text-gray-700">

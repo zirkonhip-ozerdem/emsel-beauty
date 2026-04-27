@@ -1,57 +1,39 @@
-"use client";
 import Link from "next/link";
+import type { Metadata } from "next";
+import { getLocalizedPath } from "@/i18n/config";
+import { getPageMetadata } from "@/i18n/metadata";
+import { resolveLocale, type LangRouteParams } from "@/i18n/server";
+import { getServicesPageContent } from "@/lib/site/services-page";
 import "./style.css";
- 
-const services = [
-  {
-    id: 1,
-    category: "Cilt Bakımı",
-    title: "Derinlemesine Cilt Bakımı",
-    desc: "Cilt tipinize özel hazırlanan temizleme, peeling ve nemlendirme protokolleri ile cildinizi yenileyin. Tek seansta görünür parlaklık ve sıkılaşma.",
-    img: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=600&q=80",
-    items: ["Derin Temizlik Protokolü", "Peeling & Nemlendirme", "Cilt Tonu Eşitleme", "Parlaklık Serumu"],
-  },
-  {
-    id: 2,
-    category: "Kalıcı Makyaj",
-    title: "Microblading & Kaş Tasarımı",
-    desc: "Yüz hatlarınıza uygun, doğal görünümlü kaş tasarımı. Pigment uygulaması ile uzun süreli ve bakımlı bir görünüm.",
-    img: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=600&q=80",
-    items: ["Kaş Analizi & Tasarım", "Microblading Uygulaması", "Renk Pigmentasyonu", "Şekil Düzeltme"],
-  },
-  {
-    id: 3,
-    category: "Lazer & Epilasyon",
-    title: "Lazer Epilasyon",
-    desc: "En yeni teknoloji ile güvenli ve etkili kalıcı tüy azaltma. Tüm cilt tonları için uygun, ağrısız protokoller.",
-    img: "https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=600&q=80",
-    items: ["Diode Lazer Teknolojisi", "Tüm Cilt Tonları", "Ağrısız Uygulama", "Kalıcı Sonuçlar"],
-  },
-  {
-    id: 4,
-    category: "Vücut Bakımı",
-    title: "Aromaterapi Masajı",
-    desc: "Özel yağlar ile kas gerginliğini gideren, lenf dolaşımını uyaran ve zihni dinlendiren bütüncül terapi.",
-    img: "https://images.unsplash.com/photo-1519823551278-64ac92734fb1?w=600&q=80",
-    items: ["İsveç Masajı", "Aromaterapi Yağları", "Lenf Drenajı", "Sırt & Boyun Odaklı"],
-  },
-];
- 
-export default function ServicesPage() {
+
+type ServicesPageProps = {
+  params: LangRouteParams;
+};
+
+export async function generateMetadata({
+  params,
+}: ServicesPageProps): Promise<Metadata> {
+  const locale = await resolveLocale(params);
+  return getPageMetadata(locale, "services");
+}
+
+export default async function ServicesPage({ params }: ServicesPageProps) {
+  const locale = await resolveLocale(params);
+  const content = getServicesPageContent(locale);
+
   return (
     <div className="services-page">
       <header className="page-header">
-        <p className="page-eyebrow">Emsel Beauty &amp; Care Studio</p>
-        <h1 className="page-title">Profesyonel Güzellik<br />Hizmetleri</h1>
+        <p className="page-eyebrow">{content.eyebrow}</p>
+        <h1 className="page-title">{content.title[0]}<br />{content.title[1]}</h1>
         <p className="page-sub">
-          Uzman ekibimiz ile cildinizin ve güzelliğinizin en iyi halini keşfedin. Her hizmet,
-          sizin için özel olarak tasarlandı.
+          {content.description}
         </p>
       </header>
  
       <section className="services-grid">
-        {services.map((s) => (
-          <Link key={s.id} href={`/tr/services/${s.id}`} className="scard" style={{ textDecoration: "none" }}>
+        {content.cards.map((s) => (
+          <Link key={s.id} href={`${getLocalizedPath(locale, "services")}/${s.id}`} className="scard" style={{ textDecoration: "none" }}>
             <div className="scard-img-wrap">
               <img className="scard-img" src={s.img} alt={s.title} />
               <div className="scard-img-overlay" />
@@ -70,7 +52,7 @@ export default function ServicesPage() {
               </div>
             </div>
             <div className="scard-footer">
-              <span className="btn-reserve">Detayları Gör</span>
+              <span className="btn-reserve">{content.detailCta}</span>
             </div>
           </Link>
         ))}
@@ -78,4 +60,3 @@ export default function ServicesPage() {
     </div>
   );
 }
- 

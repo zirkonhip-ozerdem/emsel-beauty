@@ -5,6 +5,7 @@
 import type { Metadata } from "next";
 import { getPageMetadata } from "@/i18n/metadata";
 import { resolveLocale, type LangRouteParams } from "@/i18n/server";
+import { getContactPageContent } from "@/lib/site/contact-page";
 import ContactClient from "./ContactClient";
 
 // ─── SEO metadata (server tarafında üretilir) ────────────────────────────────
@@ -19,10 +20,9 @@ export async function generateMetadata({
   return getPageMetadata(locale, "contact");
 }
 
-// ─── Page (server component) ─────────────────────────────────────────────────
 export default async function ContactPage({ params }: ContactPageProps) {
   const locale = await resolveLocale(params);
-  // Client bileşene locale bilgisini geçiriyoruz;
-  // gerçek içerik (adres, telefon, mail) buradan düzenlenebilir.
-  return <ContactClient locale={locale} />;
+  const content = getContactPageContent(locale);
+
+  return <ContactClient content={content} />;
 }

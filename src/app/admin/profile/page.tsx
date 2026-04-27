@@ -11,8 +11,8 @@ export default function AdminProfilePage() {
       <section className="rounded-xl border bg-white p-6 shadow-sm">
         <h2 className="font-semibold text-gray-700">Admin Bilgisi</h2>
         <p className="mt-3 text-sm leading-6 text-gray-600">
-          Şifre güncelleme formunu sonraki adımda buraya Gürgen Packaging
-          profil akışına benzer şekilde ekleyebiliriz.
+          Sifre guncelleme formunu sonraki adimda bu alana, panelin genel
+          guvenlik akisina uyumlu sekilde ekleyebiliriz.
         </p>
       </section>
     </div>

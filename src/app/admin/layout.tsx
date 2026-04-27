@@ -14,9 +14,9 @@ export default async function AdminLayout({ children }: { children: ReactNode })
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 md:flex">
+    <div className="min-h-screen bg-gray-100">
       <Sidebar />
-      <main className="flex-1 overflow-y-auto p-4 md:p-6">{children}</main>
+      <main className="min-w-0 p-4 md:ml-64 md:p-6">{children}</main>
     </div>
   );
 }

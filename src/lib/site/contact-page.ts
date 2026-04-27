@@ -1,0 +1,102 @@
+import type { Locale } from "@/i18n/config";
+
+export type ContactPageContent = {
+  headerTitle: string;
+  headerSubtitle: string;
+  labels: {
+    address: string;
+    phone: string;
+    email: string;
+    workingHours: string;
+    appointmentTitle: string;
+    fullName: string;
+    fullNamePlaceholder: string;
+    phonePlaceholder: string;
+    servicePlaceholder: string;
+    submit: string;
+    success: string;
+  };
+  services: string[];
+  contactInfo: {
+    address: string[];
+    phone: string;
+    email: string;
+    mapSrc: string;
+    whatsapp: string;
+    workingHours: string[];
+  };
+};
+
+const baseContactInfo: ContactPageContent["contactInfo"] = {
+  address: ["Aliben Mah. Guzellik Cad. No:12", "Besiktas / Istanbul", "Turkiye"],
+  phone: "+90 555 123 45 67",
+  email: "iletisim@emselbeauty.com",
+  mapSrc:
+    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3010!2d28.97!3d41.01!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDHCsDAwJzM2LjAiTiAyOMKwNTgnMTIuMCJF!5e0!3m2!1str!2str!4v1",
+  whatsapp: "905551234567",
+  workingHours: ["Pzt–Cmt: 09:00 – 20:00", "Pazar: 10:00 – 18:00"],
+};
+
+const contactPageContent: Record<Locale, ContactPageContent> = {
+  tr: {
+    headerTitle: "Iletisim - Bize Ulasin",
+    headerSubtitle: "Randevu almak veya bilgi edinmek icin",
+    labels: {
+      address: "Adres",
+      phone: "Telefon",
+      email: "E-Posta",
+      workingHours: "Calisma Saatleri",
+      appointmentTitle: "Online Randevu",
+      fullName: "Adiniz Soyadiniz",
+      fullNamePlaceholder: "Adiniz ve soyadiniz",
+      phonePlaceholder: "+90 5xx xxx xx xx",
+      servicePlaceholder: "Seciniz",
+      submit: "Randevu Talebini Gonder",
+      success: "Randevu talebiniz basariyla alindi. En kisa surede sizinle iletisime gececegiz.",
+    },
+    services: ["Kafa Masaji", "Tirnak Sanati", "Vucut Bakimi", "Yuz Bakimi", "Aromaterapi", "Sac Bakimi"],
+    contactInfo: baseContactInfo,
+  },
+  en: {
+    headerTitle: "Contact - Reach Out",
+    headerSubtitle: "For appointments or more information",
+    labels: {
+      address: "Address",
+      phone: "Phone",
+      email: "Email",
+      workingHours: "Working Hours",
+      appointmentTitle: "Online Appointment",
+      fullName: "Full Name",
+      fullNamePlaceholder: "Your full name",
+      phonePlaceholder: "+90 5xx xxx xx xx",
+      servicePlaceholder: "Select",
+      submit: "Send Appointment Request",
+      success: "Your request has been received successfully. We will contact you shortly.",
+    },
+    services: ["Head Massage", "Nail Art", "Body Care", "Facial Care", "Aromatherapy", "Hair Care"],
+    contactInfo: baseContactInfo,
+  },
+  de: {
+    headerTitle: "Kontakt - Schreiben Sie Uns",
+    headerSubtitle: "Fur Termine oder weitere Informationen",
+    labels: {
+      address: "Adresse",
+      phone: "Telefon",
+      email: "E-Mail",
+      workingHours: "Offnungszeiten",
+      appointmentTitle: "Online Termin",
+      fullName: "Vor- und Nachname",
+      fullNamePlaceholder: "Ihr Vor- und Nachname",
+      phonePlaceholder: "+90 5xx xxx xx xx",
+      servicePlaceholder: "Auswahlen",
+      submit: "Terminanfrage Senden",
+      success: "Ihre Anfrage wurde erfolgreich erhalten. Wir melden uns in Kurze bei Ihnen.",
+    },
+    services: ["Kopfmassage", "Nageldesign", "Korperpflege", "Gesichtspflege", "Aromatherapie", "Haarpflege"],
+    contactInfo: baseContactInfo,
+  },
+};
+
+export function getContactPageContent(locale: Locale) {
+  return contactPageContent[locale];
+}

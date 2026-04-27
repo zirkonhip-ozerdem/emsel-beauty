@@ -16,12 +16,10 @@ type Product = {
   nameTr: string;
   nameEn: string;
   slugTr: string;
-  price: string | number;
-  stock: number;
-  currency: string;
   imageUrl: string | null;
-  isFeatured: boolean;
   isActive: boolean;
+  sortOrder: number;
+  galleries: Array<{ id: number }>;
   updatedAt: string;
 };
 
@@ -109,7 +107,7 @@ export default function ProductsPage() {
                 <th className="px-6 py-3 text-left">Görsel</th>
                 <th className="px-6 py-3 text-left">Ürün</th>
                 <th className="px-6 py-3 text-left">SEO URL</th>
-                <th className="px-6 py-3 text-left">Fiyat / Stok</th>
+                <th className="px-6 py-3 text-left">Galeri / Sıra</th>
                 <th className="px-6 py-3 text-left">Durum</th>
                 <th className="px-6 py-3 text-left">Güncelleme</th>
                 <th className="px-6 py-3 text-right">İşlemler</th>
@@ -137,8 +135,8 @@ export default function ProductsPage() {
                   </td>
                   <td className="px-6 py-4 text-gray-600">/{product.slugTr}</td>
                   <td className="px-6 py-4 text-gray-600">
-                    {Number(product.price).toLocaleString("tr-TR")} {product.currency}
-                    <div className="text-xs text-gray-500">Stok: {product.stock}</div>
+                    Galeri: {product.galleries.length}
+                    <div className="text-xs text-gray-500">Sıra: {product.sortOrder}</div>
                   </td>
                   <td className="px-6 py-4">
                     <span
@@ -148,11 +146,6 @@ export default function ProductsPage() {
                     >
                       {product.isActive ? "Yayında" : "Pasif"}
                     </span>
-                    {product.isFeatured ? (
-                      <span className="ml-2 inline-flex rounded-full bg-[#f2d688]/60 px-2 py-1 text-xs text-[#8a6e36]">
-                        Öne çıkan
-                      </span>
-                    ) : null}
                   </td>
                   <td className="px-6 py-4 text-gray-600">{formatAdminDate(product.updatedAt)}</td>
                   <td className="px-6 py-4 text-right">
@@ -179,7 +172,7 @@ export default function ProductsPage() {
               {product.imageUrl ? <img src={product.imageUrl} alt="" className="h-12 w-12 rounded-md object-cover" /> : null}
               <div>
                 <div className="font-semibold text-gray-800">{product.nameTr}</div>
-                <div className="text-xs text-gray-500">{Number(product.price).toLocaleString("tr-TR")} {product.currency}</div>
+                <div className="text-xs text-gray-500">Galeri: {product.galleries.length}</div>
               </div>
             </div>
             <div className="mt-3 flex justify-end gap-4 border-t pt-3">

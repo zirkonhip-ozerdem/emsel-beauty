@@ -1,22 +1,71 @@
 import type { NextRequest } from "next/server";
 
 import {
-  createAdminResource,
-  deleteAdminResource,
-  listAdminResource,
-} from "@/lib/admin/api-resource-handlers";
+  adminJsonError,
+  adminJsonSuccess,
+} from "@/lib/admin/server";
+import {
+  parseAdminDeleteBodyId,
+  parseAdminRouteBody,
+  requireAdminRouteAccess,
+  toAdminRouteError,
+} from "@/lib/admin/modules/shared/route-helpers";
+import { contactAppointmentInputSchema } from "@/lib/admin/modules/contact-appointments/schema";
+import { contactAppointmentAdminService } from "@/lib/admin/modules/contact-appointments/service";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
-export function GET(request: NextRequest) {
-  return listAdminResource(request, "contact-appointments");
+export async function GET(request: NextRequest) {
+  const blockedResponse = await requireAdminRouteAccess(request);
+
+  if (blockedResponse) {
+    return blockedResponse;
+  }
+
+  const records = await contactAppointmentAdminService.list();
+  return adminJsonSuccess(records);
 }
 
-export function POST(request: NextRequest) {
-  return createAdminResource(request, "contact-appointments");
+export async function POST(request: NextRequest) {
+  const blockedResponse = await requireAdminRouteAccess(request);
+
+  if (blockedResponse) {
+    return blockedResponse;
+  }
+
+  try {
+    const data = await parseAdminRouteBody(
+      request,
+      "contact-appointments",
+      contactAppointmentInputSchema,
+    );
+    const createdRecord = await contactAppointmentAdminService.create(data);
+
+    return adminJsonSuccess(createdRecord, "Kayıt oluşturuldu.");
+  } catch (error) {
+    return toAdminRouteError(error, "Kayıt oluşturulamadı.");
+  }
 }
 
-export function DELETE(request: NextRequest) {
-  return deleteAdminResource(request, "contact-appointments");
+export async function DELETE(request: NextRequest) {
+  const blockedResponse = await requireAdminRouteAccess(request);
+
+  if (blockedResponse) {
+    return blockedResponse;
+  }
+
+  const id = await parseAdminDeleteBodyId(request);
+
+  if (!id) {
+    return adminJsonError("Geçersiz kayıt ID değeri.", 400);
+  }
+
+  try {
+    await contactAppointmentAdminService.remove(id);
+    return adminJsonSuccess({ id }, "Kayıt silindi.");
+  } catch (error) {
+    console.error(error);
+    return adminJsonError("Kayıt silinemedi.", 500);
+  }
 }

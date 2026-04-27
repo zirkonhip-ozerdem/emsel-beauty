@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
+import RichTextEditor from "@/components/admin/RichTextEditor";
 import {
   getAdminCsrfToken,
   slugifyAdminText,
@@ -13,14 +14,10 @@ import {
 
 const inputClass =
   "w-full rounded-md border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none transition focus:border-[#c5a059] focus:ring-2 focus:ring-[#f2d688]/50";
-const textareaClass = `${inputClass} min-h-32 resize-y`;
 
 type ServiceChildRecord = Record<string, string | number | null>;
 
 type Service = {
-  categoryTr: string | null;
-  categoryEn: string | null;
-  categoryDe: string | null;
   nameTr: string;
   nameEn: string;
   nameDe: string;
@@ -109,9 +106,6 @@ export default function EditServicePage() {
     faqs: [] as ServiceChildRecord[],
   });
   const [form, setForm] = useState({
-    categoryTr: "",
-    categoryEn: "",
-    categoryDe: "",
     nameTr: "",
     nameEn: "",
     nameDe: "",
@@ -150,9 +144,6 @@ export default function EditServicePage() {
         const service = unwrapAdminApiData(payload);
 
         setForm({
-          categoryTr: service.categoryTr ?? "",
-          categoryEn: service.categoryEn ?? "",
-          categoryDe: service.categoryDe ?? "",
           nameTr: service.nameTr,
           nameEn: service.nameEn,
           nameDe: service.nameDe,
@@ -287,15 +278,6 @@ export default function EditServicePage() {
 
       <div className="rounded-xl border bg-white p-6 shadow-sm">
         <section className="space-y-4">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-700">Kategori</h2>
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-            <input name="categoryTr" value={form.categoryTr} onChange={handleInput} className={inputClass} />
-            <input name="categoryEn" value={form.categoryEn} onChange={handleInput} className={inputClass} />
-            <input name="categoryDe" value={form.categoryDe} onChange={handleInput} className={inputClass} />
-          </div>
-        </section>
-
-        <section className="mt-10 space-y-4">
           <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-700">Hizmet Adı</h2>
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
             <input name="nameTr" value={form.nameTr} onChange={handleInput} className={inputClass} />
@@ -315,19 +297,19 @@ export default function EditServicePage() {
 
         <section className="mt-10 space-y-4">
           <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-700">Kısa Açıklama</h2>
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-            <textarea name="shortDescriptionTr" value={form.shortDescriptionTr} onChange={handleInput} className={textareaClass} />
-            <textarea name="shortDescriptionEn" value={form.shortDescriptionEn} onChange={handleInput} className={textareaClass} />
-            <textarea name="shortDescriptionDe" value={form.shortDescriptionDe} onChange={handleInput} className={textareaClass} />
+          <div className="grid grid-cols-1 gap-6">
+            <RichTextEditor value={form.shortDescriptionTr} onChange={(value) => setForm((prev) => ({ ...prev, shortDescriptionTr: value }))} />
+            <RichTextEditor value={form.shortDescriptionEn} onChange={(value) => setForm((prev) => ({ ...prev, shortDescriptionEn: value }))} />
+            <RichTextEditor value={form.shortDescriptionDe} onChange={(value) => setForm((prev) => ({ ...prev, shortDescriptionDe: value }))} />
           </div>
         </section>
 
         <section className="mt-10 space-y-4">
           <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-700">Uzun Açıklama</h2>
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-            <textarea name="longDescriptionTr" value={form.longDescriptionTr} onChange={handleInput} className={textareaClass} />
-            <textarea name="longDescriptionEn" value={form.longDescriptionEn} onChange={handleInput} className={textareaClass} />
-            <textarea name="longDescriptionDe" value={form.longDescriptionDe} onChange={handleInput} className={textareaClass} />
+          <div className="grid grid-cols-1 gap-6">
+            <RichTextEditor value={form.longDescriptionTr} onChange={(value) => setForm((prev) => ({ ...prev, longDescriptionTr: value }))} minHeight={260} />
+            <RichTextEditor value={form.longDescriptionEn} onChange={(value) => setForm((prev) => ({ ...prev, longDescriptionEn: value }))} minHeight={260} />
+            <RichTextEditor value={form.longDescriptionDe} onChange={(value) => setForm((prev) => ({ ...prev, longDescriptionDe: value }))} minHeight={260} />
           </div>
         </section>
 
@@ -363,8 +345,18 @@ export default function EditServicePage() {
 
         <section className="mt-10 flex flex-col gap-5 border-t pt-6 sm:flex-row sm:items-center sm:justify-between">
           <div className="grid w-full grid-cols-1 gap-4 sm:max-w-md sm:grid-cols-2">
-            <input type="number" name="durationMinutes" min={0} value={form.durationMinutes} onChange={handleInput} className={inputClass} />
-            <input type="number" name="sortOrder" min={0} value={form.sortOrder} onChange={handleInput} className={inputClass} />
+            <div className="space-y-2">
+              <label htmlFor="durationMinutes" className="text-xs font-semibold uppercase tracking-wide text-gray-700">
+                Hizmet Suresi
+              </label>
+              <input id="durationMinutes" type="number" name="durationMinutes" min={0} value={form.durationMinutes} onChange={handleInput} placeholder="Hizmet suresi (dk)" className={inputClass} />
+            </div>
+            <div className="space-y-2">
+              <label htmlFor="sortOrder" className="text-xs font-semibold uppercase tracking-wide text-gray-700">
+                Siralama
+              </label>
+              <input id="sortOrder" type="number" name="sortOrder" min={0} value={form.sortOrder} onChange={handleInput} placeholder="Siralama degeri" className={inputClass} />
+            </div>
           </div>
           <label className="flex items-center gap-3 text-sm font-medium text-gray-700">
             <input type="checkbox" name="isActive" checked={form.isActive} onChange={handleInput} className="h-4 w-4 accent-[#8a6e36]" />

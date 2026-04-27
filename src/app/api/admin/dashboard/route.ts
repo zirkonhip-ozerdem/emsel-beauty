@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-import { getAdminDashboardCounts } from "@/lib/admin/crud";
+import { getAdminDashboardCounts } from "@/lib/admin/modules/dashboard";
 import { assertAdminApiAccess } from "@/lib/auth/admin-auth";
 import {
   adminDbUnavailableResponse,

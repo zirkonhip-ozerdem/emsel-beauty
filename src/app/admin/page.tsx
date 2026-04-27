@@ -81,7 +81,7 @@ export default function AdminPage() {
           <div className="rounded-xl border bg-white p-6 shadow-sm">
             <p className="text-sm text-gray-500">Panel Mimarisi</p>
             <p className="mt-2 text-xl font-bold text-gray-800">
-              Gürgen Packaging akışı
+              Emsel Beauty yonetim akisi
             </p>
           </div>
           <div className="rounded-xl bg-[#f7e6d3] p-6">
