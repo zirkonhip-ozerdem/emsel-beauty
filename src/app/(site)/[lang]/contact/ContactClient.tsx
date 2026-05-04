@@ -3,6 +3,7 @@
 import { useState } from "react";
 import "./contact.css";
 import type { ContactPageContent } from "@/lib/site/contact-page";
+import type { Locale } from "@/i18n/config";
 
 // ─── FORM STATE TİPİ ─────────────────────────────────────────────────────────
 type FormState = {
@@ -16,9 +17,17 @@ const EMPTY_FORM: FormState = {
 };
 
 // ─── COMPONENT ───────────────────────────────────────────────────────────────
-export default function ContactClient({ content }: { content: ContactPageContent }) {
+export default function ContactClient({
+  content,
+  locale,
+}: {
+  content: ContactPageContent;
+  locale: Locale;
+}) {
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   // Tüm input/select/textarea için tek handler
   function handleChange(
@@ -27,15 +36,41 @@ export default function ContactClient({ content }: { content: ContactPageContent
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   }
 
-  // Form gonderimi daha sonra site API'sine baglanacak.
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    console.log("Form verisi:", form); // → gerçek API çağrısıyla değiştir
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
+    setSubmitting(true);
+    setSubmitError(null);
+
+    try {
+      const response = await fetch("/api/site/reservations", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          ...form,
+          locale,
+        }),
+      });
+
+      const payload = (await response.json().catch(() => null)) as
+        | { ok?: boolean; message?: string }
+        | null;
+
+      if (!response.ok || payload?.ok === false) {
+        throw new Error(payload?.message ?? "Randevu talebi gonderilemedi.");
+      }
+
+      setSubmitted(true);
       setForm(EMPTY_FORM);
-    }, 4500);
+      setTimeout(() => setSubmitted(false), 4500);
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Randevu talebi gonderilemedi.";
+      setSubmitError(message);
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -215,8 +250,8 @@ export default function ContactClient({ content }: { content: ContactPageContent
                 Köşesiz, border-only başlangıç stili.
                 Hover'da ::before pseudo-element ile soldan sağa altın dolum animasyonu.
                 max-width: 300px, margin: 0 auto → ortalanmış. */}
-            <button type="submit" className="cp-submit-btn">
-              <span>{content.labels.submit}</span>
+            <button type="submit" className="cp-submit-btn" disabled={submitting}>
+              <span>{submitting ? "Gonderiliyor..." : content.labels.submit}</span>
             </button>
 
             {/* Başarılı gönderim mesajı — fadeIn animasyonuyla görünür */}
@@ -225,6 +260,7 @@ export default function ContactClient({ content }: { content: ContactPageContent
                 ✦ &nbsp; {content.labels.success}
               </div>
             )}
+            {submitError ? <div className="cp-success">{submitError}</div> : null}
 
           </form>
         </div>

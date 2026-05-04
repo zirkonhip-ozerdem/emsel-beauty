@@ -24,5 +24,5 @@ export default async function ContactPage({ params }: ContactPageProps) {
   const locale = await resolveLocale(params);
   const content = getContactPageContent(locale);
 
-  return <ContactClient content={content} />;
+  return <ContactClient content={content} locale={locale} />;
 }

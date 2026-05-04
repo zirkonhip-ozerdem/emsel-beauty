@@ -1,4 +1,5 @@
 import type { NextRequest } from "next/server";
+import { revalidateTag } from "next/cache";
 
 import {
   adminJsonError,
@@ -66,6 +67,7 @@ export async function PUT(request: NextRequest, context: AdminIdRouteContext) {
       blogPostInputSchema,
     );
     const updatedRecord = await blogPostAdminService.update(id, data);
+    revalidateTag("blog-posts", "max");
 
     return adminJsonSuccess(updatedRecord, "Kayıt güncellendi.");
   } catch (error) {
@@ -91,6 +93,7 @@ export async function DELETE(
 
   try {
     await blogPostAdminService.remove(id);
+    revalidateTag("blog-posts", "max");
     return adminJsonSuccess({ id }, "Kayıt silindi.");
   } catch (error) {
     console.error(error);

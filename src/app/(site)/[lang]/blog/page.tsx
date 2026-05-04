@@ -73,6 +73,7 @@ export default async function BlogPage({ params, searchParams }: BlogPageProps) 
           initialPage={currentPage}
           perPage={PER_PAGE}
           locale={locale}
+          apiPath="/api/blogs"
           headingFont={headingFont}
           labels={ui.labels}
           basePath={`/${locale}/blog`}

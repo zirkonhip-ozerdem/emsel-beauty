@@ -11,6 +11,7 @@ import { notFound } from "next/navigation";
 import type { Locale } from "@/i18n/config";
 import { siteLocales } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
+import { getLocalizedBlogPostValue, getPublishedBlogPosts } from "@/lib/site/blogs";
 import { slugify } from "@/lib/slugify";
 import "./blog-detail.css";
 
@@ -127,13 +128,52 @@ function IconTwitterX() {
 // Next.js 16: params = Promise<{ lang, slug }>
 type Props = { params: Promise<{ lang: string; slug: string }> };
 
+type DetailPost = {
+  title: string;
+  slug: string;
+  meta?: string | null;
+  description: string;
+  body?: string | null;
+  imageUrl?: string | null;
+  readTimeMin?: number;
+  publishedAt?: Date | null;
+};
+
+async function getLocalePosts(locale: Locale): Promise<DetailPost[]> {
+  const published = await getPublishedBlogPosts();
+
+  if (published.length > 0) {
+    return published.map((post) => {
+      const localized = getLocalizedBlogPostValue(locale, post);
+
+      return {
+        title: localized.title,
+        slug: localized.slug,
+        meta: localized.meta,
+        description: localized.description,
+        body: localized.body,
+        imageUrl: post.imageUrl,
+        readTimeMin: post.readTimeMin,
+        publishedAt: post.publishedAt,
+      };
+    });
+  }
+
+  const dict = getDictionary(locale);
+  return dict.blogPage.posts.map((post) => ({
+    title: post.title,
+    slug: slugify(post.title),
+    meta: "meta" in post ? post.meta : undefined,
+    description: post.description,
+  }));
+}
+
 export async function generateStaticParams() {
   const out: { lang: string; slug: string }[] = [];
   for (const lang of siteLocales) {
-    const dict = getDictionary(lang);
-    for (const post of dict.blogPage.posts) {
-      const slug = slugify(post.title);
-      if (slug) out.push({ lang, slug });
+    const posts = await getLocalePosts(lang);
+    for (const post of posts) {
+      if (post.slug) out.push({ lang, slug: post.slug });
     }
   }
   return out;
@@ -143,13 +183,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { lang, slug } = await params;
   if (!siteLocales.includes(lang as Locale)) return { title: "Blog | Emsel Beauty" };
   const locale = lang as Locale;
-  const dict   = getDictionary(locale);
-  const post   = dict.blogPage.posts.find((p) => slugify(p.title) === slug);
+  const posts = await getLocalePosts(locale);
+  const post = posts.find((item) => item.slug === slug);
   if (!post) return { title: "Blog | Emsel Beauty" };
   return {
-    title:       `${post.title} | Emsel Beauty`,
+    title: `${post.title} | Emsel Beauty`,
     description: post.description,
-    openGraph:   { title: post.title, description: post.description, type: "article" },
+    openGraph: { title: post.title, description: post.description, type: "article" },
   };
 }
 
@@ -158,19 +198,28 @@ export default async function BlogDetailPage({ params }: Props) {
   if (!siteLocales.includes(lang as Locale)) notFound();
 
   const locale      = lang as Locale;
-  const dict        = getDictionary(locale);
+  const allPosts = await getLocalePosts(locale);
   const headingFont = "font-display";
   const ui          = UI[locale];
 
-  const allPosts  = dict.blogPage.posts;
-  const postIndex = allPosts.findIndex((p) => slugify(p.title) === slug);
+  const postIndex = allPosts.findIndex((p) => p.slug === slug);
   const post      = allPosts[postIndex];
   if (!post) notFound();
 
-  const heroImage   = BLOG_IMAGES[postIndex % BLOG_IMAGES.length];
-  const publishDate = fakeDate(postIndex, locale);
-  const paragraphs  = buildContent(post.description);
-  const readingTime = calcReadingTime(paragraphs);
+  const heroImage = post.imageUrl || BLOG_IMAGES[postIndex % BLOG_IMAGES.length];
+  const publishDate = post.publishedAt
+    ? new Date(post.publishedAt).toLocaleDateString(
+        locale === "de" ? "de-DE" : locale === "en" ? "en-GB" : "tr-TR",
+        { day: "numeric", month: "long", year: "numeric" },
+      )
+    : fakeDate(postIndex, locale);
+  const paragraphs = post.body
+    ? post.body
+        .split("\n")
+        .map((value) => value.trim())
+        .filter(Boolean)
+    : buildContent(post.description);
+  const readingTime = post.readTimeMin || calcReadingTime(paragraphs);
 
   // Sidebar için: mevcut yazı hariç ilk 6 yazı
   const sidebarPosts = allPosts
@@ -303,7 +352,7 @@ export default async function BlogDetailPage({ params }: Props) {
                 {sidebarPosts.map(({ post: sp, originalIndex }) => (
                   <Link
                     key={originalIndex}
-                    href={`/${locale}/blog/${slugify(sp.title)}`}
+                    href={`/${locale}/blog/${sp.slug}`}
                     className="bd-sidebar-post"
                   >
                     <div className="bd-sidebar-post-img-wrap">
