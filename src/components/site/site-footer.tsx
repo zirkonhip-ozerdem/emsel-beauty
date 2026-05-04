@@ -5,14 +5,83 @@ import Link from "next/link";
 import "./global.css";
 import { getLocalizedPath, type Locale } from "@/i18n/config";
 import type { SiteDictionary } from "@/i18n/dictionaries";
+import { footerRouteKeys } from "@/components/site/navigation";
 
 type FooterProps = {
   locale: Locale;
   dictionary: SiteDictionary;
 };
 
+const footerCopy = {
+  tr: {
+    brandText:
+      "Uzun yillardir guzellik sektorunde arkamizda binlerce memnun musteri birakarak hizmetlerimize hiz kesmeden devam ediyoruz.",
+    servicesTitle: "Hizmetlerimiz",
+    agreementsTitle: "Sozlesmeler",
+    agreements: [
+      "Hizmet Sozlesmesi",
+      "Gizlilik Sozlesmesi",
+      "KVKK Metinleri",
+      "Sartlar",
+    ],
+    mapTitle: "Bizi Bulun",
+    mapLink: "Yol Tarifi Al",
+    addressTitle: "Adres",
+    phoneTitle: "Telefon",
+    workingHoursTitle: "Calisma Saatleri",
+    workingHours: ["Pzt-Cmt: 09:00 - 20:00", "Pazar: 10:00 - 18:00"],
+    socialTitle: "Sosyal Medya",
+  },
+  en: {
+    brandText:
+      "For many years, we have continued our beauty services with the trust of thousands of satisfied guests behind us.",
+    servicesTitle: "Our Services",
+    agreementsTitle: "Policies",
+    agreements: [
+      "Service Agreement",
+      "Privacy Policy",
+      "Data Protection Texts",
+      "Terms",
+    ],
+    mapTitle: "Find Us",
+    mapLink: "Get Directions",
+    addressTitle: "Address",
+    phoneTitle: "Phone",
+    workingHoursTitle: "Working Hours",
+    workingHours: ["Mon-Sat: 09:00 - 20:00", "Sunday: 10:00 - 18:00"],
+    socialTitle: "Social Media",
+  },
+  de: {
+    brandText:
+      "Seit vielen Jahren setzen wir unsere Beauty-Services mit dem Vertrauen tausender zufriedener Kundinnen und Kunden fort.",
+    servicesTitle: "Unsere Services",
+    agreementsTitle: "Richtlinien",
+    agreements: [
+      "Servicevereinbarung",
+      "Datenschutzrichtlinie",
+      "Datenschutzhinweise",
+      "Bedingungen",
+    ],
+    mapTitle: "Hier finden Sie uns",
+    mapLink: "Route anzeigen",
+    addressTitle: "Adresse",
+    phoneTitle: "Telefon",
+    workingHoursTitle: "Offnungszeiten",
+    workingHours: ["Mo-Sa: 09:00 - 20:00", "Sonntag: 10:00 - 18:00"],
+    socialTitle: "Soziale Medien",
+  },
+} as const;
+
 export default function SiteFooter({ locale, dictionary }: FooterProps) {
   const currentYear = new Date().getFullYear();
+  const ui = footerCopy[locale];
+  const footerLinks = footerRouteKeys.map((routeKey) => ({
+    href: getLocalizedPath(locale, routeKey),
+    label:
+      routeKey === "contact"
+        ? dictionary.header.consultation
+        : dictionary.navigation[routeKey],
+  }));
 
   return (
     <>
@@ -25,24 +94,20 @@ export default function SiteFooter({ locale, dictionary }: FooterProps) {
             height={303}
             className="cta-logo-img"
           />
-          <p className="cta-brand-text">
-            Uzun yillardir guzellik sektorunde arkamizda binlerce memnun musteri
-            birakarak hizmetlerimize hiz kesmeden devam ediyoruz.
-          </p>
+          <p className="cta-brand-text">{ui.brandText}</p>
         </div>
         <nav className="cta-links">
           <div className="cta-links-col">
-            <span className="cta-links-title">Hizli Linkler</span>
-            <Link href={getLocalizedPath(locale, "home")}>Anasayfa</Link>
-            <Link href={getLocalizedPath(locale, "services")}>Hizmetlerimiz</Link>
-            <Link href={getLocalizedPath(locale, "blog")}>Blog</Link>
-            <Link href={getLocalizedPath(locale, "corporate")}>Kurumsal</Link>
-            <Link href={getLocalizedPath(locale, "products")}>Urunlerimiz</Link>
-            <Link href={getLocalizedPath(locale, "contact")}>Online Rezervasyon</Link>
+            <span className="cta-links-title">{dictionary.footer.linksTitle}</span>
+            {footerLinks.map((item) => (
+              <Link key={item.href} href={item.href}>
+                {item.label}
+              </Link>
+            ))}
           </div>
 
           <div className="cta-links-col">
-            <span className="cta-links-title">Hizmetlerimiz</span>
+            <span className="cta-links-title">{ui.servicesTitle}</span>
             <a href="#">Hizmet 1</a>
             <a href="#">Hizmet 2</a>
             <a href="#">Hizmet 3</a>
@@ -51,16 +116,17 @@ export default function SiteFooter({ locale, dictionary }: FooterProps) {
           </div>
 
           <div className="cta-links-col">
-            <span className="cta-links-title">Sozlesmeler</span>
-            <Link href={getLocalizedPath(locale, "contact")}>Hizmet Sozlesmesi</Link>
-            <Link href={getLocalizedPath(locale, "contact")}>Gizlilik Sozlesmesi</Link>
-            <Link href={getLocalizedPath(locale, "contact")}>KVKK Metinleri</Link>
-            <Link href={getLocalizedPath(locale, "contact")}>Sartlar</Link>
+            <span className="cta-links-title">{ui.agreementsTitle}</span>
+            {ui.agreements.map((item) => (
+              <Link key={item} href={getLocalizedPath(locale, "contact")}>
+                {item}
+              </Link>
+            ))}
           </div>
         </nav>
 
         <div className="cta-map-col">
-          <span className="cta-col-title">Bizi Bulun</span>
+          <span className="cta-col-title">{ui.mapTitle}</span>
           <div className="cta-map">
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3011.!2d28.97!3d41.01!2m3!1f0!2f0!3f0!2m3!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDHCsDAwJzM2LjAiTiAyOMKwNTgnMTIuMCJF!5e0!3m2!1str!2str!4v1"
@@ -73,7 +139,7 @@ export default function SiteFooter({ locale, dictionary }: FooterProps) {
             />
           </div>
           <a href="..." target="_blank" rel="noreferrer" className="cta-map-link">
-            → Yol Tarifi Al
+            → {ui.mapLink}
           </a>
         </div>
       </section>
@@ -86,12 +152,8 @@ export default function SiteFooter({ locale, dictionary }: FooterProps) {
               <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
             </svg>
             <div>
-              <span className="kp-info-lbl">Adres</span>
-              <p className="kp-info-txt">
-                Ornek Mahallesi, Guzellik Cad. No:12
-                <br />
-                Istanbul
-              </p>
+              <span className="kp-info-lbl">{ui.addressTitle}</span>
+              <p className="kp-info-txt">{dictionary.footer.address}</p>
             </div>
           </div>
           <div className="kp-info-item">
@@ -99,11 +161,11 @@ export default function SiteFooter({ locale, dictionary }: FooterProps) {
               <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
             </svg>
             <div>
-              <span className="kp-info-lbl">Telefon</span>
+              <span className="kp-info-lbl">{ui.phoneTitle}</span>
               <p className="kp-info-txt">
-                +90 555 123 45 67
+                {dictionary.footer.phone}
                 <br />
-                info@emselbeauty.com
+                {dictionary.footer.mail}
               </p>
             </div>
           </div>
@@ -112,11 +174,11 @@ export default function SiteFooter({ locale, dictionary }: FooterProps) {
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             <div>
-              <span className="kp-info-lbl">Calisma Saatleri</span>
+              <span className="kp-info-lbl">{ui.workingHoursTitle}</span>
               <p className="kp-info-txt">
-                Pzt-Cmt: 09:00 - 20:00
+                {ui.workingHours[0]}
                 <br />
-                Pazar: 10:00 - 18:00
+                {ui.workingHours[1]}
               </p>
             </div>
           </div>
@@ -127,7 +189,7 @@ export default function SiteFooter({ locale, dictionary }: FooterProps) {
             </svg>
 
             <div>
-              <span className="kp-info-lbl">Sosyal Medya</span>
+              <span className="kp-info-lbl">{ui.socialTitle}</span>
 
               <div className="kp-social-links">
                 <a href="#">Instagram</a>
@@ -138,7 +200,7 @@ export default function SiteFooter({ locale, dictionary }: FooterProps) {
         </div>
         <div className="kp-info-social">
           <p>
-            © {currentYear} {dictionary.brand.name} - Tum Haklari Saklidir.
+            © {currentYear} {dictionary.brand.name} - {dictionary.footer.rights}
           </p>
         </div>
       </div>

@@ -1588,16 +1588,78 @@ const dictionaries = {
   },
 };
 
+const germanDictionary: SiteDictionary = {
+  ...(dictionaries.en as SiteDictionary),
+  navigation: {
+    home: "Startseite",
+    products: "Produkte",
+    services: "Services",
+    blog: "Blog",
+    campaigns: "Kampagnen",
+    contact: "Kontakt",
+    corporate: "Unternehmen",
+  },
+  languageLabels: {
+    tr: "Türkisch",
+    en: "Englisch",
+    de: "Deutsch",
+  },
+  header: {
+    consultation: "Online-Reservierung",
+  },
+  footer: {
+    ...(dictionaries.en as SiteDictionary).footer,
+    note: "Die aktuellen Texte dienen als Platzhalter und konnen spater durch finale Markeninhalte ersetzt werden.",
+    rights: "Alle Rechte vorbehalten.",
+    linksTitle: "Schnellzugriff",
+    contactTitle: "Kontakt",
+    addressLabel: "Adresse",
+    phoneLabel: "Telefon",
+    mailLabel: "E-Mail",
+  },
+  seo: {
+    ...(dictionaries.en as SiteDictionary).seo,
+    home: {
+      title: "Startseite",
+      description:
+        "Entdecken Sie die Startseite von Emsel Beauty mit Markenwelt, Produkten, Services und editorialen Inhalten in einem ruhigen Erlebnis.",
+    },
+    products: {
+      title: "Produkte",
+      description:
+        "Entdecken Sie Produktkategorien, Formulierungsansatze und die Premium-Produktwelt von Emsel Beauty.",
+    },
+    services: {
+      title: "Services",
+      description:
+        "Prufen Sie Beauty-Rituale, Servicepakete und buchungsfreundliche Ablaufe.",
+    },
+    blog: {
+      title: "Blog",
+      description:
+        "Lesen Sie editoriale Notizen, Pflegeroutinen und Beauty-Trends im Emsel Beauty Blog.",
+    },
+    campaigns: {
+      title: "Kampagnen",
+      description:
+        "Entdecken Sie saisonale Angebote, kuratierte Pakete und zeitlich begrenzte Specials auf der Kampagnenseite.",
+    },
+    contact: {
+      title: "Kontakt",
+      description:
+        "Kontaktieren Sie Emsel Beauty fur Termine, Kooperationen und Markenanfragen.",
+    },
+    corporate: {
+      title: "Unternehmen",
+      description:
+        "Lernen Sie Markenversprechen, Werte und Wachstumsplan auf der Unternehmensseite kennen.",
+    },
+  },
+};
+
 export function getDictionary(locale: Locale): SiteDictionary {
   if (locale === "de") {
-    return {
-      ...dictionaries.en,
-      languageLabels: {
-        tr: "Turkish",
-        en: "English",
-        de: "Deutsch",
-      },
-    } as SiteDictionary;
+    return germanDictionary;
   }
 
   return dictionaries[locale] as SiteDictionary;

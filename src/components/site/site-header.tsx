@@ -25,9 +25,33 @@ type SiteHeaderProps = {
 
 const localeMeta: Record<Locale, { shortLabel: string; flagClassName: string }> = {
   tr: { shortLabel: "TR", flagClassName: "site-header-flag-tr" },
-  en: { shortLabel: "ENG", flagClassName: "site-header-flag-en" },
-  de: { shortLabel: "GER", flagClassName: "site-header-flag-de" },
+  en: { shortLabel: "EN", flagClassName: "site-header-flag-en" },
+  de: { shortLabel: "DE", flagClassName: "site-header-flag-de" },
 };
+
+const headerCopy = {
+  tr: {
+    openMenu: "Menüyü aç",
+    closeMenu: "Menüyü kapat",
+    mobileNavigation: "Mobil navigasyon",
+    mobileNavigationLinks: "Mobil navigasyon linkleri",
+    languageSwitcher: "Dil secici",
+  },
+  en: {
+    openMenu: "Open menu",
+    closeMenu: "Close menu",
+    mobileNavigation: "Mobile navigation",
+    mobileNavigationLinks: "Mobile navigation links",
+    languageSwitcher: "Language switcher",
+  },
+  de: {
+    openMenu: "Menü öffnen",
+    closeMenu: "Menü schließen",
+    mobileNavigation: "Mobile Navigation",
+    mobileNavigationLinks: "Links der mobilen Navigation",
+    languageSwitcher: "Sprachauswahl",
+  },
+} as const;
 
 function PhoneIcon() {
   return (
@@ -64,6 +88,7 @@ export function SiteHeader({ locale, dictionary }: SiteHeaderProps) {
   const pathname = usePathname() ?? getLocalizedPath(locale, "home");
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const ui = headerCopy[locale];
   const phoneHref = dictionary.footer.phone.replace(/[^+\d]/g, "") || dictionary.footer.phone;
   const allRouteKeys = [...headerLeftRouteKeys, ...headerRightRouteKeys] as HeaderRouteKey[];
   const mobileSubmenus: Partial<Record<HeaderRouteKey, string[]>> = {
@@ -135,6 +160,31 @@ export function SiteHeader({ locale, dictionary }: SiteHeaderProps) {
             <Link href={`tel:${phoneHref}`} className="site-header-top-link">
               {dictionary.footer.phone}
             </Link>
+          </div>
+
+          <div className="site-header-top-item site-header-top-item-center">
+            <div className="site-header-top-locales" aria-label={ui.languageSwitcher}>
+              {siteLocales.map((currentLocale) => {
+                const href = swapLocaleInPath(pathname, currentLocale);
+                const active = currentLocale === locale;
+                const meta = localeMeta[currentLocale];
+
+                return (
+                  <Link
+                    key={currentLocale}
+                    href={href}
+                    className={`site-header-top-locale ${
+                      active
+                        ? "site-header-top-locale-active"
+                        : "site-header-top-locale-default"
+                    }`}
+                    aria-current={active ? "page" : undefined}
+                  >
+                    {meta.shortLabel}
+                  </Link>
+                );
+              })}
+            </div>
           </div>
 
           <div className="site-header-top-item site-header-top-item-address">
@@ -270,28 +320,6 @@ export function SiteHeader({ locale, dictionary }: SiteHeaderProps) {
             </nav>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-2 border-t border-header-line pt-1.5!">
-            <div className="flex flex-wrap items-center justify-center gap-2">
-              {siteLocales.map((currentLocale) => {
-                const href = swapLocaleInPath(pathname, currentLocale);
-                const active = currentLocale === locale;
-
-                return (
-                  <Link
-                    key={currentLocale}
-                    href={href}
-                    className={`site-header-locale-link ${
-                      active
-                        ? "bg-accent-soft text-accent-strong"
-                        : "bg-white/70 text-muted hover:text-foreground"
-                    }`}
-                  >
-                    {dictionary.languageLabels[currentLocale]}
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
         </div>
 
         <div className="relative space-y-1.5 px-5 py-1.5! md:hidden">
@@ -301,7 +329,7 @@ export function SiteHeader({ locale, dictionary }: SiteHeaderProps) {
               className="site-header-mobile-toggle ml-1"
               aria-expanded={isMobileMenuOpen}
               aria-controls="site-mobile-menu"
-              aria-label={isMobileMenuOpen ? "Menüyü kapat" : "Menüyü aç"}
+              aria-label={isMobileMenuOpen ? ui.closeMenu : ui.openMenu}
               onClick={() => setIsMobileMenuOpen((current) => !current)}
             >
               <span
@@ -344,7 +372,7 @@ export function SiteHeader({ locale, dictionary }: SiteHeaderProps) {
           <button
             type="button"
             className="site-header-mobile-scrim md:hidden"
-            aria-label="Menüyü kapat"
+            aria-label={ui.closeMenu}
             onClick={() => setIsMobileMenuOpen(false)}
           />
 
@@ -353,7 +381,7 @@ export function SiteHeader({ locale, dictionary }: SiteHeaderProps) {
             className="site-header-mobile-drawer md:hidden"
             role="dialog"
             aria-modal="true"
-            aria-label="Mobil navigasyon"
+            aria-label={ui.mobileNavigation}
           >
             <div className="site-header-mobile-drawer-top">
               <Link
@@ -374,7 +402,7 @@ export function SiteHeader({ locale, dictionary }: SiteHeaderProps) {
               <button
                 type="button"
                 className="site-header-mobile-close"
-                aria-label="Menüyü kapat"
+                aria-label={ui.closeMenu}
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 <span className="site-header-mobile-close-line rotate-45" />
@@ -382,7 +410,7 @@ export function SiteHeader({ locale, dictionary }: SiteHeaderProps) {
               </button>
             </div>
 
-            <nav className="site-header-mobile-nav" aria-label="Mobil navigasyon linkleri">
+            <nav className="site-header-mobile-nav" aria-label={ui.mobileNavigationLinks}>
               {allRouteKeys.map((routeKey) => {
                 const item = buildNavItem(routeKey);
                 const submenuItems = mobileSubmenus[routeKey];
