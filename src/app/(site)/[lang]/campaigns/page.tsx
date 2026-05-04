@@ -16,6 +16,18 @@ type CampaignsPageProps = {
 
 export const dynamic = "force-dynamic";
 
+function hasRichTextContent(value: string | null | undefined) {
+  if (!value) {
+    return false;
+  }
+
+  return value
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&nbsp;/g, " ")
+    .replace(/\s+/g, " ")
+    .trim().length > 0;
+}
+
 export async function generateMetadata({
   params,
 }: CampaignsPageProps): Promise<Metadata> {
@@ -83,6 +95,8 @@ export default async function CampaignsPage({ params }: CampaignsPageProps) {
           <div className="grid gap-6 md:grid-cols-3">
             {campaigns.map((campaign) => {
               const localized = getLocalizedCampaignValue(locale, campaign);
+              const descriptionHtml = localized.description?.trim() ?? "";
+              const showDescription = hasRichTextContent(descriptionHtml);
 
               return (
                 <article
@@ -109,9 +123,16 @@ export default async function CampaignsPage({ params }: CampaignsPageProps) {
                     <h2 className="mt-4 font-display text-2xl text-[#3b2a1a]">
                       {localized.title}
                     </h2>
-                    <p className="mt-3 font-body text-[15px] leading-7 text-[#6b4c32]">
-                      {localized.description?.trim() || copy.emptyDescription}
-                    </p>
+                    {showDescription ? (
+                      <div
+                        className="mt-3 font-body text-[15px] leading-7 text-[#6b4c32] [&_p]:mb-3 [&_p:last-child]:mb-0 [&_strong]:font-semibold [&_em]:italic [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5"
+                        dangerouslySetInnerHTML={{ __html: descriptionHtml }}
+                      />
+                    ) : (
+                      <p className="mt-3 font-body text-[15px] leading-7 text-[#6b4c32]">
+                        {copy.emptyDescription}
+                      </p>
+                    )}
                     <Link
                       href={getLocalizedPath(locale, "contact")}
                       className="mt-6 inline-flex min-h-11 items-center justify-center border border-[#8a6e36] px-5 font-sans text-[11px] uppercase tracking-[0.26em] text-[#3b2a1a] transition hover:bg-[#efe5d0]"
