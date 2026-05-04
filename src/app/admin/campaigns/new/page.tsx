@@ -13,7 +13,6 @@ const inputClass =
 export default function NewCampaignPage() {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
-  const [imageFile, setImageFile] = useState<File | null>(null);
   const [form, setForm] = useState({
     titleTr: "",
     titleEn: "",
@@ -27,6 +26,7 @@ export default function NewCampaignPage() {
     descTr: "",
     descEn: "",
     descDe: "",
+    imageUrl: "",
     startsAt: "",
     endsAt: "",
     sortOrder: 0,
@@ -80,27 +80,22 @@ export default function NewCampaignPage() {
     try {
       setSaving(true);
       const csrfToken = await getAdminCsrfToken();
-      const formData = new FormData();
-
-      formData.append(
-        "payload",
-        JSON.stringify({
-          ...form,
-          startsAt: form.startsAt || null,
-          endsAt: form.endsAt || null,
-          sortOrder: Number(form.sortOrder) || 0,
-        }),
-      );
-
-      if (imageFile) {
-        formData.append("imageUrl", imageFile);
-      }
+      const payload = {
+        ...form,
+        imageUrl: form.imageUrl.trim() || null,
+        startsAt: form.startsAt || null,
+        endsAt: form.endsAt || null,
+        sortOrder: Number(form.sortOrder) || 0,
+      };
 
       const response = await fetch("/api/admin/campaigns", {
         method: "POST",
-        headers: { "x-csrf-token": csrfToken },
+        headers: {
+          "content-type": "application/json",
+          "x-csrf-token": csrfToken,
+        },
         credentials: "include",
-        body: formData,
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
@@ -256,12 +251,17 @@ export default function NewCampaignPage() {
 
         <section className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-2">
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">Kapak Görseli</label>
+            <label className="text-sm font-medium text-gray-700">Kapak Görseli URL</label>
+            {form.imageUrl ? (
+              <img src={form.imageUrl} alt="" className="h-28 w-44 rounded-lg border object-cover" />
+            ) : null}
             <input
-              type="file"
-              accept="image/*"
-              onChange={(event) => setImageFile(event.target.files?.[0] ?? null)}
-              className="block w-full text-sm text-gray-800 file:mr-4 file:rounded-md file:border-0 file:bg-[#f2d688]/45 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-[#8a6e36]"
+              type="url"
+              name="imageUrl"
+              value={form.imageUrl}
+              onChange={handleInput}
+              placeholder="https://..."
+              className={inputClass}
             />
           </div>
 
