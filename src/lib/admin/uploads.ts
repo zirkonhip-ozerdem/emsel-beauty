@@ -98,14 +98,28 @@ async function saveAdminImageUpload(file: File, resourceKey: AdminResourceKey) {
   const blobToken = process.env.BLOB_READ_WRITE_TOKEN;
 
   if (blobToken) {
-    const blob = await put(`admin/${resourceKey}/${fileName}`, file, {
-      access: "public",
-      addRandomSuffix: false,
-      contentType: file.type,
-      token: blobToken,
-    });
+    try {
+      const blob = await put(`admin/${resourceKey}/${fileName}`, file, {
+        access: "public",
+        addRandomSuffix: false,
+        contentType: file.type,
+        token: blobToken,
+      });
 
-    return blob.url;
+      return blob.url;
+    } catch (error) {
+      if (
+        error instanceof Error &&
+        error.message.includes("Cannot use public access on a private store")
+      ) {
+        throw new AdminUploadError(
+          "Bagladiginiz Vercel Blob store private durumda. Site gorselleri icin public access ile olusturulmus bir Blob store baglamaniz gerekiyor.",
+          500,
+        );
+      }
+
+      throw error;
+    }
   }
 
   if (process.env.VERCEL) {
