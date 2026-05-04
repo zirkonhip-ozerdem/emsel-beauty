@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto";
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 
+import { put } from "@vercel/blob";
 import type { NextRequest } from "next/server";
 
 import type { AdminResourceKey } from "@/lib/admin/types";
@@ -93,10 +94,30 @@ async function saveAdminImageUpload(file: File, resourceKey: AdminResourceKey) {
     throw new AdminUploadError("Lütfen JPG, PNG, WEBP, GIF veya AVIF görsel yükleyin.");
   }
 
+  const fileName = `${Date.now()}-${randomUUID()}.${extension}`;
+  const blobToken = process.env.BLOB_READ_WRITE_TOKEN;
+
+  if (blobToken) {
+    const blob = await put(`admin/${resourceKey}/${fileName}`, file, {
+      access: "public",
+      addRandomSuffix: false,
+      contentType: file.type,
+      token: blobToken,
+    });
+
+    return blob.url;
+  }
+
+  if (process.env.VERCEL) {
+    throw new AdminUploadError(
+      "Canlı ortamda görsel yüklemek için Vercel Blob yapılandırması eksik.",
+      500,
+    );
+  }
+
   const uploadRoot = path.join(process.cwd(), "public", "uploads", "admin", resourceKey);
   await mkdir(uploadRoot, { recursive: true });
 
-  const fileName = `${Date.now()}-${randomUUID()}.${extension}`;
   const filePath = path.join(uploadRoot, fileName);
   const buffer = Buffer.from(await file.arrayBuffer());
 
