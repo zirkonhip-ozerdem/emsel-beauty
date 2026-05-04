@@ -65,6 +65,11 @@ export function toAdminRouteError(error: unknown, fallbackMessage: string) {
     return adminJsonError(error.message, error.status);
   }
 
+  if (error instanceof Error) {
+    console.error(error);
+    return adminJsonError(error.message || fallbackMessage, 500);
+  }
+
   console.error(error);
   return adminJsonError(fallbackMessage, 500);
 }
