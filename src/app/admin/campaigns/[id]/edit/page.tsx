@@ -179,12 +179,17 @@ export default function EditCampaignPage() {
       });
 
       if (!response.ok) {
-        throw new Error();
+        const payload = (await response.json().catch(() => null)) as {
+          message?: string;
+        } | null;
+        throw new Error(payload?.message || "Kampanya güncellenemedi.");
       }
 
       router.push("/admin/campaigns");
-    } catch {
-      alert("Kampanya güncellenemedi.");
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Kampanya güncellenemedi.";
+      alert(message);
     } finally {
       setSaving(false);
     }

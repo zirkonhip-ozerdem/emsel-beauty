@@ -104,12 +104,17 @@ export default function NewCampaignPage() {
       });
 
       if (!response.ok) {
-        throw new Error();
+        const payload = (await response.json().catch(() => null)) as {
+          message?: string;
+        } | null;
+        throw new Error(payload?.message || "Kampanya oluşturulamadı.");
       }
 
       router.push("/admin/campaigns");
-    } catch {
-      alert("Kampanya oluşturulamadı.");
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Kampanya oluşturulamadı.";
+      alert(message);
     } finally {
       setSaving(false);
     }
