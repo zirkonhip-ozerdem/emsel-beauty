@@ -12,9 +12,11 @@ const contentSecurityPolicy = [
     ? "script-src 'self' 'unsafe-inline'"
     : "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-  "img-src 'self' data: blob: https://images.unsplash.com",
+  "img-src 'self' data: blob: https://images.unsplash.com https://*.public.blob.vercel-storage.com",
   "font-src 'self' data: https://fonts.gstatic.com",
-  isProduction ? "connect-src 'self'" : "connect-src 'self' ws: wss:",
+  isProduction
+    ? "connect-src 'self' https://*.public.blob.vercel-storage.com"
+    : "connect-src 'self' ws: wss: https://*.public.blob.vercel-storage.com",
   "frame-src 'self' https://www.google.com https://maps.google.com",
   "upgrade-insecure-requests",
 ].join("; ");
@@ -25,6 +27,10 @@ const nextConfig: NextConfig = {
       {
         protocol: "https",
         hostname: "images.unsplash.com",
+      },
+      {
+        protocol: "https",
+        hostname: "**.public.blob.vercel-storage.com",
       },
     ],
   },
