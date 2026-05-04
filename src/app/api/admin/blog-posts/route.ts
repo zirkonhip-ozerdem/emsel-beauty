@@ -1,4 +1,5 @@
 import type { NextRequest } from "next/server";
+import { revalidateTag } from "next/cache";
 
 import {
   adminJsonError,
@@ -41,6 +42,7 @@ export async function POST(request: NextRequest) {
       blogPostInputSchema,
     );
     const createdRecord = await blogPostAdminService.create(data);
+    revalidateTag("blog-posts");
 
     return adminJsonSuccess(createdRecord, "Kayıt oluşturuldu.");
   } catch (error) {
@@ -63,6 +65,7 @@ export async function DELETE(request: NextRequest) {
 
   try {
     await blogPostAdminService.remove(id);
+    revalidateTag("blog-posts");
     return adminJsonSuccess({ id }, "Kayıt silindi.");
   } catch (error) {
     console.error(error);

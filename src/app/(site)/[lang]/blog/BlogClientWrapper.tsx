@@ -20,6 +20,7 @@ type Props = {
   initialPage: number;
   perPage: number;
   locale: string;
+  apiPath: string;
   headingFont: string;
   labels: Labels;
   basePath: string;
@@ -186,27 +187,81 @@ export function BlogClientWrapper({
   initialPage,
   perPage,
   locale,
+  apiPath,
   headingFont,
   labels,
   basePath,
 }: Props) {
   const router = useRouter();
+  const [posts, setPosts] = useState<SerializedPost[]>(allPosts);
 
-  const totalPages = Math.ceil(allPosts.length / perPage);
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadPosts() {
+      try {
+        const response = await fetch(`${apiPath}?locale=${locale}`, {
+          method: "GET",
+          cache: "no-store",
+        });
+
+        if (!response.ok) {
+          return;
+        }
+
+        const payload = (await response.json()) as {
+          ok?: boolean;
+          data?: Array<{
+            title?: string;
+            description?: string;
+            meta?: string | null;
+            slug?: string;
+            imageUrl?: string | null;
+          }>;
+        };
+        const remotePosts = Array.isArray(payload?.data) ? payload.data : [];
+
+        if (cancelled) {
+          return;
+        }
+
+        const mapped = remotePosts.map((post, index) => ({
+          title: post.title ?? "",
+          description: post.description ?? "",
+          meta: post.meta ?? undefined,
+          slug: post.slug ?? `post-${index}`,
+          imageSrc: post.imageUrl || allPosts[index % allPosts.length]?.imageSrc || "",
+          index,
+        }));
+
+        setPosts(mapped);
+      } catch {
+        // API hatasında fallback olarak dictionary verisi gösterilmeye devam eder.
+      }
+    }
+
+    void loadPosts();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [apiPath, locale, allPosts]);
+
+  const totalPages = Math.ceil(posts.length / perPage);
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [visibleCount, setVisibleCount] = useState(currentPage * perPage);
   const [loading, setLoading] = useState(false);
   const [newBatch, setNewBatch] = useState<number[]>([]); // yeni gelen index'ler animasyon için
 
-  const displayedPosts = allPosts.slice(0, visibleCount);
-  const hasMore = visibleCount < allPosts.length;
+  const displayedPosts = posts.slice(0, visibleCount);
+  const hasMore = visibleCount < posts.length;
 
   function handleLoadMore() {
     setLoading(true);
     const prev = visibleCount;
     setTimeout(() => {
-      const next = Math.min(visibleCount + perPage, allPosts.length);
-      const freshIndexes = allPosts.slice(prev, next).map((_, i) => prev + i);
+      const next = Math.min(visibleCount + perPage, posts.length);
+      const freshIndexes = posts.slice(prev, next).map((_, i) => prev + i);
       setNewBatch(freshIndexes);
       setVisibleCount(next);
       // URL'yi gizlice güncelle (pagination'ı takip etmesi için)
