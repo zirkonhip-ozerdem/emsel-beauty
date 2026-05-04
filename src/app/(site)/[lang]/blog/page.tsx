@@ -7,9 +7,10 @@ import { getDictionary } from "@/i18n/dictionaries";
 import { getPageMetadata } from "@/i18n/metadata";
 import { resolveLocale, type LangRouteParams } from "@/i18n/server";
 import { BLOG_IMAGES, getBlogPageUi } from "@/lib/site/blog-page";
+import { getLocalizedBlogPostValue, getPublishedBlogPosts } from "@/lib/site/blogs";
 import "./blog.css";
 import { slugify } from "@/lib/slugify";
-import { BlogClientWrapper } from "./BlogClientWrapper"; // ← yeni client bileşeni
+import { BlogClientWrapper } from "./BlogClientWrapper";
 
 const PER_PAGE = 10;
 
@@ -33,25 +34,37 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
   return getPageMetadata(locale, "blog");
 }
 
+export const dynamic = "force-dynamic";
+
 export default async function BlogPage({ params, searchParams }: BlogPageProps) {
   const locale      = await resolveLocale(params);
   const dictionary  = getDictionary(locale);
   const headingFont = "font-display";
   const ui          = getBlogPageUi(locale);
+  const databasePosts = await getPublishedBlogPosts();
+  const allPosts = databasePosts.length
+    ? databasePosts.map((post, index) => {
+        const localized = getLocalizedBlogPostValue(locale, post);
 
-  const allPosts = dictionary.blogPage.posts;
+        return {
+          title: localized.title,
+          description: localized.description,
+          meta: localized.meta ?? undefined,
+          slug: localized.slug,
+          imageSrc: post.imageUrl || BLOG_IMAGES[index % BLOG_IMAGES.length],
+          index,
+        };
+      })
+    : dictionary.blogPage.posts.map((post, index) => ({
+        title: post.title,
+        description: post.description,
+        meta: "meta" in post ? (post.meta as string | undefined) : undefined,
+        slug: slugify(post.title),
+        imageSrc: BLOG_IMAGES[index % BLOG_IMAGES.length],
+        index,
+      }));
   const totalPages = Math.ceil(allPosts.length / PER_PAGE);
   const currentPage = Math.max(1, Math.min(Number(searchParams?.page ?? 1), totalPages));
-
-  // Tüm postları serialize et (client bileşeni kullanacak)
-  const allSerialized: SerializedPost[] = allPosts.map((p, i) => ({
-    title: p.title,
-    description: p.description,
-    meta: "meta" in p ? (p.meta as string | undefined) : undefined,
-    slug: slugify(p.title),
-    imageSrc: BLOG_IMAGES[i % BLOG_IMAGES.length],
-    index: i,
-  }));
 
   return (
     <div className="blog-page">
@@ -69,11 +82,10 @@ export default async function BlogPage({ params, searchParams }: BlogPageProps) 
         {/* Client bileşeni: "Daha Fazla" + pagination + kart render */}
         <BlogClientWrapper
           key={`${locale}-${currentPage}`}
-          allPosts={allSerialized}
+          allPosts={allPosts as SerializedPost[]}
           initialPage={currentPage}
           perPage={PER_PAGE}
           locale={locale}
-          apiPath="/api/blogs"
           headingFont={headingFont}
           labels={ui.labels}
           basePath={`/${locale}/blog`}

@@ -5,11 +5,13 @@ import Link from "next/link";
 import "./global.css";
 import { getLocalizedPath, type Locale } from "@/i18n/config";
 import type { SiteDictionary } from "@/i18n/dictionaries";
+import type { SiteShellData } from "@/lib/site/site-shell";
 import { footerRouteKeys } from "@/components/site/navigation";
 
 type FooterProps = {
   locale: Locale;
   dictionary: SiteDictionary;
+  siteShell?: SiteShellData;
 };
 
 const footerCopy = {
@@ -72,9 +74,41 @@ const footerCopy = {
   },
 } as const;
 
-export default function SiteFooter({ locale, dictionary }: FooterProps) {
+export default function SiteFooter({
+  locale,
+  dictionary,
+  siteShell,
+}: FooterProps) {
   const currentYear = new Date().getFullYear();
   const ui = footerCopy[locale];
+  const logoSrc = siteShell?.logoUrl || "/logo/emsel-logo.png";
+  const brandName = siteShell?.siteName || dictionary.brand.name;
+  const addressLines = siteShell?.addressLines?.length
+    ? siteShell.addressLines
+    : [dictionary.footer.address];
+  const workingHoursLines = siteShell?.workingHoursLines?.length
+    ? siteShell.workingHoursLines
+    : ui.workingHours;
+  const mapSrc =
+    siteShell?.mapEmbedUrl ||
+    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3011.!2d28.97!3d41.01!2m3!1f0!2f0!3f0!2m3!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDHCsDAwJzM2LjAiTiAyOMKwNTgnMTIuMCJF!5e0!3m2!1str!2str!4v1";
+  const mapHref = siteShell?.address
+    ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(siteShell.address.replace(/\r?\n/g, " "))}`
+    : "https://www.google.com/maps";
+  const serviceLinks = siteShell?.serviceLinks?.length
+    ? siteShell.serviceLinks.map((item) => ({
+        href: `${getLocalizedPath(locale, "services")}/${item.id}`,
+        label: item.label,
+      }))
+    : Array.from({ length: 5 }, (_, index) => ({
+        href: getLocalizedPath(locale, "services"),
+        label: `${ui.servicesTitle} ${index + 1}`,
+      }));
+  const socialLinks = [
+    { href: siteShell?.instagramUrl, label: "Instagram" },
+    { href: siteShell?.facebookUrl, label: "Facebook" },
+    { href: siteShell?.xUrl, label: "X" },
+  ].filter((item): item is { href: string; label: string } => Boolean(item.href));
   const footerLinks = footerRouteKeys.map((routeKey) => ({
     href: getLocalizedPath(locale, routeKey),
     label:
@@ -88,8 +122,8 @@ export default function SiteFooter({ locale, dictionary }: FooterProps) {
       <section className="cta">
         <div className="cta-logo">
           <Image
-            src="/logo/emsel-logo.png"
-            alt={dictionary.brand.name}
+            src={logoSrc}
+            alt={brandName}
             width={248}
             height={303}
             className="cta-logo-img"
@@ -108,11 +142,11 @@ export default function SiteFooter({ locale, dictionary }: FooterProps) {
 
           <div className="cta-links-col">
             <span className="cta-links-title">{ui.servicesTitle}</span>
-            <a href="#">Hizmet 1</a>
-            <a href="#">Hizmet 2</a>
-            <a href="#">Hizmet 3</a>
-            <a href="#">Hizmet 4</a>
-            <a href="#">Hizmet 5</a>
+            {serviceLinks.map((item) => (
+              <Link key={item.href + item.label} href={item.href}>
+                {item.label}
+              </Link>
+            ))}
           </div>
 
           <div className="cta-links-col">
@@ -129,7 +163,7 @@ export default function SiteFooter({ locale, dictionary }: FooterProps) {
           <span className="cta-col-title">{ui.mapTitle}</span>
           <div className="cta-map">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3011.!2d28.97!3d41.01!2m3!1f0!2f0!3f0!2m3!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDHCsDAwJzM2LjAiTiAyOMKwNTgnMTIuMCJF!5e0!3m2!1str!2str!4v1"
+              src={mapSrc}
               width="100%"
               height="160"
               style={{ border: 0, display: "block" }}
@@ -138,7 +172,7 @@ export default function SiteFooter({ locale, dictionary }: FooterProps) {
               referrerPolicy="no-referrer-when-downgrade"
             />
           </div>
-          <a href="..." target="_blank" rel="noreferrer" className="cta-map-link">
+          <a href={mapHref} target="_blank" rel="noreferrer" className="cta-map-link">
             → {ui.mapLink}
           </a>
         </div>
@@ -153,7 +187,14 @@ export default function SiteFooter({ locale, dictionary }: FooterProps) {
             </svg>
             <div>
               <span className="kp-info-lbl">{ui.addressTitle}</span>
-              <p className="kp-info-txt">{dictionary.footer.address}</p>
+              <p className="kp-info-txt">
+                {addressLines.map((line) => (
+                  <span key={line}>
+                    {line}
+                    <br />
+                  </span>
+                ))}
+              </p>
             </div>
           </div>
           <div className="kp-info-item">
@@ -163,9 +204,9 @@ export default function SiteFooter({ locale, dictionary }: FooterProps) {
             <div>
               <span className="kp-info-lbl">{ui.phoneTitle}</span>
               <p className="kp-info-txt">
-                {dictionary.footer.phone}
+                {siteShell?.phone || dictionary.footer.phone}
                 <br />
-                {dictionary.footer.mail}
+                {siteShell?.email || dictionary.footer.mail}
               </p>
             </div>
           </div>
@@ -176,9 +217,12 @@ export default function SiteFooter({ locale, dictionary }: FooterProps) {
             <div>
               <span className="kp-info-lbl">{ui.workingHoursTitle}</span>
               <p className="kp-info-txt">
-                {ui.workingHours[0]}
-                <br />
-                {ui.workingHours[1]}
+                {workingHoursLines.map((line) => (
+                  <span key={line}>
+                    {line}
+                    <br />
+                  </span>
+                ))}
               </p>
             </div>
           </div>
@@ -192,8 +236,17 @@ export default function SiteFooter({ locale, dictionary }: FooterProps) {
               <span className="kp-info-lbl">{ui.socialTitle}</span>
 
               <div className="kp-social-links">
-                <a href="#">Instagram</a>
-                <a href="#">TikTok</a>
+                {socialLinks.length > 0 ? (
+                  socialLinks.map((item) => (
+                    <a key={item.label} href={item.href} target="_blank" rel="noreferrer">
+                      {item.label}
+                    </a>
+                  ))
+                ) : (
+                  <a href={getLocalizedPath(locale, "contact")}>
+                    {dictionary.header.consultation}
+                  </a>
+                )}
               </div>
             </div>
           </div>

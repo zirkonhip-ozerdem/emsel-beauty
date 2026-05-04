@@ -13,6 +13,7 @@ type Labels = {
   prev: string;
   next: string;
   page: string;
+  loading: string;
 };
 
 type Props = {
@@ -20,7 +21,6 @@ type Props = {
   initialPage: number;
   perPage: number;
   locale: string;
-  apiPath: string;
   headingFont: string;
   labels: Labels;
   basePath: string;
@@ -187,66 +187,12 @@ export function BlogClientWrapper({
   initialPage,
   perPage,
   locale,
-  apiPath,
   headingFont,
   labels,
   basePath,
 }: Props) {
   const router = useRouter();
-  const [posts, setPosts] = useState<SerializedPost[]>(allPosts);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    async function loadPosts() {
-      try {
-        const response = await fetch(`${apiPath}?locale=${locale}`, {
-          method: "GET",
-          cache: "no-store",
-        });
-
-        if (!response.ok) {
-          return;
-        }
-
-        const payload = (await response.json()) as {
-          ok?: boolean;
-          data?: Array<{
-            title?: string;
-            description?: string;
-            meta?: string | null;
-            slug?: string;
-            imageUrl?: string | null;
-          }>;
-        };
-        const remotePosts = Array.isArray(payload?.data) ? payload.data : [];
-
-        if (cancelled) {
-          return;
-        }
-
-        const mapped = remotePosts.map((post, index) => ({
-          title: post.title ?? "",
-          description: post.description ?? "",
-          meta: post.meta ?? undefined,
-          slug: post.slug ?? `post-${index}`,
-          imageSrc: post.imageUrl || allPosts[index % allPosts.length]?.imageSrc || "",
-          index,
-        }));
-
-        setPosts(mapped);
-      } catch {
-        // API hatasında fallback olarak dictionary verisi gösterilmeye devam eder.
-      }
-    }
-
-    void loadPosts();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [apiPath, locale, allPosts]);
-
+  const posts = allPosts;
   const totalPages = Math.ceil(posts.length / perPage);
   const [currentPage, setCurrentPage] = useState(initialPage);
   const [visibleCount, setVisibleCount] = useState(currentPage * perPage);
@@ -295,7 +241,7 @@ export function BlogClientWrapper({
         {loading && (
           <div className="blog-loading-wrap">
             <div className="blog-spinner" />
-            <span className="blog-loading-text">Yükleniyor…</span>
+            <span className="blog-loading-text">{labels.loading}</span>
           </div>
         )}
 

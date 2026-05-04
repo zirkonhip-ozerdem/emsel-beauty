@@ -21,6 +21,12 @@ type DetailPost = {
   publishedAt: Date | null;
 };
 
+const detailCopy: Record<Locale, { back: string }> = {
+  tr: { back: "Blog'a Don" },
+  en: { back: "Back to Blog" },
+  de: { back: "Zuruck zum Blog" },
+};
+
 async function getLocalePosts(locale: Locale): Promise<DetailPost[]> {
   const posts = await getPublishedBlogPosts();
 
@@ -99,12 +105,8 @@ export default async function BlogDetailPage({ params }: Props) {
     notFound();
   }
 
-  const postParagraphs = post.body
-    ? post.body
-        .split("\n")
-        .map((line) => line.trim())
-        .filter(Boolean)
-    : [post.description];
+  const articleHtml = post.body?.trim() || `<p>${post.description}</p>`;
+  const copy = detailCopy[locale];
 
   return (
     <div className="bd-page">
@@ -134,15 +136,14 @@ export default async function BlogDetailPage({ params }: Props) {
         <article className="bd-content-card">
           <nav className="bd-nav-bar">
             <Link href={`/${locale}/blog`} className="bd-back-btn">
-              Blog&apos;a Don
+              {copy.back}
             </Link>
           </nav>
           <div className="bd-divider" />
-          <div className="bd-article-body">
-            {postParagraphs.map((line, index) => (
-              <p key={index}>{line}</p>
-            ))}
-          </div>
+          <div
+            className="bd-article-body"
+            dangerouslySetInnerHTML={{ __html: articleHtml }}
+          />
         </article>
       </div>
     </div>

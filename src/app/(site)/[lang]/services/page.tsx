@@ -4,6 +4,11 @@ import { getLocalizedPath } from "@/i18n/config";
 import { getPageMetadata } from "@/i18n/metadata";
 import { resolveLocale, type LangRouteParams } from "@/i18n/server";
 import { getServicesPageContent } from "@/lib/site/services-page";
+import {
+  getLocalizedServiceValue,
+  getPublishedServices,
+  stripHtmlTags,
+} from "@/lib/site/services";
 import "./style.css";
 
 type ServicesPageProps = {
@@ -17,9 +22,31 @@ export async function generateMetadata({
   return getPageMetadata(locale, "services");
 }
 
+export const dynamic = "force-dynamic";
+
 export default async function ServicesPage({ params }: ServicesPageProps) {
   const locale = await resolveLocale(params);
   const content = getServicesPageContent(locale);
+  const services = await getPublishedServices();
+  const serviceCards = services.length
+    ? services.map((service) => {
+        const localized = getLocalizedServiceValue(locale, service);
+
+        return {
+          id: service.id,
+          title: localized.name,
+          img: service.imageUrl,
+          category:
+            localized.badge ||
+            localized.sessionsLabel ||
+            content.eyebrow,
+          desc:
+            stripHtmlTags(localized.shortDescription) ||
+            stripHtmlTags(localized.longDescription),
+          items: localized.features.slice(0, 4),
+        };
+      })
+    : content.cards;
 
   return (
     <div className="services-page">
@@ -32,10 +59,10 @@ export default async function ServicesPage({ params }: ServicesPageProps) {
       </header>
  
       <section className="services-grid">
-        {content.cards.map((s) => (
+        {serviceCards.map((s) => (
           <Link key={s.id} href={`${getLocalizedPath(locale, "services")}/${s.id}`} className="scard" style={{ textDecoration: "none" }}>
             <div className="scard-img-wrap">
-              <img className="scard-img" src={s.img} alt={s.title} />
+              {s.img ? <img className="scard-img" src={s.img} alt={s.title} /> : null}
               <div className="scard-img-overlay" />
               <span className="scard-cat-pill">{s.category}</span>
               <div className="scard-title-bar"><h2>{s.title}</h2></div>

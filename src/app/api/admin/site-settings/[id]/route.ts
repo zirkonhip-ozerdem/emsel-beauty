@@ -1,4 +1,5 @@
 import type { NextRequest } from "next/server";
+import { revalidateTag } from "next/cache";
 
 import {
   adminJsonError,
@@ -66,6 +67,7 @@ export async function PUT(request: NextRequest, context: AdminIdRouteContext) {
       siteSettingInputSchema,
     );
     const updatedRecord = await siteSettingAdminService.update(id, data);
+    revalidateTag("site-settings", "max");
 
     return adminJsonSuccess(updatedRecord, "Kayıt güncellendi.");
   } catch (error) {
@@ -91,6 +93,7 @@ export async function DELETE(
 
   try {
     await siteSettingAdminService.remove(id);
+    revalidateTag("site-settings", "max");
     return adminJsonSuccess({ id }, "Kayıt silindi.");
   } catch (error) {
     console.error(error);

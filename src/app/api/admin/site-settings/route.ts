@@ -1,4 +1,5 @@
 import type { NextRequest } from "next/server";
+import { revalidateTag } from "next/cache";
 
 import {
   adminJsonError,
@@ -41,6 +42,7 @@ export async function POST(request: NextRequest) {
       siteSettingInputSchema,
     );
     const createdRecord = await siteSettingAdminService.create(data);
+    revalidateTag("site-settings", "max");
 
     return adminJsonSuccess(createdRecord, "Kayıt oluşturuldu.");
   } catch (error) {
@@ -63,6 +65,7 @@ export async function DELETE(request: NextRequest) {
 
   try {
     await siteSettingAdminService.remove(id);
+    revalidateTag("site-settings", "max");
     return adminJsonSuccess({ id }, "Kayıt silindi.");
   } catch (error) {
     console.error(error);

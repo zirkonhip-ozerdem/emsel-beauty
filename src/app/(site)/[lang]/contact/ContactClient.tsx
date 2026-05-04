@@ -58,7 +58,7 @@ export default function ContactClient({
         | null;
 
       if (!response.ok || payload?.ok === false) {
-        throw new Error(payload?.message ?? "Randevu talebi gonderilemedi.");
+        throw new Error(payload?.message ?? content.labels.error);
       }
 
       setSubmitted(true);
@@ -66,7 +66,7 @@ export default function ContactClient({
       setTimeout(() => setSubmitted(false), 4500);
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : "Randevu talebi gonderilemedi.";
+        error instanceof Error ? error.message : content.labels.error;
       setSubmitError(message);
     } finally {
       setSubmitting(false);
@@ -114,7 +114,7 @@ export default function ContactClient({
             <span className="cp-corner br" />
             <iframe
               src={content.contactInfo.mapSrc}
-              title="Emsel Beauty Konum"
+              title={content.labels.mapTitle}
               loading="lazy"
               allowFullScreen
               referrerPolicy="no-referrer-when-downgrade"
@@ -214,7 +214,7 @@ export default function ContactClient({
 
                 <div className="cp-field">
                   <label className="cp-label" htmlFor="cp-phone">
-                    Telefon Numaranız
+                    {content.labels.phoneField}
                   </label>
                   <input
                     id="cp-phone"
@@ -251,7 +251,7 @@ export default function ContactClient({
                 Hover'da ::before pseudo-element ile soldan sağa altın dolum animasyonu.
                 max-width: 300px, margin: 0 auto → ortalanmış. */}
             <button type="submit" className="cp-submit-btn" disabled={submitting}>
-              <span>{submitting ? "Gonderiliyor..." : content.labels.submit}</span>
+              <span>{submitting ? content.labels.submitting : content.labels.submit}</span>
             </button>
 
             {/* Başarılı gönderim mesajı — fadeIn animasyonuyla görünür */}
@@ -280,7 +280,7 @@ export default function ContactClient({
         target="_blank"
         rel="noopener noreferrer"
         className="cp-whatsapp"
-        aria-label="WhatsApp ile iletişim"
+        aria-label={content.labels.whatsappAriaLabel}
       >
         {/* WhatsApp SVG — harici kütüphane gerekmez */}
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

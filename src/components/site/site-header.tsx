@@ -13,6 +13,7 @@ import {
   type Locale,
 } from "@/i18n/config";
 import type { SiteDictionary } from "@/i18n/dictionaries";
+import type { SiteShellData } from "@/lib/site/site-shell";
 
 type HeaderRouteKey =
   | (typeof headerLeftRouteKeys)[number]
@@ -21,6 +22,7 @@ type HeaderRouteKey =
 type SiteHeaderProps = {
   locale: Locale;
   dictionary: SiteDictionary;
+  siteShell?: SiteShellData;
 };
 
 const localeMeta: Record<Locale, { shortLabel: string; flagClassName: string }> = {
@@ -84,15 +86,26 @@ function PinIcon() {
   );
 }
 
-export function SiteHeader({ locale, dictionary }: SiteHeaderProps) {
+export function SiteHeader({
+  locale,
+  dictionary,
+  siteShell,
+}: SiteHeaderProps) {
   const pathname = usePathname() ?? getLocalizedPath(locale, "home");
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const ui = headerCopy[locale];
-  const phoneHref = dictionary.footer.phone.replace(/[^+\d]/g, "") || dictionary.footer.phone;
+  const brandName = siteShell?.siteName || dictionary.brand.name;
+  const logoSrc = siteShell?.logoUrl || "/logo/emsel-logo.png";
+  const phoneLabel = siteShell?.phone || dictionary.footer.phone;
+  const phoneHref = phoneLabel.replace(/[^+\d]/g, "") || phoneLabel;
+  const addressLabel =
+    siteShell?.address?.replace(/\r?\n/g, " · ") || dictionary.footer.address;
   const allRouteKeys = [...headerLeftRouteKeys, ...headerRightRouteKeys] as HeaderRouteKey[];
   const mobileSubmenus: Partial<Record<HeaderRouteKey, string[]>> = {
-    services: dictionary.servicesPage.packages.slice(0, 3).map((item) => item.title),
+    services:
+      siteShell?.serviceLinks?.slice(0, 3).map((item) => item.label) ||
+      dictionary.servicesPage.packages.slice(0, 3).map((item) => item.title),
     products: dictionary.productsPage.categories.slice(0, 3).map((item) => item.title),
   };
 
@@ -158,7 +171,7 @@ export function SiteHeader({ locale, dictionary }: SiteHeaderProps) {
               <PhoneIcon />
             </span>
             <Link href={`tel:${phoneHref}`} className="site-header-top-link">
-              {dictionary.footer.phone}
+              {phoneLabel}
             </Link>
           </div>
 
@@ -191,7 +204,7 @@ export function SiteHeader({ locale, dictionary }: SiteHeaderProps) {
             <span className="site-header-top-label" aria-hidden="true">
               <PinIcon />
             </span>
-            <span className="site-header-top-text">{dictionary.footer.address}</span>
+            <span className="site-header-top-text">{addressLabel}</span>
           </div>
         </div>
       </div>
@@ -224,11 +237,11 @@ export function SiteHeader({ locale, dictionary }: SiteHeaderProps) {
           <Link
             href={getLocalizedPath(locale, "home")}
             className="justify-self-center px-2 py-0"
-            aria-label={dictionary.brand.name}
+            aria-label={brandName}
           >
             <Image
-              src="/logo/emsel-logo.png"
-              alt={dictionary.brand.name}
+              src={logoSrc}
+              alt={brandName}
               width={220}
               height={275}
               priority
@@ -286,11 +299,11 @@ export function SiteHeader({ locale, dictionary }: SiteHeaderProps) {
             <Link
               href={getLocalizedPath(locale, "home")}
               className="justify-self-center px-2 py-0"
-              aria-label={dictionary.brand.name}
+              aria-label={brandName}
             >
               <Image
-                src="/logo/emsel-logo.png"
-                alt={dictionary.brand.name}
+                src={logoSrc}
+                alt={brandName}
                 width={220}
                 height={275}
                 priority
@@ -350,11 +363,11 @@ export function SiteHeader({ locale, dictionary }: SiteHeaderProps) {
             <Link
               href={getLocalizedPath(locale, "home")}
               className="flex justify-center px-3 py-1"
-              aria-label={dictionary.brand.name}
+              aria-label={brandName}
             >
               <Image
-                src="/logo/emsel-logo.png"
-                alt={dictionary.brand.name}
+                src={logoSrc}
+                alt={brandName}
                 width={220}
                 height={275}
                 priority
@@ -387,11 +400,11 @@ export function SiteHeader({ locale, dictionary }: SiteHeaderProps) {
               <Link
                 href={getLocalizedPath(locale, "home")}
                 className="flex justify-center"
-                aria-label={dictionary.brand.name}
+                aria-label={brandName}
               >
                 <Image
-                  src="/logo/emsel-logo.png"
-                  alt={dictionary.brand.name}
+                  src={logoSrc}
+                  alt={brandName}
                   width={220}
                   height={275}
                   priority

@@ -6,6 +6,8 @@ import type { Metadata } from "next";
 import { getPageMetadata } from "@/i18n/metadata";
 import { resolveLocale, type LangRouteParams } from "@/i18n/server";
 import { getContactPageContent } from "@/lib/site/contact-page";
+import { getLocalizedServiceValue, getPublishedServices } from "@/lib/site/services";
+import { getSiteShellData } from "@/lib/site/site-shell";
 import ContactClient from "./ContactClient";
 
 // ─── SEO metadata (server tarafında üretilir) ────────────────────────────────
@@ -22,7 +24,30 @@ export async function generateMetadata({
 
 export default async function ContactPage({ params }: ContactPageProps) {
   const locale = await resolveLocale(params);
-  const content = getContactPageContent(locale);
+  const [content, siteShell, services] = await Promise.all([
+    Promise.resolve(getContactPageContent(locale)),
+    getSiteShellData(locale),
+    getPublishedServices(),
+  ]);
 
-  return <ContactClient content={content} locale={locale} />;
+  const dynamicContent = {
+    ...content,
+    services: services.length
+      ? services.map((service) => getLocalizedServiceValue(locale, service).name)
+      : content.services,
+    contactInfo: {
+      address: siteShell.addressLines.length
+        ? siteShell.addressLines
+        : content.contactInfo.address,
+      phone: siteShell.phone || content.contactInfo.phone,
+      email: siteShell.email || content.contactInfo.email,
+      mapSrc: siteShell.mapEmbedUrl || content.contactInfo.mapSrc,
+      whatsapp: (siteShell.whatsapp || content.contactInfo.whatsapp).replace(/\D/g, ""),
+      workingHours: siteShell.workingHoursLines.length
+        ? siteShell.workingHoursLines
+        : content.contactInfo.workingHours,
+    },
+  };
+
+  return <ContactClient content={dynamicContent} locale={locale} />;
 }

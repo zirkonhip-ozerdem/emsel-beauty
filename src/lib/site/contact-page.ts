@@ -11,10 +11,15 @@ export type ContactPageContent = {
     appointmentTitle: string;
     fullName: string;
     fullNamePlaceholder: string;
+    phoneField: string;
     phonePlaceholder: string;
     servicePlaceholder: string;
     submit: string;
+    submitting: string;
     success: string;
+    error: string;
+    whatsappAriaLabel: string;
+    mapTitle: string;
   };
   services: string[];
   contactInfo: {
@@ -49,10 +54,15 @@ const contactPageContent: Record<Locale, ContactPageContent> = {
       appointmentTitle: "Online Randevu",
       fullName: "Adiniz Soyadiniz",
       fullNamePlaceholder: "Adiniz ve soyadiniz",
+      phoneField: "Telefon Numaraniz",
       phonePlaceholder: "+90 5xx xxx xx xx",
       servicePlaceholder: "Seciniz",
       submit: "Randevu Talebini Gonder",
+      submitting: "Gonderiliyor...",
       success: "Randevu talebiniz basariyla alindi. En kisa surede sizinle iletisime gececegiz.",
+      error: "Randevu talebi gonderilemedi.",
+      whatsappAriaLabel: "WhatsApp ile iletisim",
+      mapTitle: "Emsel Beauty Konum",
     },
     services: ["Kafa Masaji", "Tirnak Sanati", "Vucut Bakimi", "Yuz Bakimi", "Aromaterapi", "Sac Bakimi"],
     contactInfo: baseContactInfo,
@@ -68,10 +78,15 @@ const contactPageContent: Record<Locale, ContactPageContent> = {
       appointmentTitle: "Online Appointment",
       fullName: "Full Name",
       fullNamePlaceholder: "Your full name",
+      phoneField: "Phone Number",
       phonePlaceholder: "+90 5xx xxx xx xx",
       servicePlaceholder: "Select",
       submit: "Send Appointment Request",
+      submitting: "Sending...",
       success: "Your request has been received successfully. We will contact you shortly.",
+      error: "Your appointment request could not be sent.",
+      whatsappAriaLabel: "Contact us on WhatsApp",
+      mapTitle: "Emsel Beauty Location",
     },
     services: ["Head Massage", "Nail Art", "Body Care", "Facial Care", "Aromatherapy", "Hair Care"],
     contactInfo: baseContactInfo,
@@ -87,10 +102,15 @@ const contactPageContent: Record<Locale, ContactPageContent> = {
       appointmentTitle: "Online Termin",
       fullName: "Vor- und Nachname",
       fullNamePlaceholder: "Ihr Vor- und Nachname",
+      phoneField: "Telefonnummer",
       phonePlaceholder: "+90 5xx xxx xx xx",
       servicePlaceholder: "Auswahlen",
       submit: "Terminanfrage Senden",
+      submitting: "Wird gesendet...",
       success: "Ihre Anfrage wurde erfolgreich erhalten. Wir melden uns in Kurze bei Ihnen.",
+      error: "Ihre Terminanfrage konnte nicht gesendet werden.",
+      whatsappAriaLabel: "Kontakt uber WhatsApp",
+      mapTitle: "Emsel Beauty Standort",
     },
     services: ["Kopfmassage", "Nageldesign", "Korperpflege", "Gesichtspflege", "Aromatherapie", "Haarpflege"],
     contactInfo: baseContactInfo,

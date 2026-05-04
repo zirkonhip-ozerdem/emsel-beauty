@@ -1,4 +1,5 @@
 import type { NextRequest } from "next/server";
+import { revalidateTag } from "next/cache";
 
 import {
   adminJsonError,
@@ -62,6 +63,7 @@ export async function PUT(request: NextRequest, context: AdminIdRouteContext) {
   try {
     const data = await parseAdminRouteBody(request, "who", whoInputSchema);
     const updatedRecord = await whoAdminService.update(id, data);
+    revalidateTag("who", "max");
 
     return adminJsonSuccess(updatedRecord, "Kayıt güncellendi.");
   } catch (error) {
@@ -87,6 +89,7 @@ export async function DELETE(
 
   try {
     await whoAdminService.remove(id);
+    revalidateTag("who", "max");
     return adminJsonSuccess({ id }, "Kayıt silindi.");
   } catch (error) {
     console.error(error);
