@@ -152,12 +152,17 @@ export default function NewProductPage() {
       });
 
       if (!response.ok) {
-        throw new Error();
+        const payload = (await response.json().catch(() => null)) as {
+          message?: string;
+        } | null;
+        throw new Error(payload?.message || "Ürün oluşturulamadı.");
       }
 
       router.push("/admin/products");
-    } catch {
-      alert("Ürün oluşturulamadı.");
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Ürün oluşturulamadı.";
+      alert(message);
     } finally {
       setSaving(false);
     }

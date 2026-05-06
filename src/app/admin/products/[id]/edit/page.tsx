@@ -242,12 +242,17 @@ export default function EditProductPage() {
       });
 
       if (!response.ok) {
-        throw new Error();
+        const payload = (await response.json().catch(() => null)) as {
+          message?: string;
+        } | null;
+        throw new Error(payload?.message || "Ürün güncellenemedi.");
       }
 
       router.push("/admin/products");
-    } catch {
-      alert("Ürün güncellenemedi.");
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Ürün güncellenemedi.";
+      alert(message);
     } finally {
       setSaving(false);
     }
