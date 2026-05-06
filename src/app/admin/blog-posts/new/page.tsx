@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { RequiredFieldNote } from "@/components/admin/RequiredFieldNote";
 import RichTextEditor from "@/components/admin/RichTextEditor";
 import { getAdminCsrfToken, slugifyAdminText } from "@/lib/admin/client-utils";
 
@@ -128,7 +129,10 @@ export default function NewBlogPostPage() {
 
       <div className="rounded-xl border bg-white p-6 shadow-sm">
         <section className="space-y-4">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-700">Başlık</h2>
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-700">
+            Başlık
+            <RequiredFieldNote compact />
+          </h2>
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
             <input name="titleTr" value={form.titleTr} onChange={handleInput} placeholder="Başlık (TR)" className={inputClass} />
             <input name="titleEn" value={form.titleEn} onChange={handleInput} placeholder="Title (EN)" className={inputClass} />
@@ -137,7 +141,10 @@ export default function NewBlogPostPage() {
         </section>
 
         <section className="mt-10 space-y-4">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-700">SEO URL</h2>
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-700">
+            SEO URL
+            <RequiredFieldNote compact />
+          </h2>
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
             <input name="seoUrlTr" value={form.seoUrlTr} onChange={handleInput} className={inputClass} />
             <input name="seoUrlEn" value={form.seoUrlEn} onChange={handleInput} className={inputClass} />
@@ -155,7 +162,10 @@ export default function NewBlogPostPage() {
         </section>
 
         <section className="mt-10 space-y-4">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-700">Kart Açıklaması</h2>
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-700">
+            Kart Açıklaması
+            <RequiredFieldNote compact />
+          </h2>
           <div className="grid grid-cols-1 gap-6">
             <RichTextEditor value={form.descriptionTr} onChange={(value) => setForm((prev) => ({ ...prev, descriptionTr: value }))} />
             <RichTextEditor value={form.descriptionEn} onChange={(value) => setForm((prev) => ({ ...prev, descriptionEn: value }))} />
@@ -174,7 +184,10 @@ export default function NewBlogPostPage() {
 
         <section className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-2">
           <div className="space-y-3">
-            <label className="text-sm font-medium text-gray-700">Blog Kapak Görseli</label>
+            <label className="text-sm font-medium text-gray-700">
+              Blog Kapak Görseli
+              <RequiredFieldNote compact />
+            </label>
             <input
               type="file"
               accept="image/*"

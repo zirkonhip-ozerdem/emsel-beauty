@@ -120,9 +120,12 @@ export default function EditUserPage() {
       </div>
 
       <div className="rounded-xl border bg-white p-6 shadow-sm">
+        <p className="mb-4 text-xs font-medium text-amber-700">
+          Ad ve Soyad alanları boş geçilemez.
+        </p>
         <section className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <input name="firstName" value={form.firstName} onChange={handleInput} className={inputClass} />
-          <input name="lastName" value={form.lastName} onChange={handleInput} className={inputClass} />
+          <input name="firstName" value={form.firstName} onChange={handleInput} placeholder="Ad - Boş geçilemez" className={inputClass} />
+          <input name="lastName" value={form.lastName} onChange={handleInput} placeholder="Soyad - Boş geçilemez" className={inputClass} />
           <input name="email" value={form.email} onChange={handleInput} className={inputClass} />
           <input name="phoneNumber" value={form.phoneNumber} onChange={handleInput} className={inputClass} />
           <select name="status" value={form.status} onChange={handleInput} className={inputClass}>

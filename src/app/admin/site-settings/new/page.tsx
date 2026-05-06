@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { RequiredFieldNote } from "@/components/admin/RequiredFieldNote";
 import { getAdminCsrfToken } from "@/lib/admin/client-utils";
 
 const inputClass =
@@ -85,7 +86,10 @@ export default function NewSiteSettingPage() {
 
       <div className="rounded-xl border bg-white p-6 shadow-sm">
         <section className="space-y-4">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-700">Temel Bilgiler</h2>
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-700">
+            Temel Bilgiler
+            <RequiredFieldNote compact />
+          </h2>
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
             <input name="siteName" value={form.siteName} onChange={handleInput} placeholder="Site adı" className={inputClass} />
             <input name="siteSeoKeywords" value={form.siteSeoKeywords} onChange={handleInput} placeholder="SEO anahtar kelimeler" className={inputClass} />

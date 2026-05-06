@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
+import { RequiredFieldNote } from "@/components/admin/RequiredFieldNote";
 import {
   getAdminCsrfToken,
   unwrapAdminApiData,
@@ -165,7 +166,10 @@ export default function EditSiteSettingPage() {
 
       <div className="rounded-xl border bg-white p-6 shadow-sm">
         <section className="space-y-4">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-700">Temel Bilgiler</h2>
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-700">
+            Temel Bilgiler
+            <RequiredFieldNote compact />
+          </h2>
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
             <input name="siteName" value={form.siteName} onChange={handleInput} className={inputClass} />
             <input name="siteSeoKeywords" value={form.siteSeoKeywords} onChange={handleInput} className={inputClass} />

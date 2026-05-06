@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
+import { RequiredFieldNote } from "@/components/admin/RequiredFieldNote";
 import RichTextEditor from "@/components/admin/RichTextEditor";
 import {
   getAdminCsrfToken,
@@ -292,7 +293,10 @@ export default function EditProductPage() {
 
       <div className="rounded-xl border bg-white p-6 shadow-sm">
         <section className="space-y-4">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-700">Ürün Adı</h2>
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-700">
+            Ürün Adı
+            <RequiredFieldNote compact />
+          </h2>
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
             <input name="nameTr" value={form.nameTr} onChange={handleInput} className={inputClass} />
             <input name="nameEn" value={form.nameEn} onChange={handleInput} className={inputClass} />
@@ -301,7 +305,10 @@ export default function EditProductPage() {
         </section>
 
         <section className="mt-10 space-y-4">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-700">SEO URL</h2>
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-700">
+            SEO URL
+            <RequiredFieldNote compact />
+          </h2>
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
             <input name="slugTr" value={form.slugTr} onChange={handleInput} className={inputClass} />
             <input name="slugEn" value={form.slugEn} onChange={handleInput} className={inputClass} />
@@ -319,7 +326,10 @@ export default function EditProductPage() {
         </section>
 
         <section className="mt-10 space-y-4">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-700">Detay Açıklama</h2>
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-700">
+            Detay Açıklama
+            <RequiredFieldNote compact />
+          </h2>
           <div className="grid grid-cols-1 gap-6">
             <RichTextEditor value={form.descriptionTr} onChange={(value) => setForm((prev) => ({ ...prev, descriptionTr: value }))} minHeight={260} />
             <RichTextEditor value={form.descriptionEn} onChange={(value) => setForm((prev) => ({ ...prev, descriptionEn: value }))} minHeight={260} />

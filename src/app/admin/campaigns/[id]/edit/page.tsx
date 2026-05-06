@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
+import { RequiredFieldNote } from "@/components/admin/RequiredFieldNote";
 import RichTextEditor from "@/components/admin/RichTextEditor";
 import {
   getAdminCsrfToken,
@@ -231,6 +232,7 @@ export default function EditCampaignPage() {
         <section className="space-y-4">
           <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-700">
             Kampanya Başlıkları
+            <RequiredFieldNote compact />
           </h2>
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
             <input name="titleTr" value={form.titleTr} onChange={handleInput} className={inputClass} />
@@ -240,7 +242,10 @@ export default function EditCampaignPage() {
         </section>
 
         <section className="mt-10 space-y-4">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-700">SEO URL</h2>
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-700">
+            SEO URL
+            <RequiredFieldNote compact />
+          </h2>
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
             <input name="seoUrlTr" value={form.seoUrlTr} onChange={handleInput} className={inputClass} />
             <input name="seoUrlEn" value={form.seoUrlEn} onChange={handleInput} className={inputClass} />

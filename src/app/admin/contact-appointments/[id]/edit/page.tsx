@@ -120,10 +120,13 @@ export default function EditContactAppointmentPage() {
       </div>
 
       <div className="rounded-xl border bg-white p-6 shadow-sm">
+        <p className="mb-4 text-xs font-medium text-amber-700">
+          Adınız Soyadınız ve Hizmet alanları boş geçilemez.
+        </p>
         <section className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <input name="name" value={form.name} onChange={handleInput} className={inputClass} />
+          <input name="name" value={form.name} onChange={handleInput} placeholder="Adınız Soyadınız - Boş geçilemez" className={inputClass} />
           <input name="phone" value={form.phone} onChange={handleInput} className={inputClass} />
-          <input name="service" value={form.service} onChange={handleInput} className={inputClass} />
+          <input name="service" value={form.service} onChange={handleInput} placeholder="Hizmet - Boş geçilemez" className={inputClass} />
           <select name="status" value={form.status} onChange={handleInput} className={inputClass}>
             <option value="PENDING">Beklemede</option>
             <option value="CONFIRMED">Onaylandı</option>
