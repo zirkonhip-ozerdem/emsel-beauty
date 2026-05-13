@@ -67,6 +67,14 @@ export type PublishedService = {
   }>;
 };
 
+export type PublishedServiceShellLink = {
+  id: number;
+  nameTr: string;
+  nameEn: string;
+  nameDe: string;
+  sortOrder: number;
+};
+
 export const getPublishedServices = unstable_cache(
   async (): Promise<PublishedService[]> => {
     if (!hasDatabaseConfig()) {
@@ -173,6 +181,39 @@ export const getPublishedServices = unstable_cache(
   },
 );
 
+export const getPublishedServiceShellLinks = unstable_cache(
+  async (): Promise<PublishedServiceShellLink[]> => {
+    if (!hasDatabaseConfig()) {
+      return [];
+    }
+
+    try {
+      return await prisma.service.findMany({
+        where: {
+          isActive: true,
+        },
+        select: {
+          id: true,
+          nameTr: true,
+          nameEn: true,
+          nameDe: true,
+          sortOrder: true,
+        },
+        orderBy: [{ sortOrder: "asc" }, { updatedAt: "desc" }],
+        take: 5,
+      });
+    } catch (error) {
+      console.error("PUBLISHED SERVICE SHELL LINKS CACHE ERROR:", error);
+      return [];
+    }
+  },
+  ["published-service-shell-links"],
+  {
+    revalidate: 3600,
+    tags: ["services"],
+  },
+);
+
 export function getLocalizedServiceValue(
   locale: Locale,
   service: PublishedService,
@@ -258,6 +299,21 @@ export function getLocalizedServiceValue(
       imageAlt: item.imageAltTr,
     })),
   };
+}
+
+export function getLocalizedServiceShellLabel(
+  locale: Locale,
+  service: PublishedServiceShellLink,
+) {
+  if (locale === "en") {
+    return service.nameEn;
+  }
+
+  if (locale === "de") {
+    return service.nameDe;
+  }
+
+  return service.nameTr;
 }
 
 export function stripHtmlTags(value: string | null | undefined) {

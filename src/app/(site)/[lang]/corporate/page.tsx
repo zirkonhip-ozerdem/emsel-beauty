@@ -4,10 +4,7 @@ import type { Locale } from "@/i18n/config";
 import { getPageMetadata } from "@/i18n/metadata";
 import { resolveLocale, type LangRouteParams } from "@/i18n/server";
 import { getCorporatePageContent } from "@/lib/site/corporate-page";
-import { getPublishedCampaigns } from "@/lib/site/campaigns";
-import { getPublishedBlogPosts } from "@/lib/site/blogs";
-import { getPublishedProducts } from "@/lib/site/products";
-import { getPublishedServices } from "@/lib/site/services";
+import { getPublicSiteStats } from "@/lib/site/stats";
 import { getLocalizedWhoValue, getPublishedWhoSections } from "@/lib/site/who";
 import "./style.css";
 
@@ -22,7 +19,7 @@ export async function generateMetadata({
   return getPageMetadata(locale, "corporate");
 }
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 const statsLabels: Record<
   Locale,
@@ -47,12 +44,9 @@ function renderParagraphHtml(value: string | null | undefined) {
 export default async function KurumsalPage({ params }: CorporatePageProps) {
   const locale = await resolveLocale(params);
   const fallback = getCorporatePageContent(locale);
-  const [whoSections, services, products, posts, campaigns] = await Promise.all([
+  const [whoSections, stats] = await Promise.all([
     getPublishedWhoSections(),
-    getPublishedServices(),
-    getPublishedProducts(),
-    getPublishedBlogPosts(),
-    getPublishedCampaigns(),
+    getPublicSiteStats(),
   ]);
 
   const localizedSections = whoSections.map((item) => ({
@@ -67,11 +61,11 @@ export default async function KurumsalPage({ params }: CorporatePageProps) {
     .filter((item): item is string => Boolean(item))
     .slice(0, 3);
   const labels = statsLabels[locale];
-  const stats = [
-    { value: `${services.length}+`, label: labels[0] },
-    { value: `${products.length}+`, label: labels[1] },
-    { value: `${posts.length}+`, label: labels[2] },
-    { value: `${campaigns.length}+`, label: labels[3] },
+  const siteStats = [
+    { value: `${stats.services}+`, label: labels[0] },
+    { value: `${stats.products}+`, label: labels[1] },
+    { value: `${stats.posts}+`, label: labels[2] },
+    { value: `${stats.campaigns}+`, label: labels[3] },
   ];
 
   return (
@@ -169,7 +163,7 @@ export default async function KurumsalPage({ params }: CorporatePageProps) {
         </section>
 
         <section className="kp-stats">
-          {stats.map((stat) => (
+          {siteStats.map((stat) => (
             <div key={stat.label} className="kp-stat">
               <span className="kp-stat-n">{stat.value}</span>
               <span className="kp-stat-l">{stat.label}</span>

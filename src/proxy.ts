@@ -7,7 +7,6 @@ import {
   setRefreshCookie,
 } from "@/lib/auth/cookies";
 import {
-  getActiveAdminSessionFromRequest,
   refreshAdminSessionFromRequest,
 } from "@/lib/auth/admin-auth";
 import { signAdminAccessToken, verifyAdminAccessToken } from "@/lib/auth/jwt";
@@ -46,12 +45,6 @@ export async function proxy(request: NextRequest) {
 
   if (accessPayload?.role === "ADMIN") {
     return NextResponse.next();
-  }
-
-  const activeSession = await getActiveAdminSessionFromRequest(request);
-
-  if (!activeSession || activeSession.admin.role !== "ADMIN") {
-    return unauthorizedResponse(request);
   }
 
   const refreshed = await refreshAdminSessionFromRequest(request);

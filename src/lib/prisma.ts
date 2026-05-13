@@ -27,6 +27,10 @@ function normalizeDatabaseUrl(value?: string) {
       url.searchParams.set("connection_limit", "1");
     }
 
+    if (!url.searchParams.has("pool_timeout")) {
+      url.searchParams.set("pool_timeout", "30");
+    }
+
     return url.toString();
   } catch {
     return value;

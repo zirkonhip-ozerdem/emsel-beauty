@@ -23,7 +23,7 @@ export async function generateMetadata({
   return getPageMetadata(locale, "products");
 }
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export default async function ProductsPage({ params }: ProductsPageProps) {
   const locale = await resolveLocale(params);

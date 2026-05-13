@@ -64,12 +64,21 @@ export default function CampaignsPage() {
         body: JSON.stringify({ id: deleteId }),
       });
 
-      if (!res.ok) throw new Error();
+      const payload = (await res.json().catch(() => null)) as {
+        message?: string;
+      } | null;
+
+      if (!res.ok) {
+        throw new Error(payload?.message || "Kampanya silinemedi.");
+      }
 
       setCampaigns((prev) => prev.filter((item) => item.id !== deleteId));
       setDeleteId(null);
-    } catch {
-      alert("Kampanya silinemedi.");
+      alert(payload?.message || "Kampanya silindi.");
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Kampanya silinemedi.";
+      alert(message);
     } finally {
       setDeleting(false);
     }

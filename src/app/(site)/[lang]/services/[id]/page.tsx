@@ -90,7 +90,7 @@ const detailCopy: Record<
   },
 };
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 function formatDuration(locale: Locale, minutes: number | null) {
   if (!minutes) {

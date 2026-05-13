@@ -178,6 +178,23 @@ async function rotateRefreshSession(input: {
   };
 }
 
+async function getActiveAdminSessionByToken(refreshToken: string) {
+  return withPrismaReconnectRetry(() =>
+    prisma.adminSession.findUnique({
+      where: { sessionToken: refreshToken },
+      include: {
+        admin: {
+          select: {
+            id: true,
+            email: true,
+            role: true,
+          },
+        },
+      },
+    }),
+  );
+}
+
 export async function issueAdminAuthCookies(
   response: NextResponse,
   admin: AdminSessionUser,
@@ -198,17 +215,36 @@ export async function requireAdminAccess() {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("emsel_admin_access")?.value;
 
-  if (!accessToken) {
+  const payload = accessToken ? await verifyAdminAccessToken(accessToken) : null;
+
+  if (payload?.role === "ADMIN") {
+    return payload;
+  }
+
+  if (!hasDatabaseConfig()) {
     redirect("/admin-login");
   }
 
-  const payload = await verifyAdminAccessToken(accessToken);
+  const refreshToken = cookieStore.get(REFRESH_COOKIE_NAME)?.value;
 
-  if (!payload || payload.role !== "ADMIN") {
+  if (!refreshToken) {
     redirect("/admin-login");
   }
 
-  return payload;
+  const session = await getActiveAdminSessionByToken(refreshToken);
+
+  if (!session || session.revokedAt || session.expires <= new Date()) {
+    redirect("/admin-login");
+  }
+
+  if (session.admin.role !== "ADMIN") {
+    redirect("/admin-login");
+  }
+
+  return {
+    userId: session.admin.id,
+    role: session.admin.role,
+  };
 }
 
 export async function assertAdminApiAccess(request: NextRequest) {
@@ -464,20 +500,7 @@ export async function refreshAdminSessionFromRequest(request: NextRequest) {
     return null;
   }
 
-  const session = await withPrismaReconnectRetry(() =>
-    prisma.adminSession.findUnique({
-      where: { sessionToken: refreshToken },
-      include: {
-        admin: {
-          select: {
-            id: true,
-            email: true,
-            role: true,
-          },
-        },
-      },
-    }),
-  );
+  const session = await getActiveAdminSessionByToken(refreshToken);
 
   if (!session || session.revokedAt || session.expires <= new Date()) {
     return null;
@@ -517,20 +540,7 @@ export async function getActiveAdminSessionFromRequest(request: NextRequest) {
     return null;
   }
 
-  const session = await withPrismaReconnectRetry(() =>
-    prisma.adminSession.findUnique({
-      where: { sessionToken: refreshToken },
-      include: {
-        admin: {
-          select: {
-            id: true,
-            email: true,
-            role: true,
-          },
-        },
-      },
-    }),
-  );
+  const session = await getActiveAdminSessionByToken(refreshToken);
 
   if (!session || session.revokedAt || session.expires <= new Date()) {
     return null;

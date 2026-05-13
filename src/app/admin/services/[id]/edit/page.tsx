@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { RequiredFieldNote } from "@/components/admin/RequiredFieldNote";
 import RichTextEditor from "@/components/admin/RichTextEditor";
@@ -100,6 +100,7 @@ export default function EditServicePage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const imageInputRef = useRef<HTMLInputElement | null>(null);
   const [related, setRelated] = useState({
     galleries: [] as ServiceChildRecord[],
     features: [] as ServiceChildRecord[],
@@ -210,6 +211,18 @@ export default function EditServicePage() {
     }
 
     setForm((prev) => ({ ...prev, [name]: type === "checkbox" ? checked : value }));
+  };
+
+  const handleRemoveImage = () => {
+    setImageFile(null);
+    setForm((prev) => ({
+      ...prev,
+      imageUrl: "",
+    }));
+
+    if (imageInputRef.current) {
+      imageInputRef.current.value = "";
+    }
   };
 
   const handleSave = async () => {
@@ -323,18 +336,64 @@ export default function EditServicePage() {
         <section className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-2">
           <div className="space-y-3">
             <label className="text-sm font-medium text-gray-700">Hizmet Kapak Görseli</label>
-            {form.imageUrl ? <img src={form.imageUrl} alt="" className="h-28 w-44 rounded-lg border object-cover" /> : null}
+            {form.imageUrl ? (
+              <div className="space-y-3 rounded-xl border border-[#eadfc7] bg-[#fcfaf4] p-3">
+                <img
+                  src={form.imageUrl}
+                  alt=""
+                  className="h-32 w-full rounded-lg border object-cover sm:w-56"
+                />
+                <button
+                  type="button"
+                  onClick={handleRemoveImage}
+                  className="inline-flex items-center rounded-md border border-red-200 bg-red-50 px-4 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-100"
+                >
+                  Kapak Görselini Sil
+                </button>
+              </div>
+            ) : null}
             <input
+              ref={imageInputRef}
               type="file"
               accept="image/*"
               onChange={(event) => setImageFile(event.target.files?.[0] ?? null)}
               className="block w-full text-sm text-gray-800 file:mr-4 file:rounded-md file:border-0 file:bg-[#f2d688]/45 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-[#8a6e36]"
             />
+            {imageFile ? (
+              <div className="flex items-center justify-between rounded-md border border-[#e6d9ba] bg-[#fbf8ef] px-3 py-2 text-xs text-gray-600">
+                <span className="truncate">{imageFile.name}</span>
+                <button
+                  type="button"
+                  onClick={handleRemoveImage}
+                  className="font-semibold text-red-600 hover:underline"
+                >
+                  Görseli Kaldır
+                </button>
+              </div>
+            ) : null}
           </div>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-            <input name="imageAltTr" value={form.imageAltTr} onChange={handleInput} className={inputClass} />
-            <input name="imageAltEn" value={form.imageAltEn} onChange={handleInput} className={inputClass} />
-            <input name="imageAltDe" value={form.imageAltDe} onChange={handleInput} className={inputClass} />
+          <div className="grid self-start content-start grid-cols-1 gap-4 sm:grid-cols-3">
+            <input
+              name="imageAltTr"
+              value={form.imageAltTr}
+              onChange={handleInput}
+              placeholder="Alt metin TR"
+              className={inputClass}
+            />
+            <input
+              name="imageAltEn"
+              value={form.imageAltEn}
+              onChange={handleInput}
+              placeholder="Alt text EN"
+              className={inputClass}
+            />
+            <input
+              name="imageAltDe"
+              value={form.imageAltDe}
+              onChange={handleInput}
+              placeholder="Alt text DE"
+              className={inputClass}
+            />
           </div>
         </section>
 

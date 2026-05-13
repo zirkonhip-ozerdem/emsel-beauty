@@ -22,7 +22,7 @@ export async function generateMetadata({
   return getPageMetadata(locale, "services");
 }
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export default async function ServicesPage({ params }: ServicesPageProps) {
   const locale = await resolveLocale(params);

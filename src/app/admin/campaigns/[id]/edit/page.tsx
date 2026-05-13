@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { RequiredFieldNote } from "@/components/admin/RequiredFieldNote";
 import RichTextEditor from "@/components/admin/RichTextEditor";
@@ -15,6 +15,17 @@ import {
 
 const inputClass =
   "w-full rounded-md border border-gray-200 bg-white px-4 py-2.5 text-sm text-gray-800 outline-none transition focus:border-[#c5a059] focus:ring-2 focus:ring-[#f2d688]/50";
+
+const campaignLimits = {
+  title: 100,
+  seoUrl: 255,
+  badge: 80,
+  description: 10000,
+} as const;
+
+function clampLength(value: string, max: number) {
+  return value.slice(0, max);
+}
 
 type Campaign = {
   titleTr: string;
@@ -49,6 +60,7 @@ export default function EditCampaignPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const imageInputRef = useRef<HTMLInputElement | null>(null);
   const [form, setForm] = useState({
     titleTr: "",
     titleEn: "",
@@ -116,39 +128,78 @@ export default function EditCampaignPage() {
       event.target instanceof HTMLInputElement ? event.target.checked : false;
 
     if (name === "titleTr") {
+      const nextValue = clampLength(value, campaignLimits.title);
+
       setForm((prev) => ({
         ...prev,
-        titleTr: value,
-        seoUrlTr: slugifyAdminText(value),
-        badgeTr: value,
+        titleTr: nextValue,
+        seoUrlTr: clampLength(
+          slugifyAdminText(nextValue),
+          campaignLimits.seoUrl,
+        ),
+        badgeTr: clampLength(nextValue, campaignLimits.badge),
       }));
       return;
     }
 
     if (name === "titleEn") {
+      const nextValue = clampLength(value, campaignLimits.title);
+
       setForm((prev) => ({
         ...prev,
-        titleEn: value,
-        seoUrlEn: slugifyAdminText(value),
-        badgeEn: value,
+        titleEn: nextValue,
+        seoUrlEn: clampLength(
+          slugifyAdminText(nextValue),
+          campaignLimits.seoUrl,
+        ),
+        badgeEn: clampLength(nextValue, campaignLimits.badge),
       }));
       return;
     }
 
     if (name === "titleDe") {
+      const nextValue = clampLength(value, campaignLimits.title);
+
       setForm((prev) => ({
         ...prev,
-        titleDe: value,
-        seoUrlDe: slugifyAdminText(value),
-        badgeDe: value,
+        titleDe: nextValue,
+        seoUrlDe: clampLength(
+          slugifyAdminText(nextValue),
+          campaignLimits.seoUrl,
+        ),
+        badgeDe: clampLength(nextValue, campaignLimits.badge),
       }));
       return;
     }
 
+    const limitedValue = (() => {
+      if (name.startsWith("seoUrl")) {
+        return clampLength(value, campaignLimits.seoUrl);
+      }
+
+      if (name.startsWith("badge")) {
+        return clampLength(value, campaignLimits.badge);
+      }
+
+      return value;
+    })();
+
     setForm((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: type === "checkbox" ? checked : limitedValue,
     }));
+  };
+
+  const handleRemoveImage = () => {
+    setImageFile(null);
+    setForm((prev) => ({
+      ...prev,
+      imageUrl: "",
+    }));
+
+    if (imageInputRef.current) {
+      imageInputRef.current.value = "";
+    }
   };
 
   const handleSave = async () => {
@@ -179,13 +230,15 @@ export default function EditCampaignPage() {
         body: formData,
       });
 
+      const payload = (await response.json().catch(() => null)) as {
+        message?: string;
+      } | null;
+
       if (!response.ok) {
-        const payload = (await response.json().catch(() => null)) as {
-          message?: string;
-        } | null;
         throw new Error(payload?.message || "Kampanya güncellenemedi.");
       }
 
+      alert(payload?.message || "Kampanya güncellendi.");
       router.push("/admin/campaigns");
     } catch (error) {
       const message =
@@ -234,10 +287,31 @@ export default function EditCampaignPage() {
             Kampanya Başlıkları
             <RequiredFieldNote compact />
           </h2>
+          <p className="text-xs text-gray-500">
+            Her başlık alanı en fazla {campaignLimits.title} karakter olabilir.
+          </p>
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-            <input name="titleTr" value={form.titleTr} onChange={handleInput} className={inputClass} />
-            <input name="titleEn" value={form.titleEn} onChange={handleInput} className={inputClass} />
-            <input name="titleDe" value={form.titleDe} onChange={handleInput} className={inputClass} />
+            <input
+              name="titleTr"
+              value={form.titleTr}
+              onChange={handleInput}
+              className={inputClass}
+              maxLength={campaignLimits.title}
+            />
+            <input
+              name="titleEn"
+              value={form.titleEn}
+              onChange={handleInput}
+              className={inputClass}
+              maxLength={campaignLimits.title}
+            />
+            <input
+              name="titleDe"
+              value={form.titleDe}
+              onChange={handleInput}
+              className={inputClass}
+              maxLength={campaignLimits.title}
+            />
           </div>
         </section>
 
@@ -246,28 +320,97 @@ export default function EditCampaignPage() {
             SEO URL
             <RequiredFieldNote compact />
           </h2>
+          <p className="text-xs text-gray-500">
+            Her SEO URL alanı en fazla {campaignLimits.seoUrl} karakter olabilir.
+          </p>
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-            <input name="seoUrlTr" value={form.seoUrlTr} onChange={handleInput} className={inputClass} />
-            <input name="seoUrlEn" value={form.seoUrlEn} onChange={handleInput} className={inputClass} />
-            <input name="seoUrlDe" value={form.seoUrlDe} onChange={handleInput} className={inputClass} />
+            <input
+              name="seoUrlTr"
+              value={form.seoUrlTr}
+              onChange={handleInput}
+              className={inputClass}
+              maxLength={campaignLimits.seoUrl}
+            />
+            <input
+              name="seoUrlEn"
+              value={form.seoUrlEn}
+              onChange={handleInput}
+              className={inputClass}
+              maxLength={campaignLimits.seoUrl}
+            />
+            <input
+              name="seoUrlDe"
+              value={form.seoUrlDe}
+              onChange={handleInput}
+              className={inputClass}
+              maxLength={campaignLimits.seoUrl}
+            />
           </div>
         </section>
 
         <section className="mt-10 space-y-4">
           <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-700">Rozet / Etiket</h2>
+          <p className="text-xs text-gray-500">
+            Rozet alanları en fazla {campaignLimits.badge} karakter olabilir.
+          </p>
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-            <input name="badgeTr" value={form.badgeTr} onChange={handleInput} className={inputClass} />
-            <input name="badgeEn" value={form.badgeEn} onChange={handleInput} className={inputClass} />
-            <input name="badgeDe" value={form.badgeDe} onChange={handleInput} className={inputClass} />
+            <input
+              name="badgeTr"
+              value={form.badgeTr}
+              onChange={handleInput}
+              className={inputClass}
+              maxLength={campaignLimits.badge}
+            />
+            <input
+              name="badgeEn"
+              value={form.badgeEn}
+              onChange={handleInput}
+              className={inputClass}
+              maxLength={campaignLimits.badge}
+            />
+            <input
+              name="badgeDe"
+              value={form.badgeDe}
+              onChange={handleInput}
+              className={inputClass}
+              maxLength={campaignLimits.badge}
+            />
           </div>
         </section>
 
         <section className="mt-10 space-y-4">
           <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-700">Açıklama</h2>
+          <p className="text-xs text-gray-500">
+            Her açıklama alanı en fazla {campaignLimits.description} karakter olabilir.
+          </p>
           <div className="grid grid-cols-1 gap-6">
-            <RichTextEditor value={form.descTr} onChange={(value) => setForm((prev) => ({ ...prev, descTr: value }))} />
-            <RichTextEditor value={form.descEn} onChange={(value) => setForm((prev) => ({ ...prev, descEn: value }))} />
-            <RichTextEditor value={form.descDe} onChange={(value) => setForm((prev) => ({ ...prev, descDe: value }))} />
+            <RichTextEditor
+              value={form.descTr}
+              onChange={(value) =>
+                setForm((prev) => ({
+                  ...prev,
+                  descTr: clampLength(value, campaignLimits.description),
+                }))
+              }
+            />
+            <RichTextEditor
+              value={form.descEn}
+              onChange={(value) =>
+                setForm((prev) => ({
+                  ...prev,
+                  descEn: clampLength(value, campaignLimits.description),
+                }))
+              }
+            />
+            <RichTextEditor
+              value={form.descDe}
+              onChange={(value) =>
+                setForm((prev) => ({
+                  ...prev,
+                  descDe: clampLength(value, campaignLimits.description),
+                }))
+              }
+            />
           </div>
         </section>
 
@@ -275,14 +418,40 @@ export default function EditCampaignPage() {
           <div className="space-y-3">
             <label className="text-sm font-medium text-gray-700">Kapak Görseli</label>
             {form.imageUrl ? (
-              <img src={form.imageUrl} alt="" className="h-28 w-44 rounded-lg border object-cover" />
+              <div className="space-y-3 rounded-xl border border-[#eadfc7] bg-[#fcfaf4] p-3">
+                <img
+                  src={form.imageUrl}
+                  alt=""
+                  className="h-32 w-full rounded-lg border object-cover sm:w-56"
+                />
+                <button
+                  type="button"
+                  onClick={handleRemoveImage}
+                  className="inline-flex items-center rounded-md border border-red-200 bg-red-50 px-4 py-2 text-sm font-semibold text-red-700 transition hover:bg-red-100"
+                >
+                  Kapak Görselini Sil
+                </button>
+              </div>
             ) : null}
             <input
+              ref={imageInputRef}
               type="file"
               accept="image/*"
               onChange={(event) => setImageFile(event.target.files?.[0] ?? null)}
               className="block w-full text-sm text-gray-800 file:mr-4 file:rounded-md file:border-0 file:bg-[#f2d688]/45 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-[#8a6e36]"
             />
+            {imageFile ? (
+              <div className="flex items-center justify-between rounded-md border border-[#e6d9ba] bg-[#fbf8ef] px-3 py-2 text-xs text-gray-600">
+                <span className="truncate">{imageFile.name}</span>
+                <button
+                  type="button"
+                  onClick={handleRemoveImage}
+                  className="font-semibold text-red-600 hover:underline"
+                >
+                  Görseli Kaldır
+                </button>
+              </div>
+            ) : null}
           </div>
 
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">

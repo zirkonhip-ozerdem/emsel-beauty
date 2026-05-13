@@ -7,11 +7,15 @@ export const serviceAdminService = {
   count: () => prisma.service.count(),
   list: () =>
     prisma.service.findMany({
-      include: {
-        galleries: { orderBy: { sortOrder: "asc" } },
-        features: { orderBy: { sortOrder: "asc" } },
-        processSteps: { orderBy: { sortOrder: "asc" } },
-        faqs: { orderBy: { sortOrder: "asc" } },
+      select: {
+        id: true,
+        nameTr: true,
+        nameEn: true,
+        slugTr: true,
+        durationMinutes: true,
+        imageUrl: true,
+        isActive: true,
+        updatedAt: true,
       },
       orderBy: [{ sortOrder: "asc" }, { updatedAt: "desc" }],
     }),

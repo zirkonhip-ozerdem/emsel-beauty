@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteReservationFab } from "@/components/site/site-reservation-fab";
 import SiteFooter from "@/components/site/site-footer";
-import { getDirection } from "@/i18n/config";
+import { getDirection, siteLocales } from "@/i18n/config";
 import { getDictionary } from "@/i18n/dictionaries";
 import { resolveLocale, type LangRouteParams } from "@/i18n/server";
 import { getSiteShellData } from "@/lib/site/site-shell";
@@ -14,7 +14,11 @@ type SiteLayoutProps = {
   params: LangRouteParams;
 };
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
+
+export function generateStaticParams() {
+  return siteLocales.map((lang) => ({ lang }));
+}
 
 export async function generateMetadata({
   params,

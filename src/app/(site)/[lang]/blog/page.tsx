@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
   return getPageMetadata(locale, "blog");
 }
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export default async function BlogPage({ params, searchParams }: BlogPageProps) {
   const locale      = await resolveLocale(params);

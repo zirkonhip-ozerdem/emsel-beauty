@@ -14,7 +14,7 @@ type CampaignsPageProps = {
   params: LangRouteParams;
 };
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 function hasRichTextContent(value: string | null | undefined) {
   if (!value) {

@@ -1,10 +1,11 @@
+import { cache } from "react";
 import { unstable_cache } from "next/cache";
 
 import type { Locale } from "@/i18n/config";
 import { hasDatabaseConfig, prisma } from "@/lib/prisma";
 import {
-  getLocalizedServiceValue,
-  getPublishedServices,
+  getLocalizedServiceShellLabel,
+  getPublishedServiceShellLinks,
 } from "@/lib/site/services";
 
 type PublicSiteSetting = {
@@ -117,10 +118,10 @@ function splitLines(value: string | null) {
     .filter(Boolean);
 }
 
-export async function getSiteShellData(locale: Locale): Promise<SiteShellData> {
-  const [settings, services] = await Promise.all([
+export const getSiteShellData = cache(async (locale: Locale): Promise<SiteShellData> => {
+  const [settings, serviceLinks] = await Promise.all([
     getPublicSiteSetting(),
-    getPublishedServices(),
+    getPublishedServiceShellLinks(),
   ]);
 
   const address = settings
@@ -154,9 +155,9 @@ export async function getSiteShellData(locale: Locale): Promise<SiteShellData> {
     instagramUrl: settings?.instagramUrl ?? null,
     facebookUrl: settings?.facebookUrl ?? null,
     xUrl: settings?.xUrl ?? null,
-    serviceLinks: services.slice(0, 5).map((service) => ({
+    serviceLinks: serviceLinks.map((service) => ({
       id: service.id,
-      label: getLocalizedServiceValue(locale, service).name,
+      label: getLocalizedServiceShellLabel(locale, service),
     })),
   };
-}
+});
