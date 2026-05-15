@@ -242,14 +242,18 @@ export default function EditProductPage() {
         body: formData,
       });
 
-      if (!response.ok) {
-        const payload = (await response.json().catch(() => null)) as {
-          message?: string;
-        } | null;
-        throw new Error(payload?.message || "Ürün güncellenemedi.");
-      }
+     if (!response.ok) {
+  const payload = (await response.json().catch(() => null)) as {
+    message?: string;
+  } | null;
 
-      router.push("/admin/products");
+  throw new Error(payload?.message || "Ürün güncellenemedi.");
+}
+
+alert("Ürün başarıyla güncellendi.");
+
+router.push("/admin/products");
+
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "Ürün güncellenemedi.";

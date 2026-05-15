@@ -204,10 +204,33 @@ export default function NewProductPage() {
             <RequiredFieldNote compact />
           </h2>
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-            <input name="nameTr" value={form.nameTr} onChange={handleInput} placeholder="Ürün adı (TR)" className={inputClass} />
-            <input name="nameEn" value={form.nameEn} onChange={handleInput} placeholder="Product name (EN)" className={inputClass} />
-            <input name="nameDe" value={form.nameDe} onChange={handleInput} placeholder="Produktname (DE)" className={inputClass} />
-          </div>
+  <input
+    name="nameTr"
+    value={form.nameTr}
+    onChange={handleInput}
+    placeholder="Ürün adı (TR)"
+    maxLength={100}
+    className={inputClass}
+  />
+
+  <input
+    name="nameEn"
+    value={form.nameEn}
+    onChange={handleInput}
+    placeholder="Product name (EN)"
+    maxLength={100}
+    className={inputClass}
+  />
+
+  <input
+    name="nameDe"
+    value={form.nameDe}
+    onChange={handleInput}
+    placeholder="Produktname (DE)"
+    maxLength={100}
+    className={inputClass}
+  />
+</div>
         </section>
 
         <section className="mt-10 space-y-4">
@@ -216,10 +239,33 @@ export default function NewProductPage() {
             <RequiredFieldNote compact />
           </h2>
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-            <input name="slugTr" value={form.slugTr} onChange={handleInput} placeholder="urun-seo-url" className={inputClass} />
-            <input name="slugEn" value={form.slugEn} onChange={handleInput} placeholder="product-seo-url" className={inputClass} />
-            <input name="slugDe" value={form.slugDe} onChange={handleInput} placeholder="produkt-seo-url" className={inputClass} />
-          </div>
+  <input
+    name="slugTr"
+    value={form.slugTr}
+    onChange={handleInput}
+    placeholder="urun-seo-url"
+    maxLength={120}
+    className={inputClass}
+  />
+
+  <input
+    name="slugEn"
+    value={form.slugEn}
+    onChange={handleInput}
+    placeholder="product-seo-url"
+    maxLength={120}
+    className={inputClass}
+  />
+
+  <input
+    name="slugDe"
+    value={form.slugDe}
+    onChange={handleInput}
+    placeholder="produkt-seo-url"
+    maxLength={120}
+    className={inputClass}
+  />
+</div>
         </section>
 
         <section className="mt-10 space-y-4">
@@ -255,10 +301,33 @@ export default function NewProductPage() {
           </div>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-            <input name="imageAltTr" value={form.imageAltTr} onChange={handleInput} placeholder="Kapak alt metin TR" className={inputClass} />
-            <input name="imageAltEn" value={form.imageAltEn} onChange={handleInput} placeholder="Cover alt text EN" className={inputClass} />
-            <input name="imageAltDe" value={form.imageAltDe} onChange={handleInput} placeholder="Cover alt text DE" className={inputClass} />
-          </div>
+  <input
+    name="imageAltTr"
+    value={form.imageAltTr}
+    onChange={handleInput}
+    placeholder="Kapak alt metin TR"
+    maxLength={150}
+    className={inputClass}
+  />
+
+  <input
+    name="imageAltEn"
+    value={form.imageAltEn}
+    onChange={handleInput}
+    placeholder="Cover alt text EN"
+    maxLength={150}
+    className={inputClass}
+  />
+
+  <input
+    name="imageAltDe"
+    value={form.imageAltDe}
+    onChange={handleInput}
+    placeholder="Cover alt text DE"
+    maxLength={150}
+    className={inputClass}
+  />
+</div>
         </section>
 
         <section className="mt-10 space-y-4 border-t pt-6">
@@ -303,26 +372,37 @@ export default function NewProductPage() {
                   />
                 </div>
 
-                <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-3">
-                  <input
-                    value={item.imageAltTr}
-                    onChange={(event) => handleGalleryInput(index, "imageAltTr", event.target.value)}
-                    placeholder="Galeri alt metin TR"
-                    className={inputClass}
-                  />
-                  <input
-                    value={item.imageAltEn}
-                    onChange={(event) => handleGalleryInput(index, "imageAltEn", event.target.value)}
-                    placeholder="Gallery alt text EN"
-                    className={inputClass}
-                  />
-                  <input
-                    value={item.imageAltDe}
-                    onChange={(event) => handleGalleryInput(index, "imageAltDe", event.target.value)}
-                    placeholder="Gallery alt text DE"
-                    className={inputClass}
-                  />
-                </div>
+               <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-3">
+  <input
+    value={item.imageAltTr}
+    onChange={(event) =>
+      handleGalleryInput(index, "imageAltTr", event.target.value)
+    }
+    placeholder="Galeri alt metin TR"
+    maxLength={150}
+    className={inputClass}
+  />
+
+  <input
+    value={item.imageAltEn}
+    onChange={(event) =>
+      handleGalleryInput(index, "imageAltEn", event.target.value)
+    }
+    placeholder="Gallery alt text EN"
+    maxLength={150}
+    className={inputClass}
+  />
+
+  <input
+    value={item.imageAltDe}
+    onChange={(event) =>
+      handleGalleryInput(index, "imageAltDe", event.target.value)
+    }
+    placeholder="Gallery alt text DE"
+    maxLength={150}
+    className={inputClass}
+  />
+</div>
               </div>
             ))}
           </div>

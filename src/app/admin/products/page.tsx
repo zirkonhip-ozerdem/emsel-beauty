@@ -67,7 +67,10 @@ export default function ProductsPage() {
       if (!response.ok) throw new Error();
 
       setProducts((prev) => prev.filter((product) => product.id !== deleteId));
-      setDeleteId(null);
+
+alert("Ürün başarıyla silindi.");
+
+setDeleteId(null);
     } catch {
       alert("Ürün silinemedi.");
     } finally {
