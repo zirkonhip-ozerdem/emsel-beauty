@@ -19,6 +19,7 @@ type Service = {
   durationMinutes: number | null;
   imageUrl: string | null;
   isActive: boolean;
+  showOnHomepage: boolean;
   updatedAt: string;
 };
 
@@ -104,6 +105,7 @@ export default function ServicesPage() {
                 <th className="px-6 py-3 text-left">Görsel</th>
                 <th className="px-6 py-3 text-left">Hizmet</th>
                 <th className="px-6 py-3 text-left">Süre</th>
+                <th className="px-6 py-3 text-left">Anasayfa</th>
                 <th className="px-6 py-3 text-left">Durum</th>
                 <th className="px-6 py-3 text-left">Güncelleme</th>
                 <th className="px-6 py-3 text-right">İşlemler</th>
@@ -124,6 +126,11 @@ export default function ServicesPage() {
                     <div className="text-xs text-gray-500">/{service.slugTr}</div>
                   </td>
                   <td className="px-6 py-4 text-gray-600">{service.durationMinutes ? `${service.durationMinutes} dk` : "-"}</td>
+                  <td className="px-6 py-4">
+                    <span className={`inline-flex rounded-full px-2 py-1 text-xs ${service.showOnHomepage ? "bg-[#f6edd7] text-[#8a6e36]" : "bg-gray-100 text-gray-500"}`}>
+                      {service.showOnHomepage ? "Imza Bakimi" : "Standart"}
+                    </span>
+                  </td>
                   <td className="px-6 py-4">
                     <span className={`inline-flex rounded-full px-2 py-1 text-xs ${service.isActive ? "bg-green-100 text-green-700" : "bg-gray-200 text-gray-600"}`}>
                       {service.isActive ? "Yayında" : "Pasif"}
@@ -149,6 +156,11 @@ export default function ServicesPage() {
             <div className="font-semibold text-gray-800">{service.nameTr}</div>
             <div className="mt-1 text-xs text-gray-500">
               {service.durationMinutes ? `${service.durationMinutes} dk` : "Süre yok"}
+            </div>
+            <div className="mt-2">
+              <span className={`inline-flex rounded-full px-2 py-1 text-[11px] ${service.showOnHomepage ? "bg-[#f6edd7] text-[#8a6e36]" : "bg-gray-100 text-gray-500"}`}>
+                {service.showOnHomepage ? "Anasayfada gosteriliyor" : "Anasayfada kapali"}
+              </span>
             </div>
             <div className="mt-3 flex justify-end gap-4 border-t pt-3">
               <Link href={`/admin/services/${service.id}/edit`} className="text-sm text-blue-600">Düzenle</Link>

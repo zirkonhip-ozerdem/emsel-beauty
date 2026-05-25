@@ -15,6 +15,7 @@ export const serviceAdminService = {
         durationMinutes: true,
         imageUrl: true,
         isActive: true,
+        showOnHomepage: true,
         updatedAt: true,
       },
       orderBy: [{ sortOrder: "asc" }, { updatedAt: "desc" }],

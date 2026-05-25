@@ -7,8 +7,20 @@ export const productAdminService = {
   count: () => prisma.product.count(),
   list: () =>
     prisma.product.findMany({
-      include: {
+      select: {
+        id: true,
+        nameTr: true,
+        nameEn: true,
+        slugTr: true,
+        imageUrl: true,
+        isActive: true,
+        showOnHomepage: true,
+        sortOrder: true,
+        updatedAt: true,
         galleries: {
+          select: {
+            id: true,
+          },
           orderBy: { sortOrder: "asc" },
         },
       },

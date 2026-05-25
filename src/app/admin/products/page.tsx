@@ -18,6 +18,7 @@ type Product = {
   slugTr: string;
   imageUrl: string | null;
   isActive: boolean;
+  showOnHomepage: boolean;
   sortOrder: number;
   galleries: Array<{ id: number }>;
   updatedAt: string;
@@ -64,15 +65,21 @@ export default function ProductsPage() {
         body: JSON.stringify({ id: deleteId }),
       });
 
-      if (!response.ok) throw new Error();
+      if (!response.ok) {
+        const payload = (await response.json().catch(() => null)) as {
+          message?: string;
+        } | null;
+        throw new Error(payload?.message || "Ürün silinemedi.");
+      }
 
       setProducts((prev) => prev.filter((product) => product.id !== deleteId));
 
-alert("Ürün başarıyla silindi.");
-
-setDeleteId(null);
-    } catch {
-      alert("Ürün silinemedi.");
+      alert("Ürün başarıyla silindi.");
+      setDeleteId(null);
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Ürün silinemedi.";
+      alert(message);
     } finally {
       setDeleting(false);
     }
@@ -111,6 +118,7 @@ setDeleteId(null);
                 <th className="px-6 py-3 text-left">Ürün</th>
                 <th className="px-6 py-3 text-left">SEO URL</th>
                 <th className="px-6 py-3 text-left">Galeri / Sıra</th>
+                <th className="px-6 py-3 text-left">Anasayfa</th>
                 <th className="px-6 py-3 text-left">Durum</th>
                 <th className="px-6 py-3 text-left">Güncelleme</th>
                 <th className="px-6 py-3 text-right">İşlemler</th>
@@ -140,6 +148,15 @@ setDeleteId(null);
                   <td className="px-6 py-4 text-gray-600">
                     Galeri: {product.galleries.length}
                     <div className="text-xs text-gray-500">Sıra: {product.sortOrder}</div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <span
+                      className={`inline-flex rounded-full px-2 py-1 text-xs ${
+                        product.showOnHomepage ? "bg-[#f6edd7] text-[#8a6e36]" : "bg-gray-100 text-gray-500"
+                      }`}
+                    >
+                      {product.showOnHomepage ? "Anasayfa" : "Kapali"}
+                    </span>
                   </td>
                   <td className="px-6 py-4">
                     <span
@@ -176,6 +193,11 @@ setDeleteId(null);
               <div>
                 <div className="font-semibold text-gray-800">{product.nameTr}</div>
                 <div className="text-xs text-gray-500">Galeri: {product.galleries.length}</div>
+                <div className="mt-2">
+                  <span className={`inline-flex rounded-full px-2 py-1 text-[11px] ${product.showOnHomepage ? "bg-[#f6edd7] text-[#8a6e36]" : "bg-gray-100 text-gray-500"}`}>
+                    {product.showOnHomepage ? "Anasayfada gosteriliyor" : "Anasayfada kapali"}
+                  </span>
+                </div>
               </div>
             </div>
             <div className="mt-3 flex justify-end gap-4 border-t pt-3">

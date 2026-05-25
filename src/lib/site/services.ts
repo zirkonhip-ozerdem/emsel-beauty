@@ -28,6 +28,7 @@ export type PublishedService = {
   imageAltTr: string | null;
   imageAltEn: string | null;
   imageAltDe: string | null;
+  showOnHomepage: boolean;
   sortOrder: number;
   galleries: Array<{
     id: number;
@@ -72,6 +73,8 @@ export type PublishedServiceShellLink = {
   nameTr: string;
   nameEn: string;
   nameDe: string;
+  imageUrl?: string | null;
+  showOnHomepage?: boolean;
   sortOrder: number;
 };
 
@@ -111,6 +114,7 @@ export const getPublishedServices = unstable_cache(
           imageAltTr: true,
           imageAltEn: true,
           imageAltDe: true,
+          showOnHomepage: true,
           sortOrder: true,
           galleries: {
             select: {
@@ -197,6 +201,8 @@ export const getPublishedServiceShellLinks = unstable_cache(
           nameTr: true,
           nameEn: true,
           nameDe: true,
+          imageUrl: true,
+          showOnHomepage: true,
           sortOrder: true,
         },
         orderBy: [{ sortOrder: "asc" }, { updatedAt: "desc" }],
@@ -208,6 +214,43 @@ export const getPublishedServiceShellLinks = unstable_cache(
     }
   },
   ["published-service-shell-links"],
+  {
+    revalidate: 3600,
+    tags: ["services"],
+  },
+);
+
+export const getHomepageServices = unstable_cache(
+  async (): Promise<PublishedServiceShellLink[]> => {
+    if (!hasDatabaseConfig()) {
+      return [];
+    }
+
+    try {
+      const services = await prisma.service.findMany({
+        where: {
+          isActive: true,
+        },
+        select: {
+          id: true,
+          nameTr: true,
+          nameEn: true,
+          nameDe: true,
+          imageUrl: true,
+          showOnHomepage: true,
+          sortOrder: true,
+        },
+        orderBy: [{ sortOrder: "asc" }, { updatedAt: "desc" }],
+      });
+
+      const homepageServices = services.filter((item) => item.showOnHomepage);
+      return (homepageServices.length > 0 ? homepageServices : services).slice(0, 5);
+    } catch (error) {
+      console.error("HOMEPAGE SERVICES CACHE ERROR:", error);
+      return [];
+    }
+  },
+  ["homepage-services"],
   {
     revalidate: 3600,
     tags: ["services"],

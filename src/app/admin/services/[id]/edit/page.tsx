@@ -43,6 +43,7 @@ type Service = {
   imageAltEn: string | null;
   imageAltDe: string | null;
   isActive: boolean;
+  showOnHomepage: boolean;
   sortOrder: number;
   galleries: ServiceChildRecord[];
   features: ServiceChildRecord[];
@@ -133,6 +134,7 @@ export default function EditServicePage() {
     imageAltDe: "",
     sortOrder: 0,
     isActive: true,
+    showOnHomepage: false,
   });
 
   useEffect(() => {
@@ -171,6 +173,7 @@ export default function EditServicePage() {
           imageAltDe: service.imageAltDe ?? "",
           sortOrder: service.sortOrder ?? 0,
           isActive: service.isActive,
+          showOnHomepage: service.showOnHomepage ?? false,
         });
         setRelated({
           galleries: (service.galleries ?? []).map(cleanGalleryItem),
@@ -253,11 +256,20 @@ export default function EditServicePage() {
         body: formData,
       });
 
-      if (!response.ok) throw new Error();
+      if (!response.ok) {
+        const payload = (await response.json().catch(() => null)) as {
+          message?: string;
+        } | null;
+        throw new Error(payload?.message || "Hizmet güncellenemedi.");
+      }
+
+      alert("Hizmet başarıyla güncellendi.");
 
       router.push("/admin/services");
-    } catch {
-      alert("Hizmet güncellenemedi.");
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Hizmet güncellenemedi.";
+      alert(message);
     } finally {
       setSaving(false);
     }
@@ -425,10 +437,16 @@ export default function EditServicePage() {
               <input id="sortOrder" type="number" name="sortOrder" min={0} value={form.sortOrder} onChange={handleInput} placeholder="Siralama degeri" className={inputClass} />
             </div>
           </div>
-          <label className="flex items-center gap-3 text-sm font-medium text-gray-700">
-            <input type="checkbox" name="isActive" checked={form.isActive} onChange={handleInput} className="h-4 w-4 accent-[#8a6e36]" />
-            Yayında
-          </label>
+          <div className="flex flex-col gap-3">
+            <label className="flex items-center gap-3 text-sm font-medium text-gray-700">
+              <input type="checkbox" name="showOnHomepage" checked={form.showOnHomepage} onChange={handleInput} className="h-4 w-4 accent-[#8a6e36]" />
+              Anasayfa Imza Bakimlarinda Goster
+            </label>
+            <label className="flex items-center gap-3 text-sm font-medium text-gray-700">
+              <input type="checkbox" name="isActive" checked={form.isActive} onChange={handleInput} className="h-4 w-4 accent-[#8a6e36]" />
+              Yayinda
+            </label>
+          </div>
         </section>
       </div>
     </div>

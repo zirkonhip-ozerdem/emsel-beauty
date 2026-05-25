@@ -42,6 +42,7 @@ type Product = {
   imageAltEn: string | null;
   imageAltDe: string | null;
   isActive: boolean;
+  showOnHomepage: boolean;
   sortOrder: number;
   galleries: ProductGallery[];
 };
@@ -88,6 +89,7 @@ export default function EditProductPage() {
     imageAltEn: "",
     imageAltDe: "",
     isActive: true,
+    showOnHomepage: false,
     sortOrder: 0,
   });
   const [galleries, setGalleries] = useState<GalleryFormItem[]>([]);
@@ -120,6 +122,7 @@ export default function EditProductPage() {
           imageAltEn: product.imageAltEn ?? "",
           imageAltDe: product.imageAltDe ?? "",
           isActive: product.isActive,
+          showOnHomepage: product.showOnHomepage ?? false,
           sortOrder: product.sortOrder ?? 0,
         });
 
@@ -416,10 +419,16 @@ router.push("/admin/products");
         <section className="mt-10 flex flex-col gap-5 border-t pt-6 sm:flex-row sm:items-center sm:justify-between">
           <input type="number" name="sortOrder" min={0} value={form.sortOrder} onChange={handleInput} className={`${inputClass} sm:max-w-xs`} />
 
-          <label className="flex items-center gap-3 text-sm font-medium text-gray-700">
-            <input type="checkbox" name="isActive" checked={form.isActive} onChange={handleInput} className="h-4 w-4 accent-[#8a6e36]" />
-            Yayında
-          </label>
+          <div className="flex flex-col gap-3">
+            <label className="flex items-center gap-3 text-sm font-medium text-gray-700">
+              <input type="checkbox" name="showOnHomepage" checked={form.showOnHomepage} onChange={handleInput} className="h-4 w-4 accent-[#8a6e36]" />
+              Anasayfa Urunlerinde Goster
+            </label>
+            <label className="flex items-center gap-3 text-sm font-medium text-gray-700">
+              <input type="checkbox" name="isActive" checked={form.isActive} onChange={handleInput} className="h-4 w-4 accent-[#8a6e36]" />
+              Yayinda
+            </label>
+          </div>
         </section>
       </div>
     </div>

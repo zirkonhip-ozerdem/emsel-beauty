@@ -144,3 +144,15 @@ export function getLocalizedBlogPostValue(locale: Locale, blogPost: PublishedBlo
     })),
   };
 }
+
+export function stripBlogHtmlTags(value: string | null | undefined) {
+  if (!value) {
+    return "";
+  }
+
+  return value
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&nbsp;/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}

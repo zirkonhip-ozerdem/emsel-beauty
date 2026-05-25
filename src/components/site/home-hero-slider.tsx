@@ -16,6 +16,7 @@ export type HomeHeroSlide = {
 type HomeTreatment = {
   title: string;
   image: string;
+  href?: string;
 };
 
 type HomeHeroSliderProps = {
@@ -160,49 +161,51 @@ export function HomeHeroSlider({
         </div>
       </section>
 
-      <section className="home-treatment-shell">
-        <div className="home-treatment-panel">
-          <p className="home-panel-title">{treatmentsTitle}</p>
-          <div className="home-treatment-carousel">
-            <button
-              type="button"
-              className="home-treatment-arrow"
-              aria-label="Bakimlari sola kaydir"
-              onClick={() => scrollTreatments("prev")}
-              disabled={!canScrollTreatmentsPrev}
-            >
-              <span aria-hidden="true">{"<"}</span>
-            </button>
+      {treatments.length > 0 ? (
+        <section className="home-treatment-shell">
+          <div className="home-treatment-panel">
+            <p className="home-panel-title">{treatmentsTitle}</p>
+            <div className="home-treatment-carousel">
+              <button
+                type="button"
+                className="home-treatment-arrow"
+                aria-label="Bakimlari sola kaydir"
+                onClick={() => scrollTreatments("prev")}
+                disabled={!canScrollTreatmentsPrev}
+              >
+                <span aria-hidden="true">{"<"}</span>
+              </button>
 
-            <div className="home-treatment-viewport" ref={treatmentViewportRef}>
-              <div className="home-treatment-track">
-                {treatments.map((item) => (
-                  <Link
-                    key={item.title}
-                    href={ctaHref}
-                    className="home-treatment-card"
-                    style={{
-                      backgroundImage: `linear-gradient(180deg, rgba(56, 39, 19, 0.08), rgba(56, 39, 19, 0.42)), url(${item.image})`,
-                    }}
-                  >
-                    <span className="home-treatment-card-title">{item.title}</span>
-                  </Link>
-                ))}
+              <div className="home-treatment-viewport" ref={treatmentViewportRef}>
+                <div className="home-treatment-track">
+                  {treatments.map((item) => (
+                    <Link
+                      key={item.title}
+                      href={item.href ?? ctaHref}
+                      className="home-treatment-card"
+                      style={{
+                        backgroundImage: `linear-gradient(180deg, rgba(56, 39, 19, 0.08), rgba(56, 39, 19, 0.42)), url(${item.image})`,
+                      }}
+                    >
+                      <span className="home-treatment-card-title">{item.title}</span>
+                    </Link>
+                  ))}
+                </div>
               </div>
-            </div>
 
-            <button
-              type="button"
-              className="home-treatment-arrow"
-              aria-label="Bakimlari saga kaydir"
-              onClick={() => scrollTreatments("next")}
-              disabled={!canScrollTreatmentsNext}
-            >
-              <span aria-hidden="true">{">"}</span>
-            </button>
+              <button
+                type="button"
+                className="home-treatment-arrow"
+                aria-label="Bakimlari saga kaydir"
+                onClick={() => scrollTreatments("next")}
+                disabled={!canScrollTreatmentsNext}
+              >
+                <span aria-hidden="true">{">"}</span>
+              </button>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      ) : null}
     </>
   );
 }

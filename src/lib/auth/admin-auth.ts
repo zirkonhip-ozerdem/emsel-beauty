@@ -252,6 +252,32 @@ export async function assertAdminApiAccess(request: NextRequest) {
   const payload = accessToken ? await verifyAdminAccessToken(accessToken) : null;
 
   if (!payload || payload.role !== "ADMIN") {
+    const refreshSession = await getActiveAdminSessionFromRequest(request);
+
+    if (refreshSession?.admin.role === "ADMIN") {
+      if (!["GET", "HEAD", "OPTIONS"].includes(request.method)) {
+        const csrfHeader = request.headers.get("x-csrf-token");
+
+        if (!isSameOriginRequest(request) || !validateCsrfToken(request, csrfHeader)) {
+          return {
+            ok: false as const,
+            response: NextResponse.json(
+              { ok: false, message: "CSRF doğrulaması başarısız." },
+              { status: 403 },
+            ),
+          };
+        }
+      }
+
+      return {
+        ok: true as const,
+        admin: {
+          userId: refreshSession.admin.id,
+          role: refreshSession.admin.role,
+        },
+      };
+    }
+
     const response = NextResponse.json(
       { ok: false, message: "Oturum süresi doldu. Lütfen tekrar giriş yapın." },
       { status: 401 },

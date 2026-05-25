@@ -36,6 +36,7 @@ export const serviceInputSchema = z.object({
   imageAltEn: optionalText(255),
   imageAltDe: optionalText(255),
   isActive: booleanValue().default(true),
+  showOnHomepage: booleanValue().default(false),
   sortOrder: integerNumber(0).default(0),
   galleries: z.array(galleryItemSchema).default([]),
   features: z.array(serviceFeatureSchema).default([]),

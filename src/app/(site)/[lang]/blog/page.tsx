@@ -7,7 +7,11 @@ import { getDictionary } from "@/i18n/dictionaries";
 import { getPageMetadata } from "@/i18n/metadata";
 import { resolveLocale, type LangRouteParams } from "@/i18n/server";
 import { BLOG_IMAGES, getBlogPageUi } from "@/lib/site/blog-page";
-import { getLocalizedBlogPostValue, getPublishedBlogPosts } from "@/lib/site/blogs";
+import {
+  getLocalizedBlogPostValue,
+  getPublishedBlogPosts,
+  stripBlogHtmlTags,
+} from "@/lib/site/blogs";
 import "./blog.css";
 import { slugify } from "@/lib/slugify";
 import { BlogClientWrapper } from "./BlogClientWrapper";
@@ -48,7 +52,7 @@ export default async function BlogPage({ params, searchParams }: BlogPageProps) 
 
         return {
           title: localized.title,
-          description: localized.description,
+          description: stripBlogHtmlTags(localized.description),
           meta: localized.meta ?? undefined,
           slug: localized.slug,
           imageSrc: post.imageUrl || BLOG_IMAGES[index % BLOG_IMAGES.length],

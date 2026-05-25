@@ -40,6 +40,7 @@ export default function NewServicePage() {
     imageAltDe: "",
     sortOrder: 0,
     isActive: true,
+    showOnHomepage: false,
   });
 
   const handleInput = (
@@ -97,11 +98,20 @@ export default function NewServicePage() {
         body: formData,
       });
 
-      if (!response.ok) throw new Error();
+      if (!response.ok) {
+        const payload = (await response.json().catch(() => null)) as {
+          message?: string;
+        } | null;
+        throw new Error(payload?.message || "Hizmet oluşturulamadı.");
+      }
+
+      alert("Hizmet başarıyla oluşturuldu.");
 
       router.push("/admin/services");
-    } catch {
-      alert("Hizmet oluşturulamadı.");
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Hizmet oluşturulamadı.";
+      alert(message);
     } finally {
       setSaving(false);
     }
@@ -219,10 +229,16 @@ export default function NewServicePage() {
               <input id="sortOrder" type="number" name="sortOrder" min={0} value={form.sortOrder} onChange={handleInput} placeholder="Siralama degeri" className={inputClass} />
             </div>
           </div>
-          <label className="flex items-center gap-3 text-sm font-medium text-gray-700">
-            <input type="checkbox" name="isActive" checked={form.isActive} onChange={handleInput} className="h-4 w-4 accent-[#8a6e36]" />
-            Yayında
-          </label>
+          <div className="flex flex-col gap-3">
+            <label className="flex items-center gap-3 text-sm font-medium text-gray-700">
+              <input type="checkbox" name="showOnHomepage" checked={form.showOnHomepage} onChange={handleInput} className="h-4 w-4 accent-[#8a6e36]" />
+              Anasayfa Imza Bakimlarinda Goster
+            </label>
+            <label className="flex items-center gap-3 text-sm font-medium text-gray-700">
+              <input type="checkbox" name="isActive" checked={form.isActive} onChange={handleInput} className="h-4 w-4 accent-[#8a6e36]" />
+              Yayinda
+            </label>
+          </div>
         </section>
       </div>
     </div>
