@@ -13,7 +13,11 @@ import {
   getLocalizedHomepageProductValue,
   stripHtmlTags as stripProductHtmlTags,
 } from "@/lib/site/products";
-import { getHomepageServices, getLocalizedServiceShellLabel } from "@/lib/site/services";
+import {
+  getHomepageServices,
+  getLocalizedServiceShellLabel,
+  getLocalizedServiceShellSlug,
+} from "@/lib/site/services";
 
 type HomePageProps = {
   params: LangRouteParams;
@@ -150,7 +154,7 @@ const localizedHomeShowcase: Record<Locale, HomeShowcaseContent> = {
       "Emsel Beauty, klinik disiplini ve spa zarafetini aynı atmosferde buluşturan butik bir bakım evi olarak kurgulandı. Her dokunuşta sakinlik, güven ve sonuç hissi bırakmayı hedefleyen bu yapı; ürün, servis ve marka hikayesini tek bir ritimde bir araya getiriyor.",
     storyAction: "Kurumsalı İncele",
     productsAction: "Ürünleri İncele",
-    productEyebrow: "Emsel Seckisi",
+    productEyebrow: "Emsel Seçkisi",
   },
   en: {
     treatmentsTitle: "Our Signature Treatments",
@@ -191,7 +195,7 @@ export default async function HomePage({ params }: HomePageProps) {
   const treatments = homepageServices.map((service) => ({
     title: getLocalizedServiceShellLabel(locale, service),
     image: service.imageUrl || "/background/back-1.jpeg",
-    href: `/${locale}/services/${service.id}`,
+    href: `/${locale}/services/${getLocalizedServiceShellSlug(locale, service)}`,
   }));
   const products = homepageProducts.map((product) => {
     const localized = getLocalizedHomepageProductValue(locale, product);

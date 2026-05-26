@@ -2,6 +2,7 @@ import { unstable_cache } from "next/cache";
 
 import type { Locale } from "@/i18n/config";
 import { hasDatabaseConfig, prisma } from "@/lib/prisma";
+import { normalizeTurkishText } from "@/lib/site/turkish-text";
 
 export type PublishedProduct = {
   id: number;
@@ -196,14 +197,14 @@ export function getLocalizedProductValue(
   }
 
   return {
-    name: product.nameTr,
+    name: normalizeTurkishText(product.nameTr),
     slug: product.slugTr,
-    shortDescription: product.shortDescriptionTr,
-    description: product.descriptionTr,
-    imageAlt: product.imageAltTr,
+    shortDescription: normalizeTurkishText(product.shortDescriptionTr),
+    description: normalizeTurkishText(product.descriptionTr),
+    imageAlt: normalizeTurkishText(product.imageAltTr),
     galleries: product.galleries.map((gallery) => ({
       ...gallery,
-      imageAlt: gallery.imageAltTr,
+      imageAlt: normalizeTurkishText(gallery.imageAltTr),
     })),
   };
 }
@@ -233,11 +234,11 @@ export function getLocalizedHomepageProductValue(
   }
 
   return {
-    name: product.nameTr,
+    name: normalizeTurkishText(product.nameTr),
     slug: product.slugTr,
-    shortDescription: product.shortDescriptionTr,
-    description: product.descriptionTr,
-    imageAlt: product.imageAltTr,
+    shortDescription: normalizeTurkishText(product.shortDescriptionTr),
+    description: normalizeTurkishText(product.descriptionTr),
+    imageAlt: normalizeTurkishText(product.imageAltTr),
   };
 }
 

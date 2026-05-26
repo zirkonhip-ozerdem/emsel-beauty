@@ -12,14 +12,14 @@ export type CampaignsPageCopy = {
 
 const campaignsPageCopy: Record<Locale, CampaignsPageCopy> = {
   tr: {
-    eyebrow: "Donemsel Firsatlar",
+    eyebrow: "Dönemsel Fırsatlar",
     title: "Kampanyalar",
     description:
-      "Bakim rituelinizi daha avantajli planlayabilmeniz icin hazirlanan secili paketler ve donemsel firsatlar.",
+      "Bakım ritüelinizi daha avantajlı planlayabilmeniz için hazırlanan seçili paketler ve dönemsel fırsatlar.",
     action: "Randevu Planla",
     emptyTitle: "Aktif kampanya bulunmuyor",
     emptyDescription:
-      "Yeni kampanyalar yayinlandiginda bu alanda otomatik olarak gorunecek.",
+      "Yeni kampanyalar yayınlandığında bu alanda otomatik olarak görünecek.",
     activePeriodLabel: "Aktif kampanya",
   },
   en: {

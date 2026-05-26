@@ -697,6 +697,43 @@
     text-wrap: balance;
   }
 
+  .site-whatsapp-fab {
+    position: fixed;
+    right: max(1.1rem, env(safe-area-inset-right));
+    bottom: max(0.95rem, env(safe-area-inset-bottom));
+    z-index: 999;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.35rem;
+    height: 3.35rem;
+    border-radius: 50%;
+    background: #25d366;
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(37, 211, 102, 0.42);
+    transition:
+      transform 0.22s ease,
+      box-shadow 0.22s ease,
+      background 0.22s ease;
+  }
+
+  .site-whatsapp-fab:hover {
+    transform: translateY(-2px) scale(1.05);
+    background: #1ebe5d;
+    box-shadow: 0 12px 30px rgba(37, 211, 102, 0.5);
+  }
+
+  .site-whatsapp-fab-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .site-whatsapp-fab-svg {
+    width: 1.7rem;
+    height: 1.7rem;
+  }
+
   .site-footer-shell {
     border-top: 1px solid var(--border);
     background: rgb(255 255 255 / 0.6);
@@ -770,6 +807,18 @@
   .site-reservation-fab-label {
     font-size: 0.61rem;
     letter-spacing: 0.18em;
+  }
+
+  .site-whatsapp-fab {
+    right: max(0.7rem, env(safe-area-inset-right));
+    bottom: max(0.7rem, env(safe-area-inset-bottom));
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .site-whatsapp-fab-svg {
+    width: 1.52rem;
+    height: 1.52rem;
   }
 }
 

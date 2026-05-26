@@ -2,6 +2,7 @@ import { unstable_cache } from "next/cache";
 
 import type { Locale } from "@/i18n/config";
 import { hasDatabaseConfig, prisma } from "@/lib/prisma";
+import { normalizeTurkishText } from "@/lib/site/turkish-text";
 
 export type PublishedBlogPost = {
   id: number;
@@ -132,15 +133,15 @@ export function getLocalizedBlogPostValue(locale: Locale, blogPost: PublishedBlo
   }
 
   return {
-    title: blogPost.titleTr,
+    title: normalizeTurkishText(blogPost.titleTr),
     slug: blogPost.seoUrlTr,
-    meta: blogPost.metaTr,
-    description: blogPost.descriptionTr,
-    body: blogPost.bodyTr,
-    imageAlt: blogPost.imageAltTr,
+    meta: normalizeTurkishText(blogPost.metaTr),
+    description: normalizeTurkishText(blogPost.descriptionTr),
+    body: normalizeTurkishText(blogPost.bodyTr),
+    imageAlt: normalizeTurkishText(blogPost.imageAltTr),
     galleries: blogPost.galleries.map((gallery) => ({
       ...gallery,
-      imageAlt: gallery.imageAltTr,
+      imageAlt: normalizeTurkishText(gallery.imageAltTr),
     })),
   };
 }

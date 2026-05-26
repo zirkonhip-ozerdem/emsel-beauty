@@ -31,7 +31,7 @@ export function siteJsonError(message: string, status = 400, details?: unknown) 
 
 export function siteDbUnavailableResponse() {
   return siteJsonError(
-    "Veritabani baglantisi henuz tanimli degil. Site API verileri aktif olunca bu endpointler canli veri dondurecek.",
+    "Veritabanı bağlantısı henüz tanımlı değil. Site API verileri aktif olunca bu endpointler canlı veri döndürecek.",
     503,
   );
 }

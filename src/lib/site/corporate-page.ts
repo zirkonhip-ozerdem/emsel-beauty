@@ -22,13 +22,13 @@ export type CorporatePageContent = {
 
 const corporatePageContent: Record<Locale, CorporatePageContent> = {
   tr: {
-    heroTitle: "Hakkimizda & Misyonumuz",
+    heroTitle: "Hakkımızda & Misyonumuz",
     about: {
-      title: "Hakkimizda",
+      title: "Hakkımızda",
       paragraphs: [
-        "Emsel Beauty & Care Studio, 2018 yilindan bu yana Istanbul'un kalbinde profesyonel guzellik hizmetleri sunmaktadir. Uzman ekibimiz ve en son teknolojik ekipmanlarimizla her musterimize ozel, kisisellestirilmis bir deneyim sunuyoruz.",
-        "Guzelligin sadece dissal degil, icsel bir yolculuk olduguna inaniyoruz. Her seansimizda musterilerimizin kendilerini en iyi hissetmelerini saglamayi amacliyoruz.",
-        "Yuksek kalite standartlari, guven ve seffaflik ilkeleriyle hareket eden ekibimiz, sizin icin en iyi deneyimi yaratmak adina surekli kendini gelistirmektedir.",
+        "Emsel Beauty & Care Studio, 2018 yılından bu yana İstanbul'un kalbinde profesyonel güzellik hizmetleri sunmaktadır. Uzman ekibimiz ve en son teknolojik ekipmanlarımızla her müşterimize özel, kişiselleştirilmiş bir deneyim sunuyoruz.",
+        "Güzelliğin sadece dışsal değil, içsel bir yolculuk olduğuna inanıyoruz. Her seansımızda müşterilerimizin kendilerini en iyi hissetmelerini sağlamayı amaçlıyoruz.",
+        "Yüksek kalite standartları, güven ve şeffaflık ilkeleriyle hareket eden ekibimiz, sizin için en iyi deneyimi yaratmak adına sürekli kendini geliştirmektedir.",
       ],
       galleryImages: [
         "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=600&q=80",
@@ -39,24 +39,24 @@ const corporatePageContent: Record<Locale, CorporatePageContent> = {
     mission: {
       title: "Misyonumuz",
       paragraphs: [
-        "En yuksek kalite standartlarinda, uzman ekibimizle her musterimizin dogal guzelligini on plana cikarmak; guven, seffaflik ve mukemmellik ilkeleriyle hizmet vermek temel misyonumuzdur.",
-        "Her musterimizin benzersiz olduguna inaniyor, kisiye ozel cozumler sunuyoruz. Kullandigimiz urunler ve uygulanan teknikler, uluslararasi standartlara uygun olarak ozenle secilmektedir.",
+        "En yüksek kalite standartlarında, uzman ekibimizle her müşterimizin doğal güzelliğini ön plana çıkarmak; güven, şeffaflık ve mükemmellik ilkeleriyle hizmet vermek temel misyonumuzdur.",
+        "Her müşterimizin benzersiz olduğuna inanıyor, kişiye özel çözümler sunuyoruz. Kullandığımız ürünler ve uygulanan teknikler, uluslararası standartlara uygun olarak özenle seçilmektedir.",
       ],
       image: "https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=600&q=80",
     },
     vision: {
       title: "Vizyonumuz",
       paragraphs: [
-        "Turkiye'nin en guvenilir ve yenilikci guzellik merkezi olmak; her kadinin kendini en iyi hissedecegi, kisisellestirilmis deneyimler sunan bir marka haline gelmek vizyonumuzdur.",
-        "Sektordeki gelismeleri yakindan takip ederek hizmetlerimizi surekli yeniliyor, musterilerimize her zaman en guncel ve etkili cozumleri sunuyoruz.",
+        "Türkiye'nin en güvenilir ve yenilikçi güzellik merkezi olmak; her kadının kendini en iyi hissedeceği, kişiselleştirilmiş deneyimler sunan bir marka haline gelmek vizyonumuzdur.",
+        "Sektördeki gelişmeleri yakından takip ederek hizmetlerimizi sürekli yeniliyor, müşterilerimize her zaman en güncel ve etkili çözümleri sunuyoruz.",
       ],
       image: "https://images.unsplash.com/photo-1560750588-73207b1ef5b8?w=600&q=80",
     },
     stats: [
-      { value: "6+", label: "Yillik Deneyim" },
-      { value: "2.500+", label: "Mutlu Musteri" },
+      { value: "6+", label: "Yıllık Deneyim" },
+      { value: "2.500+", label: "Mutlu Müşteri" },
       { value: "15+", label: "Uzman Kadro" },
-      { value: "20+", label: "Hizmet Cesidi" },
+      { value: "20+", label: "Hizmet Çeşidi" },
     ],
   },
   en: {
@@ -64,7 +64,7 @@ const corporatePageContent: Record<Locale, CorporatePageContent> = {
     about: {
       title: "About Us",
       paragraphs: [
-        "Since 2018, Emsel Beauty & Care Studio has been offering professional beauty rituals in the heart of Istanbul with a refined and personal approach.",
+        "Since 2018, Emsel Beauty & Care Studio has been offering professional beauty rituals in the heart of İstanbul with a refined and personal approach.",
         "We believe beauty is both an outer and inner journey. Every session is designed to help our guests feel their absolute best.",
         "With a commitment to quality, trust and transparency, our team continuously evolves to craft the best possible experience.",
       ],
@@ -85,7 +85,7 @@ const corporatePageContent: Record<Locale, CorporatePageContent> = {
     vision: {
       title: "Our Vision",
       paragraphs: [
-        "Our vision is to become one of Turkiye's most trusted and innovative beauty destinations, known for personal and memorable care experiences.",
+        "Our vision is to become one of Türkiye's most trusted and innovative beauty destinations, known for personal and memorable care experiences.",
         "By following industry developments closely, we continuously renew our service approach and offer up-to-date, effective solutions.",
       ],
       image: "https://images.unsplash.com/photo-1560750588-73207b1ef5b8?w=600&q=80",
@@ -102,7 +102,7 @@ const corporatePageContent: Record<Locale, CorporatePageContent> = {
     about: {
       title: "Uber Uns",
       paragraphs: [
-        "Seit 2018 bietet Emsel Beauty & Care Studio im Herzen Istanbuls professionelle Beauty-Rituale mit personlicher und stilvoller Betreuung an.",
+        "Seit 2018 bietet Emsel Beauty & Care Studio im Herzen İstanbuls professionelle Beauty-Rituale mit personlicher und stilvoller Betreuung an.",
         "Wir glauben, dass Schonheit sowohl eine aussere als auch eine innere Reise ist. Jede Sitzung soll dazu beitragen, dass sich unsere Gaste von ihrer besten Seite fuhlen.",
         "Mit hohen Qualitatsstandards, Vertrauen und Transparenz entwickelt sich unser Team standig weiter, um das bestmogliche Erlebnis zu schaffen.",
       ],

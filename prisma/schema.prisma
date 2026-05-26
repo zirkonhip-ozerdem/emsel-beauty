@@ -377,6 +377,7 @@ model ContactAppointment {
   name      String            @db.VarChar(120)
   phone     String?           @db.VarChar(30)
   service   String            @db.VarChar(100)
+  campaign  String?           @db.VarChar(100)
   status    AppointmentStatus @default(PENDING)
   locale    String            @default("tr") @db.VarChar(5)
   createdAt DateTime          @default(now()) @map("created_at")

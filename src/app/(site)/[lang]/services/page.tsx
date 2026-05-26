@@ -34,6 +34,7 @@ export default async function ServicesPage({ params }: ServicesPageProps) {
 
         return {
           id: service.id,
+          slug: localized.slug,
           title: localized.name,
           img: service.imageUrl,
           category:
@@ -46,7 +47,10 @@ export default async function ServicesPage({ params }: ServicesPageProps) {
           items: localized.features.slice(0, 4),
         };
       })
-    : content.cards;
+    : content.cards.map((card) => ({
+        ...card,
+        slug: "",
+      }));
 
   return (
     <div className="services-page">
@@ -60,7 +64,7 @@ export default async function ServicesPage({ params }: ServicesPageProps) {
  
       <section className="services-grid">
         {serviceCards.map((s) => (
-          <Link key={s.id} href={`${getLocalizedPath(locale, "services")}/${s.id}`} className="scard" style={{ textDecoration: "none" }}>
+          <Link key={s.id} href={s.slug ? `${getLocalizedPath(locale, "services")}/${s.slug}` : getLocalizedPath(locale, "services")} className="scard" style={{ textDecoration: "none" }}>
             <div className="scard-img-wrap">
               {s.img ? <img className="scard-img" src={s.img} alt={s.title} /> : null}
               <div className="scard-img-overlay" />

@@ -16,6 +16,7 @@ type Appointment = {
   name: string;
   phone: string | null;
   service: string;
+  campaign: string | null;
   status: "PENDING" | "CONFIRMED" | "CANCELLED" | "COMPLETED";
   locale: "tr" | "en" | "de";
   createdAt: string;
@@ -106,6 +107,7 @@ export default function ContactAppointmentsPage() {
                 <th className="px-6 py-3 text-left">Ad Soyad</th>
                 <th className="px-6 py-3 text-left">Telefon</th>
                 <th className="px-6 py-3 text-left">Hizmet</th>
+                <th className="px-6 py-3 text-left">Kampanya</th>
                 <th className="px-6 py-3 text-left">Dil</th>
                 <th className="px-6 py-3 text-left">Durum</th>
                 <th className="px-6 py-3 text-left">Tarih</th>
@@ -118,6 +120,7 @@ export default function ContactAppointmentsPage() {
                   <td className="px-6 py-4 font-medium text-gray-800">{appointment.name}</td>
                   <td className="px-6 py-4 text-gray-600">{appointment.phone ?? "-"}</td>
                   <td className="px-6 py-4 text-gray-600">{appointment.service}</td>
+                  <td className="px-6 py-4 text-gray-600">{appointment.campaign ?? "-"}</td>
                   <td className="px-6 py-4 text-gray-600">{appointment.locale.toUpperCase()}</td>
                   <td className="px-6 py-4 text-gray-600">{statusLabels[appointment.status]}</td>
                   <td className="px-6 py-4 text-gray-600">{formatAdminDate(appointment.createdAt)}</td>

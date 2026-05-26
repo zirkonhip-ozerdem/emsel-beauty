@@ -14,6 +14,7 @@ export type ContactPageContent = {
     phoneField: string;
     phonePlaceholder: string;
     servicePlaceholder: string;
+    campaignPlaceholder: string;
     submit: string;
     submitting: string;
     success: string;
@@ -22,6 +23,7 @@ export type ContactPageContent = {
     mapTitle: string;
   };
   services: string[];
+  campaigns: string[];
   contactInfo: {
     address: string[];
     phone: string;
@@ -33,7 +35,7 @@ export type ContactPageContent = {
 };
 
 const baseContactInfo: ContactPageContent["contactInfo"] = {
-  address: ["Aliben Mah. Guzellik Cad. No:12", "Besiktas / Istanbul", "Turkiye"],
+  address: ["Aliben Mah. Güzellik Cad. No:12", "Beşiktaş / İstanbul", "Türkiye"],
   phone: "+90 555 123 45 67",
   email: "iletisim@emselbeauty.com",
   mapSrc:
@@ -44,27 +46,29 @@ const baseContactInfo: ContactPageContent["contactInfo"] = {
 
 const contactPageContent: Record<Locale, ContactPageContent> = {
   tr: {
-    headerTitle: "Iletisim - Bize Ulasin",
-    headerSubtitle: "Randevu almak veya bilgi edinmek icin",
+    headerTitle: "İletişim - Bize Ulaşın",
+    headerSubtitle: "Randevu almak veya bilgi edinmek için",
     labels: {
       address: "Adres",
       phone: "Telefon",
-      email: "E-Posta",
-      workingHours: "Calisma Saatleri",
+      email: "E-posta",
+      workingHours: "Çalışma Saatleri",
       appointmentTitle: "Online Randevu",
-      fullName: "Adiniz Soyadiniz",
-      fullNamePlaceholder: "Adiniz ve soyadiniz",
-      phoneField: "Telefon Numaraniz",
+      fullName: "Adınız Soyadınız",
+      fullNamePlaceholder: "Adınız ve soyadınız",
+      phoneField: "Telefon Numaranız",
       phonePlaceholder: "+90 5xx xxx xx xx",
-      servicePlaceholder: "Seciniz",
-      submit: "Randevu Talebini Gonder",
-      submitting: "Gonderiliyor...",
-      success: "Randevu talebiniz basariyla alindi. En kisa surede sizinle iletisime gececegiz.",
-      error: "Randevu talebi gonderilemedi.",
-      whatsappAriaLabel: "WhatsApp ile iletisim",
+      servicePlaceholder: "Seçiniz",
+      campaignPlaceholder: "Kampanya seçiniz",
+      submit: "Randevu Talebini Gönder",
+      submitting: "Gönderiliyor...",
+      success: "Randevu talebiniz başarıyla alındı. En kısa sürede sizinle iletişime geçeceğiz.",
+      error: "Randevu talebi gönderilemedi.",
+      whatsappAriaLabel: "WhatsApp ile iletişim",
       mapTitle: "Emsel Beauty Konum",
     },
-    services: ["Kafa Masaji", "Tirnak Sanati", "Vucut Bakimi", "Yuz Bakimi", "Aromaterapi", "Sac Bakimi"],
+    services: ["Kafa Masajı", "Tırnak Sanatı", "Vücut Bakımı", "Yüz Bakımı", "Aromaterapi", "Saç Bakımı"],
+    campaigns: [],
     contactInfo: baseContactInfo,
   },
   en: {
@@ -81,6 +85,7 @@ const contactPageContent: Record<Locale, ContactPageContent> = {
       phoneField: "Phone Number",
       phonePlaceholder: "+90 5xx xxx xx xx",
       servicePlaceholder: "Select",
+      campaignPlaceholder: "Select a campaign",
       submit: "Send Appointment Request",
       submitting: "Sending...",
       success: "Your request has been received successfully. We will contact you shortly.",
@@ -89,6 +94,7 @@ const contactPageContent: Record<Locale, ContactPageContent> = {
       mapTitle: "Emsel Beauty Location",
     },
     services: ["Head Massage", "Nail Art", "Body Care", "Facial Care", "Aromatherapy", "Hair Care"],
+    campaigns: [],
     contactInfo: baseContactInfo,
   },
   de: {
@@ -105,6 +111,7 @@ const contactPageContent: Record<Locale, ContactPageContent> = {
       phoneField: "Telefonnummer",
       phonePlaceholder: "+90 5xx xxx xx xx",
       servicePlaceholder: "Auswahlen",
+      campaignPlaceholder: "Kampagne auswahlen",
       submit: "Terminanfrage Senden",
       submitting: "Wird gesendet...",
       success: "Ihre Anfrage wurde erfolgreich erhalten. Wir melden uns in Kurze bei Ihnen.",
@@ -113,6 +120,7 @@ const contactPageContent: Record<Locale, ContactPageContent> = {
       mapTitle: "Emsel Beauty Standort",
     },
     services: ["Kopfmassage", "Nageldesign", "Korperpflege", "Gesichtspflege", "Aromatherapie", "Haarpflege"],
+    campaigns: [],
     contactInfo: baseContactInfo,
   },
 };

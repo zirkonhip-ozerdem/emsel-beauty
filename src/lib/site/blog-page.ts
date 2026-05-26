@@ -29,17 +29,17 @@ type BlogPageUi = {
 const blogPageUi: Record<Locale, BlogPageUi> = {
   tr: {
     heroTitle: [
-      "Blog, markanin sadece anlattigi degil",
-      "yon verdigi bir alana donusuyor.",
+      "Blog, markanın sadece anlattığı değil",
+      "yön verdiği bir alana dönüşüyor.",
     ],
-    subtitle: "Bakim, estetik ve marka dunyasindan seckiler",
+    subtitle: "Bakım, estetik ve marka dünyasından seçkiler",
     labels: {
-      readMore: "Devamini Oku",
-      continueReading: "Daha Fazla Goster",
-      prev: "Onceki",
+      readMore: "Devamını Oku",
+      continueReading: "Daha Fazla Göster",
+      prev: "Önceki",
       next: "Sonraki",
       page: "Sayfa",
-      loading: "Yukleniyor...",
+      loading: "Yükleniyor...",
     },
   },
   en: {

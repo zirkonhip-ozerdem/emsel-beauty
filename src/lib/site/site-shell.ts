@@ -5,8 +5,10 @@ import type { Locale } from "@/i18n/config";
 import { hasDatabaseConfig, prisma } from "@/lib/prisma";
 import {
   getLocalizedServiceShellLabel,
+  getLocalizedServiceShellSlug,
   getPublishedServiceShellLinks,
 } from "@/lib/site/services";
+import { normalizeTurkishText } from "@/lib/site/turkish-text";
 
 type PublicSiteSetting = {
   siteName: string;
@@ -45,6 +47,7 @@ export type SiteShellData = {
   serviceLinks: Array<{
     id: number;
     label: string;
+    slug: string;
   }>;
 };
 
@@ -104,7 +107,7 @@ function getLocalizedValue(
     return values.de ?? values.tr ?? values.en ?? null;
   }
 
-  return values.tr ?? values.en ?? values.de ?? null;
+  return normalizeTurkishText(values.tr ?? values.en ?? values.de ?? null);
 }
 
 function splitLines(value: string | null) {
@@ -158,6 +161,7 @@ export const getSiteShellData = cache(async (locale: Locale): Promise<SiteShellD
     serviceLinks: serviceLinks.map((service) => ({
       id: service.id,
       label: getLocalizedServiceShellLabel(locale, service),
+      slug: getLocalizedServiceShellSlug(locale, service),
     })),
   };
 });

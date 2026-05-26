@@ -17,6 +17,7 @@ type Appointment = {
   name: string;
   phone: string | null;
   service: string;
+  campaign: string | null;
   status: "PENDING" | "CONFIRMED" | "CANCELLED" | "COMPLETED";
   locale: "tr" | "en" | "de";
 };
@@ -30,6 +31,7 @@ export default function EditContactAppointmentPage() {
     name: "",
     phone: "",
     service: "",
+    campaign: "",
     status: "PENDING",
     locale: "tr",
   });
@@ -48,6 +50,7 @@ export default function EditContactAppointmentPage() {
           name: appointment.name,
           phone: appointment.phone ?? "",
           service: appointment.service,
+          campaign: appointment.campaign ?? "",
           status: appointment.status,
           locale: appointment.locale,
         });
@@ -127,6 +130,7 @@ export default function EditContactAppointmentPage() {
           <input name="name" value={form.name} onChange={handleInput} placeholder="Adınız Soyadınız - Boş geçilemez" className={inputClass} />
           <input name="phone" value={form.phone} onChange={handleInput} className={inputClass} />
           <input name="service" value={form.service} onChange={handleInput} placeholder="Hizmet - Boş geçilemez" className={inputClass} />
+          <input name="campaign" value={form.campaign} onChange={handleInput} placeholder="Kampanya" className={inputClass} />
           <select name="status" value={form.status} onChange={handleInput} className={inputClass}>
             <option value="PENDING">Beklemede</option>
             <option value="CONFIRMED">Onaylandı</option>

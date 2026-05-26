@@ -56,7 +56,7 @@ export default async function SiteLayout({
         {children}
       </main>
       <SiteFooter locale={locale} dictionary={dictionary} siteShell={siteShell} />
-      <SiteReservationFab locale={locale} dictionary={dictionary} />
+      <SiteReservationFab locale={locale} dictionary={dictionary} siteShell={siteShell} />
     </div>
   );
 }

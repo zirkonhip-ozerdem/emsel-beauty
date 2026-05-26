@@ -6,6 +6,7 @@ import type { Metadata } from "next";
 import { getPageMetadata } from "@/i18n/metadata";
 import { resolveLocale, type LangRouteParams } from "@/i18n/server";
 import { getContactPageContent } from "@/lib/site/contact-page";
+import { getLocalizedCampaignValue, getPublishedCampaigns } from "@/lib/site/campaigns";
 import { getLocalizedServiceValue, getPublishedServices } from "@/lib/site/services";
 import { getSiteShellData } from "@/lib/site/site-shell";
 import ContactClient from "./ContactClient";
@@ -24,10 +25,11 @@ export async function generateMetadata({
 
 export default async function ContactPage({ params }: ContactPageProps) {
   const locale = await resolveLocale(params);
-  const [content, siteShell, services] = await Promise.all([
+  const [content, siteShell, services, campaigns] = await Promise.all([
     Promise.resolve(getContactPageContent(locale)),
     getSiteShellData(locale),
     getPublishedServices(),
+    getPublishedCampaigns(),
   ]);
 
   const dynamicContent = {
@@ -35,6 +37,9 @@ export default async function ContactPage({ params }: ContactPageProps) {
     services: services.length
       ? services.map((service) => getLocalizedServiceValue(locale, service).name)
       : content.services,
+    campaigns: campaigns.length
+      ? campaigns.map((campaign) => getLocalizedCampaignValue(locale, campaign).title)
+      : content.campaigns,
     contactInfo: {
       address: siteShell.addressLines.length
         ? siteShell.addressLines

@@ -37,7 +37,7 @@ const headerCopy = {
     closeMenu: "Menüyü kapat",
     mobileNavigation: "Mobil navigasyon",
     mobileNavigationLinks: "Mobil navigasyon linkleri",
-    languageSwitcher: "Dil secici",
+    languageSwitcher: "Dil seçici",
   },
   en: {
     openMenu: "Open menu",

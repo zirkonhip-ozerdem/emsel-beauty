@@ -2,6 +2,7 @@ import { unstable_cache } from "next/cache";
 
 import { prisma, hasDatabaseConfig } from "@/lib/prisma";
 import type { Locale } from "@/i18n/config";
+import { normalizeTurkishText } from "@/lib/site/turkish-text";
 
 export type PublishedCampaign = {
   id: number;
@@ -90,9 +91,9 @@ export function getLocalizedCampaignValue(
   }
 
   return {
-    title: campaign.titleTr,
-    description: campaign.descTr,
-    badge: campaign.badgeTr,
+    title: normalizeTurkishText(campaign.titleTr),
+    description: normalizeTurkishText(campaign.descTr),
+    badge: normalizeTurkishText(campaign.badgeTr),
     slug: campaign.seoUrlTr,
   };
 }

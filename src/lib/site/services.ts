@@ -2,6 +2,7 @@ import { unstable_cache } from "next/cache";
 
 import type { Locale } from "@/i18n/config";
 import { hasDatabaseConfig, prisma } from "@/lib/prisma";
+import { normalizeTurkishText } from "@/lib/site/turkish-text";
 
 export type PublishedService = {
   id: number;
@@ -73,6 +74,9 @@ export type PublishedServiceShellLink = {
   nameTr: string;
   nameEn: string;
   nameDe: string;
+  slugTr: string;
+  slugEn: string;
+  slugDe: string;
   imageUrl?: string | null;
   showOnHomepage?: boolean;
   sortOrder: number;
@@ -201,6 +205,9 @@ export const getPublishedServiceShellLinks = unstable_cache(
           nameTr: true,
           nameEn: true,
           nameDe: true,
+          slugTr: true,
+          slugEn: true,
+          slugDe: true,
           imageUrl: true,
           showOnHomepage: true,
           sortOrder: true,
@@ -236,6 +243,9 @@ export const getHomepageServices = unstable_cache(
           nameTr: true,
           nameEn: true,
           nameDe: true,
+          slugTr: true,
+          slugEn: true,
+          slugDe: true,
           imageUrl: true,
           showOnHomepage: true,
           sortOrder: true,
@@ -318,28 +328,28 @@ export function getLocalizedServiceValue(
   }
 
   return {
-    name: service.nameTr,
+    name: normalizeTurkishText(service.nameTr),
     slug: service.slugTr,
-    shortDescription: service.shortDescriptionTr,
-    longDescription: service.longDescriptionTr,
-    badge: service.badgeTr,
-    sessionsLabel: service.sessionsLabelTr,
-    imageAlt: service.imageAltTr,
-    features: service.features.map((item) => item.labelTr),
+    shortDescription: normalizeTurkishText(service.shortDescriptionTr),
+    longDescription: normalizeTurkishText(service.longDescriptionTr),
+    badge: normalizeTurkishText(service.badgeTr),
+    sessionsLabel: normalizeTurkishText(service.sessionsLabelTr),
+    imageAlt: normalizeTurkishText(service.imageAltTr),
+    features: service.features.map((item) => normalizeTurkishText(item.labelTr)),
     processSteps: service.processSteps.map((item) => ({
       id: item.id,
       stepNumber: item.stepNumber,
-      title: item.titleTr,
-      description: item.descriptionTr,
+      title: normalizeTurkishText(item.titleTr),
+      description: normalizeTurkishText(item.descriptionTr),
     })),
     faqs: service.faqs.map((item) => ({
       id: item.id,
-      question: item.questionTr,
-      answer: item.answerTr,
+      question: normalizeTurkishText(item.questionTr),
+      answer: normalizeTurkishText(item.answerTr),
     })),
     galleries: service.galleries.map((item) => ({
       ...item,
-      imageAlt: item.imageAltTr,
+      imageAlt: normalizeTurkishText(item.imageAltTr),
     })),
   };
 }
@@ -356,7 +366,22 @@ export function getLocalizedServiceShellLabel(
     return service.nameDe;
   }
 
-  return service.nameTr;
+  return normalizeTurkishText(service.nameTr);
+}
+
+export function getLocalizedServiceShellSlug(
+  locale: Locale,
+  service: PublishedServiceShellLink,
+) {
+  if (locale === "en") {
+    return service.slugEn;
+  }
+
+  if (locale === "de") {
+    return service.slugDe;
+  }
+
+  return service.slugTr;
 }
 
 export function stripHtmlTags(value: string | null | undefined) {

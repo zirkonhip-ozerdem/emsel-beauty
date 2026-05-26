@@ -2,6 +2,7 @@ import { unstable_cache } from "next/cache";
 
 import type { Locale } from "@/i18n/config";
 import { hasDatabaseConfig, prisma } from "@/lib/prisma";
+import { normalizeTurkishText } from "@/lib/site/turkish-text";
 
 export type PublishedWhoSection = {
   id: number;
@@ -67,7 +68,7 @@ export function getLocalizedWhoValue(locale: Locale, item: PublishedWhoSection) 
   }
 
   return {
-    title: item.titleTr,
-    description: item.whoDescTr,
+    title: normalizeTurkishText(item.titleTr),
+    description: normalizeTurkishText(item.whoDescTr),
   };
 }

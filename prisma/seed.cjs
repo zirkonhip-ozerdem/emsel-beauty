@@ -14,15 +14,15 @@ async function main() {
     update: {},
     create: {
       siteName: "Emsel Beauty",
-      siteSeoKeywords: "emsel beauty, spa, guzellik, bakim",
+      siteSeoKeywords: "emsel beauty, spa, güzellik, bakım",
       siteSeoDescription:
-        "Emsel Beauty icin cok dilli site ve admin panel altyapi kurulumu.",
+        "Emsel Beauty için çok dilli site ve admin panel altyapı kurulumu.",
       email: "hello@emselbeauty.com",
       phoneNumber: "+905551234567",
       wpNumber: "+905551234567",
-      addressTr: "Ornek Mahallesi, Guzellik Cad. No:12 Istanbul",
-      addressEn: "Ornek District, Guzellik Avenue No:12 Istanbul",
-      addressDe: "Ornek Viertel, Guzellik Strasse Nr.12 Istanbul",
+      addressTr: "Örnek Mahallesi, Güzellik Cad. No:12 İstanbul",
+      addressEn: "Örnek District, Güzellik Avenue No:12 İstanbul",
+      addressDe: "Örnek Viertel, Güzellik Strasse Nr.12 İstanbul",
       workingHoursTr: "Pzt-Cmt 09:00 - 20:00 / Pazar 10:00 - 18:00",
       workingHoursEn: "Mon-Sat 09:00 - 20:00 / Sunday 10:00 - 18:00",
       workingHoursDe: "Mo-Sa 09:00 - 20:00 / Sonntag 10:00 - 18:00",
@@ -36,7 +36,7 @@ async function main() {
         titleEn: "Our Story",
         titleDe: "Unsere Geschichte",
         whoDescTr:
-          "Emsel Beauty, klinik disiplin ve spa zarafetini ayni cizgide bulusturan butik bir bakim evidir.",
+          "Emsel Beauty, klinik disiplin ve spa zarafetini aynı çizgide buluşturan butik bir bakım evidir.",
         whoDescEn:
           "Emsel Beauty is a boutique care house where clinical discipline meets spa elegance.",
         whoDescDe:

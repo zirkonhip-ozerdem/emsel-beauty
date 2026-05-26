@@ -25,7 +25,7 @@ const statsLabels: Record<
   Locale,
   [string, string, string, string]
 > = {
-  tr: ["Aktif Hizmet", "Secili Urun", "Blog Yazisi", "Aktif Kampanya"],
+  tr: ["Aktif Hizmet", "Seçili Ürün", "Blog Yazısı", "Aktif Kampanya"],
   en: ["Active Service", "Selected Product", "Blog Article", "Active Campaign"],
   de: ["Aktiver Service", "Ausgewahltes Produkt", "Blogbeitrag", "Aktive Kampagne"],
 };

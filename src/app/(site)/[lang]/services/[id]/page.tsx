@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 import type { Locale } from "@/i18n/config";
 import { siteLocales } from "@/i18n/config";
@@ -40,18 +40,18 @@ const detailCopy: Record<
   tr: {
     home: "Anasayfa",
     services: "Hizmetlerimiz",
-    duration: "Sure",
+    duration: "Süre",
     sessions: "Seans",
-    processEyebrow: "Nasil Calisir",
-    processTitle: "Uygulama Sureci",
+    processEyebrow: "Nasıl Çalışır",
+    processTitle: "Uygulama Süreci",
     galleryEyebrow: "Galeri",
-    galleryTitle: "Uygulama Goruntuleri",
+    galleryTitle: "Uygulama Görüntüleri",
     scopeEyebrow: "Kapsam",
     scopeTitle: ["Bu Hizmete", "Neler Dahil?"],
     faqEyebrow: "Sorular",
-    faqTitle: "Sikca Sorulan Sorular",
-    relatedEyebrow: "Diger Hizmetler",
-    relatedTitle: "Ilginizi Cekebilir",
+    faqTitle: "Sıkça Sorulan Sorular",
+    relatedEyebrow: "Diğer Hizmetler",
+    relatedTitle: "İlginizi Çekebilir",
     reservation: "Online Rezervasyon",
   },
   en: {
@@ -118,13 +118,21 @@ export default async function ServiceDetailPage({ params }: PageProps) {
   const locale = lang as Locale;
   const copy = detailCopy[locale];
   const services = await getPublishedServices();
-  const service = services.find((item) => item.id === Number(id));
+  const service = services.find((item) => {
+    const localized = getLocalizedServiceValue(locale, item);
+    return localized.slug === id || item.id === Number(id);
+  });
 
   if (!service) {
     notFound();
   }
 
   const localized = getLocalizedServiceValue(locale, service);
+
+  if (id !== localized.slug) {
+    redirect(`/${locale}/services/${localized.slug}`);
+  }
+
   const related = services.filter((item) => item.id !== service.id).slice(0, 3);
   const summary =
     stripHtmlTags(localized.shortDescription) ||
@@ -282,7 +290,7 @@ export default async function ServiceDetailPage({ params }: PageProps) {
               return (
                 <Link
                   key={item.id}
-                  href={`/${locale}/services/${item.id}`}
+                  href={`/${locale}/services/${relatedLocalized.slug}`}
                   className="detail-rcard"
                 >
                   <div className="detail-rcard-img-wrap">

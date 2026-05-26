@@ -169,7 +169,7 @@ export function HomeHeroSlider({
               <button
                 type="button"
                 className="home-treatment-arrow"
-                aria-label="Bakimlari sola kaydir"
+                aria-label="Bakımları sola kaydır"
                 onClick={() => scrollTreatments("prev")}
                 disabled={!canScrollTreatmentsPrev}
               >
@@ -196,7 +196,7 @@ export function HomeHeroSlider({
               <button
                 type="button"
                 className="home-treatment-arrow"
-                aria-label="Bakimlari saga kaydir"
+                aria-label="Bakımları sağa kaydır"
                 onClick={() => scrollTreatments("next")}
                 disabled={!canScrollTreatmentsNext}
               >

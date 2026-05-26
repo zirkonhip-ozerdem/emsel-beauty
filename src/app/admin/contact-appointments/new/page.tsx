@@ -16,6 +16,7 @@ export default function NewContactAppointmentPage() {
     name: "",
     phone: "",
     service: "",
+    campaign: "",
     status: "PENDING",
     locale: "tr",
   });
@@ -82,6 +83,7 @@ export default function NewContactAppointmentPage() {
           <input name="name" value={form.name} onChange={handleInput} placeholder="Adınız Soyadınız - Boş geçilemez" className={inputClass} />
           <input name="phone" value={form.phone} onChange={handleInput} placeholder="Telefon" className={inputClass} />
           <input name="service" value={form.service} onChange={handleInput} placeholder="Hizmet - Boş geçilemez" className={inputClass} />
+          <input name="campaign" value={form.campaign} onChange={handleInput} placeholder="Kampanya" className={inputClass} />
           <select name="status" value={form.status} onChange={handleInput} className={inputClass}>
             <option value="PENDING">Beklemede</option>
             <option value="CONFIRMED">Onaylandı</option>

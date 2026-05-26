@@ -19,19 +19,19 @@ type ProductsPageCopy = {
 const productsPageCopy: Record<Locale, ProductsPageCopy> = {
   tr: {
     eyebrow: "Emsel Beauty & Care Studio",
-    title: ["Urunlerimiz", "Ve Bakim Serileri"],
+    title: ["Ürünlerimiz", "Ve Bakım Serileri"],
     description:
-      "Bakim rituelinizi tamamlayan formulleri, serileri ve one cikan urunleri tek bir seckide kesfedin.",
-    detailCta: "Detayli Incele",
+      "Bakım ritüelinizi tamamlayan formülleri, serileri ve öne çıkan ürünleri tek bir seçkide keşfedin.",
+    detailCta: "Detaylı İncele",
     breadcrumbHome: "Ana Sayfa",
-    breadcrumbProducts: "Urunlerimiz",
-    detailHeading: "Urun Aciklamasi",
+    breadcrumbProducts: "Ürünlerimiz",
+    detailHeading: "Ürün Açıklaması",
     extras: [
-      { title: "Spa Tuzu", description: "Mineral acisindan zengin, rahatlatici banyo tuzu." },
-      { title: "Aromaterapi Yagi", description: "Zihni ve bedeni sakinlestiren dogal yag karisimi." },
-      { title: "Masaj Kremi", description: "Kaslari rahatlatan ozel bakim kremi." },
-      { title: "Yuz Serumu", description: "Cilde parlaklik ve yenilenme hissi kazandiran serum." },
-      { title: "Nemlendirici Krem", description: "Gunluk kullanim icin yogun nem destegi sunan krem." },
+      { title: "Spa Tuzu", description: "Mineral açısından zengin, rahatlatıcı banyo tuzu." },
+      { title: "Aromaterapi Yağı", description: "Zihni ve bedeni sakinleştiren doğal yağ karışımı." },
+      { title: "Masaj Kremi", description: "Kasları rahatlatan özel bakım kremi." },
+      { title: "Yüz Serumu", description: "Cilde parlaklık ve yenilenme hissi kazandıran serum." },
+      { title: "Nemlendirici Krem", description: "Günlük kullanım için yoğun nem desteği sunan krem." },
     ],
   },
   en: {

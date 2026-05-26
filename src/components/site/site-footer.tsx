@@ -17,20 +17,20 @@ type FooterProps = {
 const footerCopy = {
   tr: {
     brandText:
-      "Uzun yillardir guzellik sektorunde arkamizda binlerce memnun musteri birakarak hizmetlerimize hiz kesmeden devam ediyoruz.",
+      "Uzun yıllardır güzellik sektöründe arkamızda binlerce memnun müşteri bırakarak hizmetlerimize hız kesmeden devam ediyoruz.",
     servicesTitle: "Hizmetlerimiz",
-    agreementsTitle: "Sozlesmeler",
+    agreementsTitle: "Sözleşmeler",
     agreements: [
-      "Hizmet Sozlesmesi",
-      "Gizlilik Sozlesmesi",
+      "Hizmet Sözleşmesi",
+      "Gizlilik Sözleşmesi",
       "KVKK Metinleri",
-      "Sartlar",
+      "Şartlar",
     ],
     mapTitle: "Bizi Bulun",
     mapLink: "Yol Tarifi Al",
     addressTitle: "Adres",
     phoneTitle: "Telefon",
-    workingHoursTitle: "Calisma Saatleri",
+    workingHoursTitle: "Çalışma Saatleri",
     workingHours: ["Pzt-Cmt: 09:00 - 20:00", "Pazar: 10:00 - 18:00"],
     socialTitle: "Sosyal Medya",
   },
@@ -97,7 +97,7 @@ export default function SiteFooter({
     : "https://www.google.com/maps";
   const serviceLinks = siteShell?.serviceLinks?.length
     ? siteShell.serviceLinks.map((item) => ({
-        href: `${getLocalizedPath(locale, "services")}/${item.id}`,
+        href: `${getLocalizedPath(locale, "services")}/${item.slug}`,
         label: item.label,
       }))
     : Array.from({ length: 5 }, (_, index) => ({

@@ -12,6 +12,7 @@ const reservationSchema = z.object({
   name: z.string().trim().min(2).max(120),
   phone: z.string().trim().max(30).optional().default(""),
   service: z.string().trim().min(2).max(100),
+  campaign: z.string().trim().max(100).optional().default(""),
   locale: z.enum(["tr", "en", "de"]).default("tr"),
 });
 
@@ -30,6 +31,7 @@ export async function GET() {
       name: true,
       phone: true,
       service: true,
+      campaign: true,
       status: true,
       locale: true,
       createdAt: true,
@@ -52,6 +54,7 @@ export async function POST(request: Request) {
       name: payload.name,
       phone: payload.phone || null,
       service: payload.service,
+      campaign: payload.campaign || null,
       locale: payload.locale,
       status: "PENDING",
     });
@@ -62,16 +65,17 @@ export async function POST(request: Request) {
         name: true,
         phone: true,
         service: true,
+        campaign: true,
         status: true,
         locale: true,
         createdAt: true,
       },
     });
 
-    return siteJsonSuccess(created, "Randevu talebi alindi.");
+    return siteJsonSuccess(created, "Randevu talebi alındı.");
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return siteJsonError("Gecersiz randevu formu verisi.", 400, error.flatten());
+      return siteJsonError("Geçersiz randevu formu verisi.", 400, error.flatten());
     }
 
     console.error("RESERVATION CREATE ERROR:", error);
