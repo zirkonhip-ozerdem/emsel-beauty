@@ -17,7 +17,6 @@
     "prisma:seed": "node scripts/with-local-env.cjs node prisma/seed.cjs"
   },
   "dependencies": {
-    "@ckeditor/ckeditor5-build-classic": "^41.4.2",
     "@ckeditor/ckeditor5-react": "^11.1.2",
     "@prisma/client": "^6.19.0",
     "@vercel/blob": "^2.3.3",
