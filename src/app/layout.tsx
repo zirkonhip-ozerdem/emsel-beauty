@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Lora, Manrope } from "next/font/google";
-import "ckeditor5/ckeditor5.css";
 import "./globals.css";
 import "@/styles/site-components.css";
 
