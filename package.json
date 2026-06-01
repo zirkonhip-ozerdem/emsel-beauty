@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "postinstall": "prisma generate",
     "prisma:generate": "node scripts/with-local-env.cjs npx prisma generate",
     "prisma:migrate": "node scripts/with-local-env.cjs npx prisma migrate dev",
     "prisma:migrate:deploy": "node scripts/with-local-env.cjs npx prisma migrate deploy",
